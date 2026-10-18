@@ -2,7 +2,7 @@
 
 نسخة من تصميم موقع آفاق بنفس الهيكل بالضبط، مع تغيير الهوية فقط لشركة **اوشوب Oshop** (Shipping & E-commerce).
 
-- الموقع: https://oshop-ly.vercel.app (مشروع Vercel: `oshop-ly`)
+- الموقع: https://oshop-ly.vercel.app (مشروع Vercel: `oshop-ly`، وهو نفس مشروع آفاق القديم بعد تغيير اسمه؛ الرابط القديم afaaq-ly يحوّل تلقائيًا للجديد)
 - إنستغرام: https://www.instagram.com/oshop.company
 - فرع مصراتة: الدائري الثاني، تقاطع المقاوبة — واتساب 0927172021 — https://maps.app.goo.gl/XkrM5y7T1ahBsXFD7
 - فرع طرابلس: الجرابة، قرب مطعم تقاسيم — واتساب 0947172021 — https://maps.app.goo.gl/s8fjUVYXkY1EDM6BA
@@ -20,6 +20,6 @@
 cp -r vercel-output <dir>/.vercel/output
 cd <dir> && vercel link --project oshop-ly && vercel deploy --prebuilt --prod
 ```
-يحتاج متغيرات البيئة `GEMINI_API_KEY` و `REEF_API_KEY` في مشروع Vercel لتشغيل الوكيل الذكي.
+مفاتيح `GEMINI_API_KEY` و `REEF_API_KEY` موجودة في المشروع، والوكيل الذكي شغال.
 
 `tools/rebrand.py` هو السكربت اللي حوّل نسخة آفاق المنشورة إلى اوشوب.
