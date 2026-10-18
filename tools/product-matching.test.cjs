@@ -38,3 +38,7 @@ test("fails closed when the title omits an unrecognized requested brand", () => 
 test("matches normal singular and plural forms from product titles", () => {
   assert.equal(productMatchesTitle("Red Embroideries on Abayas", "عبايات بتطريز أحمر", "red embroidered abaya"), true);
 });
+
+test("does not reject women's products when the marketplace omits the apostrophe-s", () => {
+  assert.equal(productMatchesTitle("Abaya for Women", "عباية نسائية", "women's abaya"), true);
+});

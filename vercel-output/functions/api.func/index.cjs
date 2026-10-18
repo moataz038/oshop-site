@@ -346,7 +346,7 @@ const PRODUCT_FEATURES = [
 ];
 
 const STOP_WORDS = new Set((
-  "a an the with for of in on from to and or by women woman womens women's men mens men's kids child children baby brand branded original authentic genuine new cheap cheaper lowest low price lower deal deals best quality style model type size color colour item product find search looking want please ladies lady female male " +
+  "a an the with for of in on from to and or by women woman womens women's men mens men's s kids child children baby brand branded original authentic genuine new cheap cheaper lowest low price lower deal deals best quality style model type size color colour item product find search looking want please ladies lady female male " +
   "نبي نبيلي ابي اريد ابغى ابحث دورلي دور لي هات عطيني وريني لو سمحت من في على الى و او فيها بها يكون تكون لل لي للزبونة للزبون نوع نوعا شكل موديل ماركة ماركه اصلي اصليه سعر ارخص اقل مختلف اخرى اخر فقط " +
   "kadin kadın erkek bayan bayanlar erkekler icin için yeni kaliteli uygun ucuz en iyi elbise urun ürün istiyorum bana bul göster"
 ).split(/\s+/).map(normalizeProductText));
