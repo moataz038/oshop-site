@@ -1,6 +1,8 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { productMatchesTitle } = require("./product-matching.cjs");
+const { productMatchesTitle, productTypeForQuery } = require("./product-matching.cjs");
+
+// --- الاختبارات الأصلية (10) ---
 
 test("accepts an abaya with the requested gold embroidery", () => {
   assert.equal(productMatchesTitle("Women's Gold Embroidered Abaya", "عباية بتطريزات ذهبية", "gold embroidered abaya"), true);
@@ -41,4 +43,43 @@ test("matches normal singular and plural forms from product titles", () => {
 
 test("does not reject women's products when the marketplace omits the apostrophe-s", () => {
   assert.equal(productMatchesTitle("Abaya for Women", "عباية نسائية", "women's abaya"), true);
+});
+
+// --- اللهجة الليبية: «كنادر» ما تجيبش حقيبة ---
+
+test("detects Libyan dialect product types", () => {
+  assert.equal(productTypeForQuery("كنادر")?.id, "sneaker");
+  assert.equal(productTypeForQuery("صبابيط")?.id, "sneaker");
+  assert.equal(productTypeForQuery("شباشب")?.id, "slipper");
+  assert.equal(productTypeForQuery("جزمة")?.id, "boot");
+});
+
+test("rejects a bag when the customer asked for كنادر", () => {
+  assert.equal(productMatchesTitle("حقيبة يد جلدية نسائية", "كنادر", ""), false);
+  assert.equal(productMatchesTitle("حقيبة ظهر", "صبابيط", ""), false);
+  assert.equal(productMatchesTitle("حقيبة يد", "شباشب", ""), false);
+});
+
+test("keeps the right shoe for a dialect request", () => {
+  assert.equal(productMatchesTitle("حذاء رياضي رجالي أسود", "كنادر", ""), true);
+  assert.equal(productMatchesTitle("شبشب رجالي أسود", "شباشب", ""), true);
+});
+
+// --- السوابق العربية: «بالذهبي» = «ذهبي» ---
+
+test("tolerates Arabic prefixes on requested features", () => {
+  assert.equal(productMatchesTitle("عباية سوداء مطرزة بالذهبي", "عباية بتطريزات ذهبية", ""), true);
+  assert.equal(productMatchesTitle("عباية بتطريز ذهبي", "عباية بتطريزات ذهبية", ""), true);
+});
+
+// --- الماركة المكتوبة بالعربي تُفرض على العنوان العربي ---
+
+test("enforces an Arabic brand against an Arabic title", () => {
+  assert.equal(productMatchesTitle("حقيبة يد سوداء", "حقيبة شانيل", ""), false);
+  assert.equal(productMatchesTitle("حقيبة يد شانيل جلد", "حقيبة شانيل", ""), true);
+});
+
+test("does not let a brand slip through for bags or watches", () => {
+  assert.equal(productMatchesTitle("ساعة يد رجالية", "ساعة رولكس", ""), false);
+  assert.equal(productMatchesTitle("ساعة رولكس أصلية", "ساعة رولكس", ""), true);
 });

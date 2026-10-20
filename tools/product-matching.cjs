@@ -1,7 +1,8 @@
 const PRODUCT_TYPES = [
-  { id: "sneaker", query: ["sneaker", "sneakers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي"], titles: ["sneaker", "sneakers", "trainer", "trainers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي"] },
+  { id: "sneaker", query: ["sneaker", "sneakers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي", "كنادر", "كندرة", "صبابيط", "صباط رياضي", "سبور"], titles: ["sneaker", "sneakers", "trainer", "trainers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي", "كنادر", "كندرة", "صباط"] },
   { id: "boot", query: ["boot", "boots", "ankle boot", "جزمة", "بوت"], titles: ["boot", "boots", "ankle boot", "جزمة", "بوت"] },
-  { id: "sandal", query: ["sandal", "sandals", "صندل", "صنادل"], titles: ["sandal", "صندل", "صنادل"] },
+  { id: "sandal", query: ["sandal", "sandals", "صندل", "صنادل", "نعال"], titles: ["sandal", "صندل", "صنادل", "نعال"] },
+  { id: "slipper", query: ["slipper", "slippers", "slide", "slides", "flip flop", "flip-flops", "شبشب", "شباشب", "سليبر", "بلاج"], titles: ["slipper", "slippers", "slide", "slides", "flip flop", "flip-flops", "شبشب", "شباشب", "سليبر", "بلاج"] },
   { id: "heel", query: ["high heel", "high heels", "heels", "كعب عالي", "حذاء بكعب"], titles: ["high heel", "heels", "stiletto", "كعب عالي", "حذاء بكعب"] },
   { id: "abaya", query: ["abaya", "abayas", "عباية", "عبايات", "عباءة", "عباءات"], titles: ["abaya", "عباية", "عباءة"] },
   { id: "handbag", query: ["handbag", "handbags", "purse", "purses", "شنطة يد", "حقيبة يد"], titles: ["handbag", "handbags", "purse", "purses", "شنطة يد", "حقيبة يد"] },
@@ -11,13 +12,14 @@ const PRODUCT_TYPES = [
   { id: "belt", query: ["belt", "belts", "حزام", "أحزمة", "احزمة"], titles: ["belt", "حزام", "أحزمة", "احزمة"] },
   { id: "watch", query: ["watch", "watches", "ساعة", "ساعات"], titles: ["watch", "watches", "ساعة", "ساعات"] },
   { id: "dress", query: ["dress", "dresses", "gown", "فستان", "فساتين", "elbise"], titles: ["dress", "gown", "فساتين", "فستان", "elbise"] },
-  { id: "perfume", query: ["perfume", "parfum", "fragrance", "عطر", "عطور"], titles: ["perfume", "parfum", "fragrance", "عطر", "عطور"] },
+  { id: "perfume", query: ["perfume", "parfum", "fragrance", "عطر", "عطور"], titles: ["perfume", "parfum", "fragrance", "eau de parfum", "عطر", "عطور"] },
   { id: "wallet", query: ["wallet", "wallets", "محفظة", "محافظ"], titles: ["wallet", "محفظة", "محافظ"] },
   { id: "shirt", query: ["shirt", "shirts", "blouse", "قميص", "قمصان", "بلوزة", "بلوزات"], titles: ["shirt", "blouse", "قميص", "بلوزة"] },
-  { id: "coat", query: ["coat", "coats", "jacket", "jackets", "معطف", "جاكيت"], titles: ["coat", "jacket", "معطف", "جاكيت"] },
-  { id: "pants", query: ["pants", "trousers", "jeans", "بنطال", "بنطلون", "جينز"], titles: ["pants", "trousers", "jeans", "بنطال", "بنطلون", "جينز"] },
-  { id: "jewelry", query: ["jewelry", "jewellery", "necklace", "bracelet", "earrings", "مجوهرات", "قلادة", "سوار", "أقراط"], titles: ["jewelry", "jewellery", "necklace", "bracelet", "earrings", "مجوهرات", "قلادة", "سوار", "أقراط"] },
-  { id: "shoes", query: ["shoe", "shoes", "footwear", "حذاء", "أحذية", "احذية"], titles: ["shoe", "shoes", "footwear", "sneaker", "trainer", "boot", "sandal", "heel", "حذاء", "أحذية", "احذية", "سنيكر", "كوتشي", "جزمة", "بوت", "صندل"] },
+  { id: "coat", query: ["coat", "coats", "jacket", "jackets", "معطف", "جاكيت", "بالطو"], titles: ["coat", "jacket", "معطف", "جاكيت", "بالطو"] },
+  { id: "pants", query: ["pants", "trousers", "jeans", "بنطال", "بنطلون", "جينز", "سروال"], titles: ["pants", "trousers", "jeans", "بنطال", "بنطلون", "جينز", "سروال"] },
+  { id: "jewelry", query: ["jewelry", "jewellery", "necklace", "bracelet", "earrings", "ring", "مجوهرات", "قلادة", "سوار", "أقراط", "خاتم", "سلسلة", "حلق"], titles: ["jewelry", "jewellery", "necklace", "bracelet", "earrings", "ring", "مجوهرات", "قلادة", "سوار", "أقراط", "خاتم", "سلسلة", "حلق"] },
+  { id: "sunglasses", query: ["sunglasses", "sun glasses", "glasses", "نظارات شمسية", "نظارة", "نظارات", "شمسية"], titles: ["sunglasses", "sun glasses", "glasses", "نظارة", "نظارات"] },
+  { id: "shoes", query: ["shoe", "shoes", "footwear", "حذاء", "أحذية", "احذية", "كنادر", "كندرة", "صبابيط", "صباط", "سبور"], titles: ["shoe", "shoes", "footwear", "sneaker", "trainer", "boot", "sandal", "heel", "slipper", "حذاء", "أحذية", "احذية", "سنيكر", "كوتشي", "جزمة", "بوت", "صندل", "شبشب", "كنادر", "صباط"] },
 ];
 
 const PRODUCT_FEATURES = [
@@ -29,48 +31,99 @@ const PRODUCT_FEATURES = [
   { id: "blue", query: ["blue", "أزرق", "ازرق", "زرقاء"], titles: ["blue", "أزرق", "ازرق", "زرقاء"] },
   { id: "green", query: ["green", "أخضر", "اخضر", "خضراء"], titles: ["green", "أخضر", "اخضر", "خضراء"] },
   { id: "pink", query: ["pink", "وردي", "وردية", "زهري"], titles: ["pink", "وردي", "وردية", "زهري"] },
+  { id: "beige", query: ["beige", "بيج", "كريمي", "cream"], titles: ["beige", "بيج", "كريمي", "cream"] },
+  { id: "brown", query: ["brown", "بني", "بنية"], titles: ["brown", "بني", "بنية"] },
+  { id: "grey", query: ["grey", "gray", "رمادي", "رمادية"], titles: ["grey", "gray", "رمادي", "رمادية"] },
+  { id: "navy", query: ["navy", "كحلي"], titles: ["navy", "كحلي"] },
   { id: "embroidered", query: ["embroidery", "embroideries", "embroidered", "embroider", "تطريز", "تطريزات", "مطرز", "مطرزة", "مطرزات"], titles: ["embroidery", "embroideries", "embroidered", "embroider", "تطريز", "مطرز", "مطرزة"] },
   { id: "lace", query: ["lace", "lacework", "دانتيلا", "دانتيل"], titles: ["lace", "lacework", "دانتيلا", "دانتيل"] },
   { id: "sequins", query: ["sequin", "sequins", "paillette", "ترتر", "ترتره"], titles: ["sequin", "sequins", "paillette", "ترتر"] },
   { id: "floral", query: ["floral", "flower", "flowers", "ورود", "ورود مطبوعة"], titles: ["floral", "flower", "flowers", "ورود"] },
   { id: "leather", query: ["leather", "جلد", "جلدي", "جلدية"], titles: ["leather", "جلد", "جلدي", "جلدية"] },
+  { id: "suede", query: ["suede", "شامواه"], titles: ["suede", "شامواه"] },
+  { id: "satin", query: ["satin", "ساتان"], titles: ["satin", "ساتان"] },
+  { id: "silk", query: ["silk", "حرير", "حريري"], titles: ["silk", "حرير", "حريري"] },
+  { id: "chiffon", query: ["chiffon", "شيفون"], titles: ["chiffon", "شيفون"] },
+  { id: "cotton", query: ["cotton", "قطن", "قطني"], titles: ["cotton", "قطن", "قطني"] },
+  { id: "velvet", query: ["velvet", "مخمل"], titles: ["velvet", "مخمل"] },
+  { id: "denim", query: ["denim", "جينز"], titles: ["denim", "جينز"] },
   { id: "quilted", query: ["quilted", "quilting", "مبطن", "مبطنة"], titles: ["quilted", "quilting", "مبطن", "مبطنة"] },
   { id: "chain", query: ["chain", "chain strap", "سلسلة", "سير سلسلة"], titles: ["chain", "سلسلة"] },
   { id: "long", query: ["long", "طويل", "طويلة"], titles: ["long", "طويل", "طويلة"] },
   { id: "short", query: ["short", "قصير", "قصيرة"], titles: ["short", "قصير", "قصيرة"] },
+  { id: "midi", query: ["midi", "ميدي"], titles: ["midi", "ميدي"] },
+  { id: "maxi", query: ["maxi", "ماكسي"], titles: ["maxi", "ماكسي"] },
+  { id: "striped", query: ["striped", "stripes", "مقلّم", "مقلم", "مخطط"], titles: ["striped", "stripes", "مقلّم", "مقلم", "مخطط"] },
+  { id: "printed", query: ["printed", "print", "مطبوع", "مطبوعة"], titles: ["printed", "print", "مطبوع", "مطبوعة"] },
+  { id: "oversized", query: ["oversized", "واسع", "واسعة"], titles: ["oversized", "واسع", "واسعة"] },
 ];
 
 const STOP_WORDS = new Set((
   "a an the with for of in on from to and or by women woman womens women's men mens men's s kids child children baby brand branded original authentic genuine new cheap cheaper lowest low price lower deal deals best quality style model type size color colour item product find search looking want please ladies lady female male " +
-  "نبي نبيلي ابي اريد ابغى ابحث دورلي دور لي هات عطيني وريني لو سمحت من في على الى و او فيها بها يكون تكون لل لي للزبونة للزبون نوع نوعا شكل موديل ماركة ماركه اصلي اصليه سعر ارخص اقل مختلف اخرى اخر فقط " +
+  "نبي نبيلي نبيلك ابي اريد ابغى ابغي نحوس دورلي دور لي هات عطيني وريني لو سمحت من في على الى إلي و او فيها بها يكون تكون لل لي للزبونة للزبون نوع نوعا شكل موديل ماركة ماركه اصلي اصليه اصليا سعر ارخص اقل مختلف اخرى اخر فقط برشا توا قداش شن شني واش هاد هذي هذا هذيك تبي تحب نلقالك نلقى حاجة حاجه شي بربي عايز عاوز محتاج طلب طلبي يدور يدورلي ابحث ابحثي حوس حوسي وريني جيبلي جيب عايزة محتاجة نفس مثل كيما حتى ولا بس بين زي كان عندك عندكم حق حقت " +
   "kadin kadın erkek bayan bayanlar erkekler icin için yeni kaliteli uygun ucuz en iyi elbise urun ürün istiyorum bana bul göster"
 ).split(/\s+/).map(normalizeProductText));
+
+/** Arabic letters are commonly written with a leading conjunction/article: بالذهبي، الذهبي، والذهبي، بتطريز. */
+const ARABIC_PREFIXES = ["", "ال", "بال", "وال", "كال", "فال", "لل", "و", "ب", "ل", "ك", "ف"];
+
+/**
+ * Audience words (نسائي / رجالي / أطفال / women / men...) rarely survive
+ * translation, so they are never used as hard requirements.
+ */
+const AUDIENCE = new Set(
+  ("women womens woman ladies lady female girls girl men mens man male boys boy kids kid child children baby " +
+    "نساء نسائي نساييه نسوان حريمي رجال رجالي رجاليه ولادي اولاد اطفال طفل اطفالي بيبي")
+    .split(/\s+/)
+    .map(normalizeProductText),
+);
+
+/** "بتطريز" -> ["بتطريز", "تطريز"] so prefixed words are recognised as features, not brands. */
+function baseForms(token) {
+  const forms = new Set([token]);
+  for (const prefix of ARABIC_PREFIXES) {
+    if (prefix && token.startsWith(prefix) && token.length > prefix.length + 1) forms.add(token.slice(prefix.length));
+  }
+  return [...forms];
+}
 
 function normalizeProductText(value) {
   return String(value ?? "")
     .toLowerCase()
     .normalize("NFKD")
     .replace(/[\u064B-\u065F\u0670\u0640]/g, "")
-    .replace(/[أإآ]/g, "ا")
+    .replace(/[أإآٱ]/g, "ا")
     .replace(/ى/g, "ي")
     .replace(/ة/g, "ه")
+    .replace(/ؤ/g, "و")
+    .replace(/ئ/g, "ي")
     .replace(/ı/g, "i")
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim()
     .replace(/\s+/g, " ");
 }
 
+/** All accepted surface forms of one word (plural + Arabic prefixes). */
+function wordVariants(word) {
+  const forms = new Set([word]);
+  const last = word;
+  forms.add(`${last}s`);
+  forms.add(`${last}es`);
+  if (last.endsWith("y") && last.length > 2) forms.add(`${last.slice(0, -1)}ies`);
+  if (last.endsWith("s") && last.length > 2) forms.add(last.slice(0, -1));
+  if (last.endsWith("ies") && last.length > 4) forms.add(`${last.slice(0, -3)}y`);
+  for (const prefix of ARABIC_PREFIXES) forms.add(prefix + word);
+  return [...forms];
+}
+
+/** Whole-phrase match, tolerant to plurals and Arabic prefixes (بالذهبي = الذهبي = ذهبي). */
 function phrasePresent(text, phrase) {
   const haystack = ` ${normalizeProductText(text)} `;
   const words = normalizeProductText(phrase).split(" ").filter(Boolean);
   if (!words.length) return false;
-  const last = words.at(-1);
-  const variants = new Set([last, `${last}s`, `${last}es`]);
-  if (last.endsWith("y") && last.length > 2) variants.add(`${last.slice(0, -1)}ies`);
-  if (last.endsWith("s") && last.length > 2) variants.add(last.slice(0, -1));
-  if (last.endsWith("ies") && last.length > 4) variants.add(`${last.slice(0, -3)}y`);
+  const lastWord = words.at(-1);
   const prefix = words.slice(0, -1);
-  return [...variants].some((variant) => {
+  return wordVariants(lastWord).some((variant) => {
     const needle = ` ${[...prefix, variant].join(" ")} `;
     return needle.length > 2 && haystack.includes(needle);
   });
@@ -82,13 +135,18 @@ function productTypeForQuery(queryText) {
 }
 
 function productTokenPresent(titleText, token) {
-  const words = new Set(normalizeProductText(titleText).split(" "));
-  if (words.has(token)) return true;
-  if (token.length > 3 && words.has(`${token}s`)) return true;
-  if (token.length > 4 && token.endsWith("s") && words.has(token.slice(0, -1))) return true;
-  return false;
+  const haystack = ` ${normalizeProductText(titleText)} `;
+  return wordVariants(token).some((variant) => haystack.includes(` ${variant} `));
 }
 
+/**
+ * Strict match between a marketplace title and what the customer asked for.
+ * - The product type (shoes vs bag vs watch…) must match, in all three languages.
+ * - Every colour / material / pattern / style word the customer mentioned must
+ *   appear in the title (Arabic included, not just the marketplace-language query).
+ * - Any remaining brand or model word from the request must appear as well;
+ *   when we cannot verify it, the result is rejected rather than shown.
+ */
 function productMatchesTitle(title, queryAr = "", localQuery = "") {
   const titleText = normalizeProductText(title);
   if (!titleText) return false;
@@ -103,12 +161,20 @@ function productMatchesTitle(title, queryAr = "", localQuery = "") {
     if (!feature.titles.some((term) => phrasePresent(titleText, term))) return false;
   }
 
-  const localTokens = normalizeProductText(localQuery).split(" ").filter(Boolean);
   const typeTokens = new Set((type?.query ?? []).flatMap((term) => normalizeProductText(term).split(" ")));
   const titleTypeTokens = new Set((type?.titles ?? []).flatMap((term) => normalizeProductText(term).split(" ")));
   const featureTokens = new Set(PRODUCT_FEATURES.flatMap((feature) => feature.query.concat(feature.titles).flatMap((term) => normalizeProductText(term).split(" "))));
-  const descriptors = [...new Set(localTokens)].filter((token) =>
-    token.length > 1 && !STOP_WORDS.has(token) && !typeTokens.has(token) && !titleTypeTokens.has(token) && !featureTokens.has(token),
+
+  // Arabic words can only be verified against an Arabic title; for English titles the
+  // marketplace-language query already carries the same brand/spec words.
+  const descriptorSource = /[\u0600-\u06FF]/.test(title) ? fullQuery : localQuery;
+  const excluded = new Set([...typeTokens, ...titleTypeTokens, ...featureTokens]);
+  const descriptors = [...new Set(normalizeProductText(descriptorSource).split(" "))].filter(
+    (token) =>
+      token.length > 1 &&
+      !STOP_WORDS.has(token) &&
+      !AUDIENCE.has(token) &&
+      !baseForms(token).some((form) => excluded.has(form)),
   );
   return descriptors.every((token) => productTokenPresent(titleText, token));
 }
