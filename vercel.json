@@ -1,0 +1,5 @@
+{
+  "buildCommand": "python3 tools/apply-product-matching-v3.py && mkdir -p .vercel/output && cp -R vercel-output/. .vercel/output/",
+  "framework": null,
+  "outputDirectory": null
+}
