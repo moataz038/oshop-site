@@ -1,3 +1,8 @@
+/**
+ * Oshop product matching rules.
+ * الوظيفة: منع عرض نتيجة قريبة كأنها مطابقة لطلب العميل.
+ * هذا الملف هو مصدر القواعد القابل للاختبار؛ لا تعدّل النسخة المحقونة يدويًا.
+ */
 const PRODUCT_TYPES = [
   { id: "sneaker", query: ["sneaker", "sneakers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي", "كنادر", "كندرة", "صبابيط", "صباط رياضي", "سبور"], titles: ["sneaker", "sneakers", "trainer", "trainers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي", "كنادر", "كندرة", "صباط"] },
   { id: "boot", query: ["boot", "boots", "ankle boot", "جزمة", "بوت"], titles: ["boot", "boots", "ankle boot", "جزمة", "بوت"] },
