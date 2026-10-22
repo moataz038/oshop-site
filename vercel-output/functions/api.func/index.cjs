@@ -304,9 +304,10 @@ new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
 `),g=["Hello! We are Oshop, an import company in Libya. We buy from China regularly and handle customs and freight ourselves.",`We are interested in: ${t.offer.title}${h?` (variant: ${h})`:""}.`,`We plan to order ${e} pcs${p?` (we understand your MOQ is ${f} \u2014 is a trial order possible?)`:""}, with repeat orders if quality is consistent.`,s.includes("competitor")?`Another supplier quoted us \xA5${r.competitorPriceCny}. Could you offer \xA5${o}/pc?`:`Your current price is \xA5${n}/pc. Could you offer \xA5${o}/pc?`,`Please also confirm: 1) unit weight and carton size/gross weight; 2) lead time; 3) delivery to our warehouse in ${d==="\u5E7F\u5DDE"?"Guangzhou":d}; 4) samples.`,r.wantsLogo?"If custom logo and packaging are possible, please quote price and MOQ.":"","Thank you, looking forward to working together."].filter(Boolean).join(`
 `),y=[`المورد: ${a}`,`السعر الحالي: ${n}\xA5 \u2014 الهدف: ${o}\xA5 \u2014 أقل سعر نقبلوه قبل ما ننسحبوا: ${w$(c)}\xA5`,`الخطة: ${u}${s.includes("competitor")?"، ونستعملوا عرض مورد منافس كورقة ضغط":""}.`,p?`تنبيه: كميتنا (${e}) أقل من الحد الأدنى (${f})، الرسالة تطلب طلب تجريبي.`:"","الرسالة تطلب الوزن ومقاس الكرتونة، وهذي نحتاجوها لحساب الشحن بدقة.","ما تنبعث إلا بعد موافقتك."].filter(Boolean).join(`
 `);return{offerId:t.offer.offerId,supplier:a,qty:e,currentUnitPriceCny:n,targetUnitPriceCny:o,walkAwayUnitPriceCny:w$(c),strategy:u,messageZh:m,messageEn:g,staffNoteAr:y,status:"needs_approval"}}var xxt=/[؀-ۿ]/,Sxt={"سماعات بلوتوث":"\u84DD\u7259\u8033\u673A","سماعة بلوتوث":"\u84DD\u7259\u8033\u673A","سماعات لاسلكية":"\u65E0\u7EBF\u84DD\u7259\u8033\u673A",سماعات:"\u8033\u673A",سماعة:"\u8033\u673A","سماعة رأس":"\u5934\u6234\u5F0F\u8033\u673A",شاحن:"\u5145\u7535\u5668","شاحن سيارة":"\u8F66\u8F7D\u5145\u7535\u5668","كابل شحن":"\u6570\u636E\u7EBF","باور بانك":"\u5145\u7535\u5B9D","بطارية متنقلة":"\u5145\u7535\u5B9D","جراب موبايل":"\u624B\u673A\u58F3","جراب هاتف":"\u624B\u673A\u58F3","كفر موبايل":"\u624B\u673A\u58F3","ساعة ذكية":"\u667A\u80FD\u624B\u8868","ساعات ذكية":"\u667A\u80FD\u624B\u8868",ساعة:"\u624B\u8868","نظارات شمسية":"\u592A\u9633\u955C",نظارات:"\u773C\u955C",شنطة:"\u5305",شنط:"\u5305","حقيبة يد":"\u5973\u58EB\u624B\u63D0\u5305","شنطة ظهر":"\u53CC\u80A9\u5305","حقيبة سفر":"\u884C\u674E\u7BB1",أحذية:"\u978B",احذية:"\u978B","حذاء رياضي":"\u8FD0\u52A8\u978B",صبابيط:"\u8FD0\u52A8\u978B",شباشب:"\u62D6\u978B","ملابس أطفال":"\u7AE5\u88C5","ملابس اطفال":"\u7AE5\u88C5","ملابس نسائية":"\u5973\u88C5","ملابس رجالية":"\u7537\u88C5",عباية:"\u963F\u62C9\u4F2F\u957F\u888D",عبايات:"\u963F\u62C9\u4F2F\u957F\u888D",حجاب:"\u5934\u5DFE","ألعاب أطفال":"\u513F\u7AE5\u73A9\u5177","العاب اطفال":"\u513F\u7AE5\u73A9\u5177",ألعاب:"\u73A9\u5177","أدوات مطبخ":"\u53A8\u623F\u7528\u54C1","ادوات مطبخ":"\u53A8\u623F\u7528\u54C1",أواني:"\u9505\u5177",طناجر:"\u9505\u5177",خلاط:"\u6405\u62CC\u673A","قلاية هوائية":"\u7A7A\u6C14\u70B8\u9505",إضاءة:"LED\u706F",اضاءة:"LED\u706F",لمبات:"LED\u706F\u6CE1",ليد:"LED\u706F","كاميرا مراقبة":"\u76D1\u63A7\u6444\u50CF\u5934",منظم:"\u6536\u7EB3\u76D2",مكياج:"\u5316\u5986\u54C1",ميكب:"\u5316\u5986\u54C1",عطور:"\u9999\u6C34",اكسسوارات:"\u9970\u54C1",إكسسوارات:"\u9970\u54C1","إكسسوارات موبايل":"\u624B\u673A\u914D\u4EF6","اكسسوارات موبايل":"\u624B\u673A\u914D\u4EF6","قطع غيار سيارات":"\u6C7D\u8F66\u914D\u4EF6","اكسسوارات سيارات":"\u6C7D\u8F66\u7528\u54C1","إكسسوارات سيارات":"\u6C7D\u8F66\u7528\u54C1","أدوات كهربائية":"\u7535\u52A8\u5DE5\u5177",عدة:"\u5DE5\u5177\u5957\u88C5",مفروشات:"\u5E8A\u4E0A\u7528\u54C1",مفارش:"\u5E8A\u5355",ستائر:"\u7A97\u5E18",سجاد:"\u5730\u6BEF",أثاث:"\u5BB6\u5177",اثاث:"\u5BB6\u5177",كراسي:"\u6905\u5B50",تغليف:"\u5305\u88C5\u76D2",أكياس:"\u5851\u6599\u888B",اكياس:"\u5851\u6599\u888B"};function _$(t){return t.replace(/[ً-ْـ]/g,"").replace(/[إأآ]/g,"ا").replace(/ى/g,"ي").replace(/\s+/g," ").trim()}var Ext=Object.entries(Sxt).map(([t,e])=>[_$(t),e]).sort((t,e)=>e[0].length-t[0].length);function kxt(t){let e=` ${_$(t).split(" ").map(i=>i.startsWith("ال")&&i.length>4?i.slice(2):i).join(" ")} `,r=` ${_$(t)} `;for(let[i,n]of Ext)if(e.includes(` ${i} `)||r.includes(` ${i} `))return n}function Txt(){let{LLM_BASE_URL:t,LLM_API_KEY:e,LLM_MODEL:r}=process.env;if(!(!t||!e||!r))return{baseUrl:t.replace(/\/$/,""),apiKey:e,model:r}}async function Cxt(t,e){let r=await fetch(`${e.baseUrl}/chat/completions`,{method:"POST",headers:{"content-type":"application/json",authorization:`Bearer ${e.apiKey}`},body:JSON.stringify({model:e.model,temperature:0,messages:[{role:"system",content:"You convert a Libyan customer's product request (Arabic, often Libyan dialect) into the single best Simplified Chinese search keyword for 1688.com wholesale search. Reply with the keyword only, 2-8 Chinese characters, no punctuation, no explanation."},{role:"user",content:t}]}),signal:AbortSignal.timeout(2e4)});if(!r.ok)throw new Error(`LLM translation failed (${r.status})`);let n=(await r.json()).choices?.[0]?.message?.content?.trim().split(/\s|\n/)[0];if(!n)throw new Error("LLM returned an empty translation");return n}async function LTe(t,e=Txt()){let r=t.trim();if(!xxt.test(r))return{original:r,searchTerm:r,method:"passthrough"};let i=kxt(r);if(i)return{original:r,searchTerm:i,method:"glossary"};if(e)return{original:r,searchTerm:await Cxt(r,e),method:"llm"};throw new Error(`ما قدرتش نترجم "${r}" للصيني. اكتب اسم المنتج بالإنجليزي أو الصيني، أو فعّل الترجمة الذكية (LLM_BASE_URL / LLM_API_KEY / LLM_MODEL).`)}var Tl={price:35,sales:20,repurchase:15,tenure:15,trust:10,moqFit:5};function x$(t,e,r={}){let i=t.map(u=>{let c=fSe(u,e),f=c?r.effectivePrice?r.effectivePrice(u,c):c.unitPriceCny:void 0;return{offer:u,price:c,eff:f}}),n=i.map(u=>u.eff).filter(u=>u!=null&&u>0),a=n.length?Math.min(...n):0,s=Math.max(1,...t.map(u=>u.soldCount??0));return i.map(({offer:u,price:c,eff:f})=>{let p=[],h=f,d=h&&a?a/h*Tl.price:0,m=u.soldCount?Math.log10(u.soldCount+1)/Math.log10(s+1)*Tl.sales:0,g=u.shopRepurchaseRate,y=g!=null?Math.min(g,40)/40*Tl.repurchase:Tl.repurchase*.3,x=u.supplier.yearsOn1688,S=x!=null?Math.min(x,10)/10*Tl.tenure:0,T=Math.min(u.trustTags.length/3,1)*Tl.trust,k=ph(u),N=k==null||e>=k,X=N?Tl.moqFit:0;h||p.push("ما فيش سعر واضح"),N||p.push(`الكمية أقل من الحد الأدنى (${k})`),x!=null&&x<2&&p.push("مورد جديد على 1688"),(u.soldCount??0)<50&&p.push("مبيعات قليلة"),g!=null&&g<15&&p.push("نسبة رجوع الزبائن ضعيفة"),u.hasDetail&&qy(u,c?.sku)==null&&p.push("الوزن غير معروف (تقديري)"),u.priceMinCny&&u.priceMaxCny&&u.priceMaxCny>u.priceMinCny*2&&p.push("الأسعار تختلف كثير حسب الموديل"),u.isAd&&p.push("إعلان ممول");let F={price:sm(d),sales:sm(m),repurchase:sm(y),tenure:sm(S),trust:sm(T),moqFit:X},L=sm(Object.values(F).reduce((R,U)=>R+U,0));return{offer:u,price:c,score:L,breakdown:F,flags:p}}).sort((u,c)=>c.score-u.score)}var sm=t=>Math.round(t*10)/10;function S$(t,e){let r=new Map;return t.filter(i=>{let n=i.offer.supplier.memberId||i.offer.supplier.name,a=r.get(n)??0;return a>=e?!1:(r.set(n,a+1),!0)})}async function BTe(t,e,r){let i=t.detailCount??5,n=t.top??5,a=[],s=await LTe(t.query),o=Axt(s.searchTerm).slice(0,t.maxSearches??3),u=new Map,c=[],f=Date.now(),p=await Promise.allSettled(o.map(U=>e.search(U)));if(console.log(`[1688] search x${o.length} ${Date.now()-f}ms`),p.forEach((U,W)=>{if(U.status==="fulfilled"){c.push(o[W]);for(let P of U.value.data.items??[])u.has(P.id)||u.set(P.id,P)}else a.push(`تعذر البحث عن "${o[W]}": ${U.reason.message}`)}),!c.length)throw p.find(U=>U.status==="rejected")?.reason??new Error("search failed");let h=Array.from(u.values()),d=/[\u4e00-\u9fff]/.test(s.searchTerm)?h.filter(U=>U.title.includes(s.searchTerm)):h,m=d.length>=Math.min(n,h.length)?d:h;if(d.length<h.length&&m===d&&a.push(`استبعدنا ${h.length-d.length} نتيجة ما فيهاش "${s.searchTerm}" في العنوان`),!m.length)throw new Error(`ما لقيناش نتائج في 1688 لـ "${s.searchTerm}".`);let g=x$(m.map(cSe),t.qty),y=t.maxPerSupplier??1,x=S$(g,Math.max(2,y)).slice(0,i),S=(U,W)=>Promise.race([U,new Promise((P,$)=>setTimeout(()=>$(new Error("بطيء، استعملنا بيانات البحث")),W))]),T=Date.now(),k=await Promise.allSettled(x.map(U=>S(e.detail(U.offer.offerId),t.detailDeadlineMs??9e3)));console.log(`[1688] details ${Date.now()-T}ms`);let N=x.map((U,W)=>{let P=k[W];return P.status==="fulfilled"?lSe(U.offer,P.value.data):(a.push(`تعذر جلب تفاصيل ${U.offer.offerId}: ${P.reason.message}`),U.offer)}),X=(U,W)=>LC({unitPriceCny:W.unitPriceCny,qty:t.qty,unitWeightKg:qy(U,W.sku),mode:t.mode},r).perUnit,F=S$(x$(N,t.qty,{effectivePrice:X}),y).slice(0,n),L=t.mode==="air"?"sea":"air",R=F.map(U=>{if(!U.price)return{...U,cost:null,costAlt:null,negotiation:null};let W=qy(U.offer,U.price.sku),P={unitPriceCny:U.price.unitPriceCny,qty:t.qty,unitWeightKg:W};return{...U,cost:LC({...P,mode:t.mode},r),costAlt:LC({...P,mode:L},r),negotiation:DTe(U,t.qty,{wantsLogo:t.wantsLogo})}});return r.placeholders.length&&a.push(`أرقام تقديرية لازم تتغير بأرقام اوشوب الحقيقية: ${r.placeholders.join("، ")}`),{request:t,translated:s,searchedCount:m.length,searchTerms:c,options:R,creditsUsed:e.creditsUsed??0,generatedAt:new Date().toISOString(),warnings:a}}function Axt(t){return/[\u4e00-\u9fff]/.test(t)?[t,`${t} \u6279\u53D1`,`${t} \u5382\u5BB6`,`${t} \u8DE8\u5883`]:[t,`${t} wholesale`,`${t} factory`]}var BC={fx:{cnyToLyd:.76,usdToLyd:5.45},chinaDomestic:{cnyPerKg:3,minCnyPerOrder:15},freight:{air:{usdPerKg:9,minChargeKg:1,transitDays:"7-12"},sea:{usdPerCbm:280,minChargeCbm:.1,transitDays:"35-50"}},packagingWeightFactor:1.15,defaultDensityKgPerCbm:200,fallbackUnitWeightKg:.3,customsPercent:0,serviceFeePercent:5,paymentFeePercent:2,placeholders:["fx.cnyToLyd","fx.usdToLyd","chinaDomestic","freight.air","freight.sea","customsPercent","serviceFeePercent","paymentFeePercent"]};var Cl=class extends Error{constructor(r,i){super(r);this.status=i;this.name="ReefError"}},H0=new Map,om=class{apiKey;baseUrl;root;timeoutMs;retries;creditsUsed=0;constructor(e={}){let r=process.env.CUSTOM_CRED_API_REEFAPI_COM_URL,i=process.env.CUSTOM_CRED_API_REEFAPI_COM_PROXY_AUTH_KEY;this.apiKey=e.apiKey??i??process.env.REEF_API_KEY,this.root=(r??"https://api.reefapi.com").replace(/\/$/,""),this.baseUrl=(e.baseUrl??process.env.REEF_BASE_URL??`${this.root}/1688/v1`).replace(/\/$/,""),this.timeoutMs=e.timeoutMs??3e4,this.retries=e.retries??1}search(e){return this.post("/search",{query:e})}detail(e){return this.post("/product/detail",{offer_id:e})}call(e,r,i){return this.post(`${this.root}/${e}/v1/${r}`,i,!0)}async post(e,r,i=!1){let n=(i?e.replace(this.root,""):e)+JSON.stringify(r),a=H0.get(n);if(a&&a.until>Date.now())return a.value;let s=await this.postRaw(e,r,i);return H0.set(n,{until:Date.now()+30*6e4,value:s}),H0.size>300&&H0.delete(H0.keys().next().value),s}async postRaw(e,r,i=!1){let n={"content-type":"application/json"};this.apiKey&&(n["x-api-key"]=this.apiKey);let a;for(let s=0;s<=this.retries;s++)try{let o=await fetch(i?e:this.baseUrl+e,{method:"POST",headers:n,body:JSON.stringify(r),signal:AbortSignal.timeout(this.timeoutMs)});if(o.status===401||o.status===403)throw new Cl("ReefAPI rejected the API key (check REEF_API_KEY).",o.status);if(o.status===402)throw new Cl("ReefAPI credits exhausted.",402);if(o.status>=500)throw new Cl(`ReefAPI server error ${o.status}`,o.status);let u=await o.json();if(!o.ok||!u.ok){let c=typeof u.error=="string"?u.error:u.error?.message;throw new Cl(c??`ReefAPI request failed (${o.status})`,o.status)}return this.creditsUsed+=u.meta?.charged_credits??0,u}catch(o){if(a=o,!(!(o instanceof Cl)||(o.status??0)>=500)||s===this.retries)break}throw a}};var jTe={rateMode:"official",officialUsd:6.43,parallelUsd:9.9,usdToLyd:6.43,airUsdPerKg:9,seaUsdPerCbm:280,serviceFeePercent:5,customsPercent:0},$Te={...jTe},X0=[],um=[];function Vs(){return{...jTe,...$Te}}function UTe(t){let e={...Vs(),...t};return e.usdToLyd=e.rateMode==="parallel"?e.parallelUsd:e.officialUsd,$Te=e,e}function E$(t){let e=X0.length+1;return X0.push({id:e,created_at:new Date().toISOString(),...t}),e}function zTe(t=50){return X0.slice().reverse().slice(0,t).map(({payload:e,...r})=>r)}function WTe(t){return X0.find(e=>e.id===t)}function HTe(t){let e=new Date().toISOString();um.push({id:um.length+1,request_id:t.requestId,created_at:e,updated_at:e,supplier:t.supplier,product:t.product,url:t.url??null,image:t.image??null,status:"needs_approval",data:t.data})}function XTe(){return um.slice().reverse().slice(0,100)}function VTe(t,e){let r=um.find(i=>i.id===t);r&&(r.status=e,r.updated_at=new Date().toISOString())}function GTe(){return{requests:X0.length,pending:um.filter(t=>t.status==="needs_approval").length,approved:um.filter(t=>t.status==="approved").length}}var k$={USD:1,CNY:7.1,SAR:3.75,AED:3.6725,EUR:.87,GBP:.75,TRY:42},V0=null;async function KTe(){if(V0&&Date.now()-V0.at<6*36e5)return V0;try{let e=await(await fetch("https://open.er-api.com/v6/latest/USD",{signal:AbortSignal.timeout(8e3)})).json();if(e?.result==="success"&&e.rates?.CNY)return V0={at:Date.now(),rates:e.rates,source:"open.er-api.com"},V0}catch{}return{rates:k$,source:"fallback"}}async function jC(t){let e=Vs(),{rates:r}=await KTe(),i=r[t.toUpperCase()]??k$[t.toUpperCase()];return i?e.usdToLyd/i:e.usdToLyd}async function YTe(){let t=Vs(),{rates:e,source:r}=await KTe(),i={};for(let n of["CNY","USD","AED","SAR","TRY","EUR","GBP"])i[n]=Math.round(t.usdToLyd/(e[n]??k$[n])*1e3)/1e3;return{usdToLyd:t.usdToLyd,rateMode:t.rateMode,perCurrency:i,source:r}}var $C={alibaba:{name:"Alibaba.com",country:"الصين",flag:"cn",kind:"wholesale"},noon_ae:{name:"noon",country:"الإمارات",flag:"ae",kind:"retail"},amazon_ae:{name:"Amazon.ae",country:"الإمارات",flag:"ae",kind:"retail"},amazon_sa:{name:"Amazon.sa",country:"السعودية",flag:"sa",kind:"retail"},trendyol:{name:"Trendyol",country:"تركيا",flag:"tr",kind:"retail"},amazon_us:{name:"Amazon.com",country:"أمريكا",flag:"us",kind:"retail"},amazon_de:{name:"Amazon.de",country:"ألمانيا",flag:"de",kind:"retail"},amazon_uk:{name:"Amazon.co.uk",country:"بريطانيا",flag:"gb",kind:"retail"}},Rxt={amazon_ae:{mp:"ae",host:"amazon.ae"},amazon_sa:{mp:"sa",host:"amazon.sa"},amazon_us:{mp:"com",host:"amazon.com"},amazon_de:{mp:"de",host:"amazon.de"},amazon_uk:{mp:"co.uk",host:"amazon.co.uk"}},Oxt=t=>Math.round(t*100)/100;async function Ixt(t,e,r,i){let n=[];if(e==="alibaba"){let s=await t.call("alibaba","search",{query:r});for(let o of s.data?.results??[]){if(o.is_ad)continue;let u=o.price?.min;u&&n.push({title:o.title,url:o.url,image:o.image,price:u,currency:o.price?.currency||"USD",rating:o.rating,reviews:o.review_count,seller:o.supplier?.name,moq:o.moq?.text,verified:!!o.supplier?.verified})}}else if(e==="noon_ae"){let s=await t.call("noon","search",{query:r});for(let o of s.data?.results??[])o.price&&n.push({title:o.title,url:o.url,image:o.image,price:o.price,currency:o.currency||"AED",rating:o.rating,reviews:o.review_count,seller:o.brand})}else if(e==="trendyol"){let s=await t.call("trendyol","search",{query:i||r});for(let o of s.data?.results??[])o.price_value&&n.push({title:o.title,url:o.url,image:o.image,price:o.price_value,currency:"TRY",rating:o.rating,reviews:o.comment_count,seller:o.brand})}else{let s=Rxt[e],o=await t.call("amazon","search",{query:r,marketplace:s.mp});for(let u of o.data?.results??[])!u.price||u.sponsored||n.push({title:u.title,url:`https://www.${s.host}/dp/${u.asin}`,image:u.image,price:u.price,currency:u.currency||u.currency_code||"USD",rating:u.rating,reviews:u.rating_count,seller:u.brand})}let a=[];for(let s of n.slice(0,12))a.push({...s,priceLyd:Oxt(s.price*await jC(s.currency))});return a.sort((s,o)=>(o.reviews??0)>20&&(s.reviews??0)<=20?1:(s.reviews??0)>20&&(o.reviews??0)<=20?-1:s.priceLyd-o.priceLyd),a.slice(0,12)}const PRODUCT_TYPES = [
-  { id: "sneaker", query: ["sneaker", "sneakers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي"], titles: ["sneaker", "sneakers", "trainer", "trainers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي"] },
+  { id: "sneaker", query: ["sneaker", "sneakers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي", "كنادر", "كندرة", "صبابيط", "صباط رياضي", "سبور"], titles: ["sneaker", "sneakers", "trainer", "trainers", "running shoe", "sports shoe", "حذاء رياضي", "سنيكر", "كوتشي", "كنادر", "كندرة", "صباط"] },
   { id: "boot", query: ["boot", "boots", "ankle boot", "جزمة", "بوت"], titles: ["boot", "boots", "ankle boot", "جزمة", "بوت"] },
-  { id: "sandal", query: ["sandal", "sandals", "صندل", "صنادل"], titles: ["sandal", "صندل", "صنادل"] },
+  { id: "sandal", query: ["sandal", "sandals", "صندل", "صنادل", "نعال"], titles: ["sandal", "صندل", "صنادل", "نعال"] },
+  { id: "slipper", query: ["slipper", "slippers", "slide", "slides", "flip flop", "flip-flops", "شبشب", "شباشب", "سليبر", "بلاج"], titles: ["slipper", "slippers", "slide", "slides", "flip flop", "flip-flops", "شبشب", "شباشب", "سليبر", "بلاج"] },
   { id: "heel", query: ["high heel", "high heels", "heels", "كعب عالي", "حذاء بكعب"], titles: ["high heel", "heels", "stiletto", "كعب عالي", "حذاء بكعب"] },
   { id: "abaya", query: ["abaya", "abayas", "عباية", "عبايات", "عباءة", "عباءات"], titles: ["abaya", "عباية", "عباءة"] },
   { id: "handbag", query: ["handbag", "handbags", "purse", "purses", "شنطة يد", "حقيبة يد"], titles: ["handbag", "handbags", "purse", "purses", "شنطة يد", "حقيبة يد"] },
@@ -316,13 +317,14 @@ new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
   { id: "belt", query: ["belt", "belts", "حزام", "أحزمة", "احزمة"], titles: ["belt", "حزام", "أحزمة", "احزمة"] },
   { id: "watch", query: ["watch", "watches", "ساعة", "ساعات"], titles: ["watch", "watches", "ساعة", "ساعات"] },
   { id: "dress", query: ["dress", "dresses", "gown", "فستان", "فساتين", "elbise"], titles: ["dress", "gown", "فساتين", "فستان", "elbise"] },
-  { id: "perfume", query: ["perfume", "parfum", "fragrance", "عطر", "عطور"], titles: ["perfume", "parfum", "fragrance", "عطر", "عطور"] },
+  { id: "perfume", query: ["perfume", "parfum", "fragrance", "عطر", "عطور"], titles: ["perfume", "parfum", "fragrance", "eau de parfum", "عطر", "عطور"] },
   { id: "wallet", query: ["wallet", "wallets", "محفظة", "محافظ"], titles: ["wallet", "محفظة", "محافظ"] },
   { id: "shirt", query: ["shirt", "shirts", "blouse", "قميص", "قمصان", "بلوزة", "بلوزات"], titles: ["shirt", "blouse", "قميص", "بلوزة"] },
-  { id: "coat", query: ["coat", "coats", "jacket", "jackets", "معطف", "جاكيت"], titles: ["coat", "jacket", "معطف", "جاكيت"] },
-  { id: "pants", query: ["pants", "trousers", "jeans", "بنطال", "بنطلون", "جينز"], titles: ["pants", "trousers", "jeans", "بنطال", "بنطلون", "جينز"] },
-  { id: "jewelry", query: ["jewelry", "jewellery", "necklace", "bracelet", "earrings", "مجوهرات", "قلادة", "سوار", "أقراط"], titles: ["jewelry", "jewellery", "necklace", "bracelet", "earrings", "مجوهرات", "قلادة", "سوار", "أقراط"] },
-  { id: "shoes", query: ["shoe", "shoes", "footwear", "حذاء", "أحذية", "احذية"], titles: ["shoe", "shoes", "footwear", "sneaker", "trainer", "boot", "sandal", "heel", "حذاء", "أحذية", "احذية", "سنيكر", "كوتشي", "جزمة", "بوت", "صندل"] },
+  { id: "coat", query: ["coat", "coats", "jacket", "jackets", "معطف", "جاكيت", "بالطو"], titles: ["coat", "jacket", "معطف", "جاكيت", "بالطو"] },
+  { id: "pants", query: ["pants", "trousers", "jeans", "بنطال", "بنطلون", "جينز", "سروال"], titles: ["pants", "trousers", "jeans", "بنطال", "بنطلون", "جينز", "سروال"] },
+  { id: "jewelry", query: ["jewelry", "jewellery", "necklace", "bracelet", "earrings", "ring", "مجوهرات", "قلادة", "سوار", "أقراط", "خاتم", "سلسلة", "حلق"], titles: ["jewelry", "jewellery", "necklace", "bracelet", "earrings", "ring", "مجوهرات", "قلادة", "سوار", "أقراط", "خاتم", "سلسلة", "حلق"] },
+  { id: "sunglasses", query: ["sunglasses", "sun glasses", "glasses", "نظارات شمسية", "نظارة", "نظارات", "شمسية"], titles: ["sunglasses", "sun glasses", "glasses", "نظارة", "نظارات"] },
+  { id: "shoes", query: ["shoe", "shoes", "footwear", "حذاء", "أحذية", "احذية", "كنادر", "كندرة", "صبابيط", "صباط", "سبور"], titles: ["shoe", "shoes", "footwear", "sneaker", "trainer", "boot", "sandal", "heel", "slipper", "حذاء", "أحذية", "احذية", "سنيكر", "كوتشي", "جزمة", "بوت", "صندل", "شبشب", "كنادر", "صباط"] },
 ];
 
 const PRODUCT_FEATURES = [
@@ -334,48 +336,99 @@ const PRODUCT_FEATURES = [
   { id: "blue", query: ["blue", "أزرق", "ازرق", "زرقاء"], titles: ["blue", "أزرق", "ازرق", "زرقاء"] },
   { id: "green", query: ["green", "أخضر", "اخضر", "خضراء"], titles: ["green", "أخضر", "اخضر", "خضراء"] },
   { id: "pink", query: ["pink", "وردي", "وردية", "زهري"], titles: ["pink", "وردي", "وردية", "زهري"] },
+  { id: "beige", query: ["beige", "بيج", "كريمي", "cream"], titles: ["beige", "بيج", "كريمي", "cream"] },
+  { id: "brown", query: ["brown", "بني", "بنية"], titles: ["brown", "بني", "بنية"] },
+  { id: "grey", query: ["grey", "gray", "رمادي", "رمادية"], titles: ["grey", "gray", "رمادي", "رمادية"] },
+  { id: "navy", query: ["navy", "كحلي"], titles: ["navy", "كحلي"] },
   { id: "embroidered", query: ["embroidery", "embroideries", "embroidered", "embroider", "تطريز", "تطريزات", "مطرز", "مطرزة", "مطرزات"], titles: ["embroidery", "embroideries", "embroidered", "embroider", "تطريز", "مطرز", "مطرزة"] },
   { id: "lace", query: ["lace", "lacework", "دانتيلا", "دانتيل"], titles: ["lace", "lacework", "دانتيلا", "دانتيل"] },
   { id: "sequins", query: ["sequin", "sequins", "paillette", "ترتر", "ترتره"], titles: ["sequin", "sequins", "paillette", "ترتر"] },
   { id: "floral", query: ["floral", "flower", "flowers", "ورود", "ورود مطبوعة"], titles: ["floral", "flower", "flowers", "ورود"] },
   { id: "leather", query: ["leather", "جلد", "جلدي", "جلدية"], titles: ["leather", "جلد", "جلدي", "جلدية"] },
+  { id: "suede", query: ["suede", "شامواه"], titles: ["suede", "شامواه"] },
+  { id: "satin", query: ["satin", "ساتان"], titles: ["satin", "ساتان"] },
+  { id: "silk", query: ["silk", "حرير", "حريري"], titles: ["silk", "حرير", "حريري"] },
+  { id: "chiffon", query: ["chiffon", "شيفون"], titles: ["chiffon", "شيفون"] },
+  { id: "cotton", query: ["cotton", "قطن", "قطني"], titles: ["cotton", "قطن", "قطني"] },
+  { id: "velvet", query: ["velvet", "مخمل"], titles: ["velvet", "مخمل"] },
+  { id: "denim", query: ["denim", "جينز"], titles: ["denim", "جينز"] },
   { id: "quilted", query: ["quilted", "quilting", "مبطن", "مبطنة"], titles: ["quilted", "quilting", "مبطن", "مبطنة"] },
   { id: "chain", query: ["chain", "chain strap", "سلسلة", "سير سلسلة"], titles: ["chain", "سلسلة"] },
   { id: "long", query: ["long", "طويل", "طويلة"], titles: ["long", "طويل", "طويلة"] },
   { id: "short", query: ["short", "قصير", "قصيرة"], titles: ["short", "قصير", "قصيرة"] },
+  { id: "midi", query: ["midi", "ميدي"], titles: ["midi", "ميدي"] },
+  { id: "maxi", query: ["maxi", "ماكسي"], titles: ["maxi", "ماكسي"] },
+  { id: "striped", query: ["striped", "stripes", "مقلّم", "مقلم", "مخطط"], titles: ["striped", "stripes", "مقلّم", "مقلم", "مخطط"] },
+  { id: "printed", query: ["printed", "print", "مطبوع", "مطبوعة"], titles: ["printed", "print", "مطبوع", "مطبوعة"] },
+  { id: "oversized", query: ["oversized", "واسع", "واسعة"], titles: ["oversized", "واسع", "واسعة"] },
 ];
 
 const STOP_WORDS = new Set((
   "a an the with for of in on from to and or by women woman womens women's men mens men's s kids child children baby brand branded original authentic genuine new cheap cheaper lowest low price lower deal deals best quality style model type size color colour item product find search looking want please ladies lady female male " +
-  "نبي نبيلي ابي اريد ابغى ابحث دورلي دور لي هات عطيني وريني لو سمحت من في على الى و او فيها بها يكون تكون لل لي للزبونة للزبون نوع نوعا شكل موديل ماركة ماركه اصلي اصليه سعر ارخص اقل مختلف اخرى اخر فقط " +
+  "نبي نبيلي نبيلك ابي اريد ابغى ابغي نحوس دورلي دور لي هات عطيني وريني لو سمحت من في على الى إلي و او فيها بها يكون تكون لل لي للزبونة للزبون نوع نوعا شكل موديل ماركة ماركه اصلي اصليه اصليا سعر ارخص اقل مختلف اخرى اخر فقط برشا توا قداش شن شني واش هاد هذي هذا هذيك تبي تحب نلقالك نلقى حاجة حاجه شي بربي عايز عاوز محتاج طلب طلبي يدور يدورلي ابحث ابحثي حوس حوسي وريني جيبلي جيب عايزة محتاجة نفس مثل كيما حتى ولا بس بين زي كان عندك عندكم حق حقت " +
   "kadin kadın erkek bayan bayanlar erkekler icin için yeni kaliteli uygun ucuz en iyi elbise urun ürün istiyorum bana bul göster"
 ).split(/\s+/).map(normalizeProductText));
+
+/** Arabic letters are commonly written with a leading conjunction/article: بالذهبي، الذهبي، والذهبي، بتطريز. */
+const ARABIC_PREFIXES = ["", "ال", "بال", "وال", "كال", "فال", "لل", "و", "ب", "ل", "ك", "ف"];
+
+/**
+ * Audience words (نسائي / رجالي / أطفال / women / men...) rarely survive
+ * translation, so they are never used as hard requirements.
+ */
+const AUDIENCE = new Set(
+  ("women womens woman ladies lady female girls girl men mens man male boys boy kids kid child children baby " +
+    "نساء نسائي نساييه نسوان حريمي رجال رجالي رجاليه ولادي اولاد اطفال طفل اطفالي بيبي")
+    .split(/\s+/)
+    .map(normalizeProductText),
+);
+
+/** "بتطريز" -> ["بتطريز", "تطريز"] so prefixed words are recognised as features, not brands. */
+function baseForms(token) {
+  const forms = new Set([token]);
+  for (const prefix of ARABIC_PREFIXES) {
+    if (prefix && token.startsWith(prefix) && token.length > prefix.length + 1) forms.add(token.slice(prefix.length));
+  }
+  return [...forms];
+}
 
 function normalizeProductText(value) {
   return String(value ?? "")
     .toLowerCase()
     .normalize("NFKD")
     .replace(/[\u064B-\u065F\u0670\u0640]/g, "")
-    .replace(/[أإآ]/g, "ا")
+    .replace(/[أإآٱ]/g, "ا")
     .replace(/ى/g, "ي")
     .replace(/ة/g, "ه")
+    .replace(/ؤ/g, "و")
+    .replace(/ئ/g, "ي")
     .replace(/ı/g, "i")
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim()
     .replace(/\s+/g, " ");
 }
 
+/** All accepted surface forms of one word (plural + Arabic prefixes). */
+function wordVariants(word) {
+  const forms = new Set([word]);
+  const last = word;
+  forms.add(`${last}s`);
+  forms.add(`${last}es`);
+  if (last.endsWith("y") && last.length > 2) forms.add(`${last.slice(0, -1)}ies`);
+  if (last.endsWith("s") && last.length > 2) forms.add(last.slice(0, -1));
+  if (last.endsWith("ies") && last.length > 4) forms.add(`${last.slice(0, -3)}y`);
+  for (const prefix of ARABIC_PREFIXES) forms.add(prefix + word);
+  return [...forms];
+}
+
+/** Whole-phrase match, tolerant to plurals and Arabic prefixes (بالذهبي = الذهبي = ذهبي). */
 function phrasePresent(text, phrase) {
   const haystack = ` ${normalizeProductText(text)} `;
   const words = normalizeProductText(phrase).split(" ").filter(Boolean);
   if (!words.length) return false;
-  const last = words.at(-1);
-  const variants = new Set([last, `${last}s`, `${last}es`]);
-  if (last.endsWith("y") && last.length > 2) variants.add(`${last.slice(0, -1)}ies`);
-  if (last.endsWith("s") && last.length > 2) variants.add(last.slice(0, -1));
-  if (last.endsWith("ies") && last.length > 4) variants.add(`${last.slice(0, -3)}y`);
+  const lastWord = words.at(-1);
   const prefix = words.slice(0, -1);
-  return [...variants].some((variant) => {
+  return wordVariants(lastWord).some((variant) => {
     const needle = ` ${[...prefix, variant].join(" ")} `;
     return needle.length > 2 && haystack.includes(needle);
   });
@@ -387,13 +440,18 @@ function productTypeForQuery(queryText) {
 }
 
 function productTokenPresent(titleText, token) {
-  const words = new Set(normalizeProductText(titleText).split(" "));
-  if (words.has(token)) return true;
-  if (token.length > 3 && words.has(`${token}s`)) return true;
-  if (token.length > 4 && token.endsWith("s") && words.has(token.slice(0, -1))) return true;
-  return false;
+  const haystack = ` ${normalizeProductText(titleText)} `;
+  return wordVariants(token).some((variant) => haystack.includes(` ${variant} `));
 }
 
+/**
+ * Strict match between a marketplace title and what the customer asked for.
+ * - The product type (shoes vs bag vs watch…) must match, in all three languages.
+ * - Every colour / material / pattern / style word the customer mentioned must
+ *   appear in the title (Arabic included, not just the marketplace-language query).
+ * - Any remaining brand or model word from the request must appear as well;
+ *   when we cannot verify it, the result is rejected rather than shown.
+ */
 function productMatchesTitle(title, queryAr = "", localQuery = "") {
   const titleText = normalizeProductText(title);
   if (!titleText) return false;
@@ -408,17 +466,23 @@ function productMatchesTitle(title, queryAr = "", localQuery = "") {
     if (!feature.titles.some((term) => phrasePresent(titleText, term))) return false;
   }
 
-  const localTokens = normalizeProductText(localQuery).split(" ").filter(Boolean);
   const typeTokens = new Set((type?.query ?? []).flatMap((term) => normalizeProductText(term).split(" ")));
   const titleTypeTokens = new Set((type?.titles ?? []).flatMap((term) => normalizeProductText(term).split(" ")));
   const featureTokens = new Set(PRODUCT_FEATURES.flatMap((feature) => feature.query.concat(feature.titles).flatMap((term) => normalizeProductText(term).split(" "))));
-  const descriptors = [...new Set(localTokens)].filter((token) =>
-    token.length > 1 && !STOP_WORDS.has(token) && !typeTokens.has(token) && !titleTypeTokens.has(token) && !featureTokens.has(token),
+
+  // Arabic words can only be verified against an Arabic title; for English titles the
+  // marketplace-language query already carries the same brand/spec words.
+  const descriptorSource = /[\u0600-\u06FF]/.test(title) ? fullQuery : localQuery;
+  const excluded = new Set([...typeTokens, ...titleTypeTokens, ...featureTokens]);
+  const descriptors = [...new Set(normalizeProductText(descriptorSource).split(" "))].filter(
+    (token) =>
+      token.length > 1 &&
+      !STOP_WORDS.has(token) &&
+      !AUDIENCE.has(token) &&
+      !baseForms(token).some((form) => excluded.has(form)),
   );
   return descriptors.every((token) => productTokenPresent(titleText, token));
 }
-
-
 async function ZTe(t,e,r){let i=new om({timeoutMs:2e4,retries:0});return{results:await Promise.all(r.map(async a=>{let s=$C[a];try{let o=new Promise((u,c)=>setTimeout(()=>c(new Error("السوق هذا ما ردش في الوقت")),14e3));return{market:a,...s,items:await Promise.race([Ixt(i,a,t,e),o])}}catch(o){return{market:a,...s,items:[],error:o.message.slice(0,160)}}})),credits:r.length}}var QTe=[{key:"ordered",label:"تم الطلب من المورد",place:"الصين"},{key:"warehouse",label:"وصلت مخزن اوشوب",place:"قوانغتشو"},{key:"departed",label:"طلعت الشحنة",place:"ميناء نانشا"},{key:"transit",label:"في الطريق",place:"البحر المتوسط"},{key:"arrived",label:"وصلت ليبيا",place:"ميناء مصراتة"},{key:"customs",label:"تخليص جمركي",place:"مصراتة"},{key:"ready",label:"جاهزة للاستلام",place:"فرع اوشوب"}];function Pxt(t){let e=2166136261;for(let r of t)e=Math.imul(e^r.charCodeAt(0),16777619);return Math.abs(e)}function UC(t){let e=t.trim().toUpperCase().replace(/\s+/g,"")||"OSH-0000",r=Pxt(e),i=r%3===0?"air":"sea",n=1+r%(QTe.length-1),a=["مصراتة","طرابلس","مصراتة"][r%3],s=i==="air"?[0,3,5,7,9,10,11]:[0,4,8,26,40,44,46],o=new Date;o.setDate(o.getDate()-s[n]);let u=QTe.map((c,f)=>{let p=new Date(o);return p.setDate(p.getDate()+s[f]),{...c,place:i==="air"&&f===2?"مطار قوانغتشو":i==="air"&&f===3?"رحلة شحن جوي":i==="air"&&f===4?"مطار مصراتة":f===6?`فرع اوشوب ${a}`:c.place,date:p.toISOString().slice(0,10),done:f<=n,current:f===n}});return{code:e,mode:i,branch:a,cartons:1+r%12,weightKg:5+r%180,stages:u,eta:u[6].date,demo:!0}}var JTe=!!process.env.VERCEL,qxt=JTe?process.env.AI_MODEL||"anthropic/claude-sonnet-5.5":"claude_sonnet_5_5",Fxt=null,zC={};function Nxt(){if(!JTe)return Fxt??=new DC;let e=process.env.AI_GATEWAY_API_KEY||zC.token||process.env.VERCEL_OIDC_TOKEN;return new DC({baseURL:"https://ai-gateway.vercel.sh",apiKey:null,authToken:e})}async function T$(){let t=Vs(),e=await jC("CNY");return{...BC,fx:{cnyToLyd:Math.round(e*1e4)/1e4,usdToLyd:t.usdToLyd},freight:{air:{...BC.freight.air,usdPerKg:t.airUsdPerKg},sea:{...BC.freight.sea,usdPerCbm:t.seaUsdPerCbm}},serviceFeePercent:t.serviceFeePercent,customsPercent:t.customsPercent,placeholders:[]}}var Mxt={oshop:{name:"Oshop",self:"مساعد"}};function eCe(t,e){let r=Mxt[e],i=Vs(),n=t==="motors"?'أنت تخدم "اوشوب موتورز" لاستيراد السيارات وقطع غيارها. الزبائن يسألوا على قطع غيار (فلاتر، تيل، بطاريات، كشافات، جنوط، قطع محرك) أو على استيراد سيارة كاملة. لقطع الغيار استخدم أدوات البحث (اكتب اسم القطعة مع موديل السيارة بالصيني والإنجليزي). لاستيراد سيارة كاملة اشرح الخطوات باختصار (المصدر: كوريا، الإمارات، أمريكا، الصين) واطلب الموديل والسنة والميزانية، وقول إن موظف اوشوب موتورز هو اللي يعطي السعر النهائي.':'أنت تخدم "اوشوب Oshop للشحن والتجارة الإلكترونية"، شركة ليبية فروعها في مصراتة وطرابلس، تشتري للزبائن وتشحن من أشهر المواقع العالمية، شحن جوي وبحري، وتوصيل لكل مدن ليبيا. تركيز اوشوب: الأزياء النسائية، العطور من البراندات المشهورة (خاصة من السعودية)، الملابس من الماركات التركية المشهورة، البراندات العالمية المعروفة الأصلية، مستلزمات الأطفال، الشنط والأحذية، من شي إن والمواقع السعودية والتركية ومواقع الماركات. أغلب الزبائن أفراد يطلبوا حبة أو كم حبة، مش تجار جملة.';return`أنت "${r.name}"، الوكيل الذكي لشركة اوشوب في ليبيا. أنت ${r.self} ليبي، تتكلم باللهجة الليبية البيضاء المهذبة (مثلاً: "شن تبي"، "توا نشوفلك"، "باهي"، "مية مية").
 ${n}
 
