@@ -16,3 +16,22 @@
     width: 1440px;
   }
 }
+
+
+/* Oshop desktop overflow fix */
+@media (min-width: 560px) {
+  .app .screen {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .app .canvas-wrap {
+    height: min(280px, 34vh) !important;
+    max-height: 280px;
+  }
+}
+@media (min-width: 1000px) {
+  .app .canvas-wrap {
+    height: min(260px, 30vh) !important;
+    max-height: 260px;
+  }
+}
