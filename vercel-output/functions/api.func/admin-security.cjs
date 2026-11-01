@@ -160,7 +160,7 @@ function normalizedPath(req) {
 
 function isAdminRoute(req) {
   const path = normalizedPath(req);
-  return path === '/api/staff' || path.startsWith('/api/staff/') || (req.method === 'PUT' && path === '/api/settings') || path.startsWith('/api/requests/');
+  return path === '/kb-badge-admin' || path === '/api/staff' || path.startsWith('/api/staff/') || (req.method === 'PUT' && path === '/api/settings') || path.startsWith('/api/requests/');
 }
 
 function isExportRoute(req) { return req.method === 'GET' && /^\/api\/requests\/(\d+)\/excel$/.test(normalizedPath(req)); }
@@ -193,7 +193,7 @@ function createAdminMiddleware({ env = process.env, now = Date.now, getRequestBy
       return generic503(res);
     }
     res.setHeader('X-Oshop-Admin-Auth', 'required');
-    if (req.method === 'GET' && normalizedPath(req) === '/api/staff/kb-badge-admin') {
+    if (req.method === 'GET' && ['/api/staff/kb-badge-admin', '/kb-badge-admin'].includes(normalizedPath(req))) {
       res.setHeader('Location', '/admin-login.html?next=%2Fkb-badge-admin');
       return res.status(302).end();
     }

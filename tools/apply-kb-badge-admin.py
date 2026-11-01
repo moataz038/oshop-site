@@ -86,10 +86,22 @@ def patch_security() -> None:
     )
     text = replace_once(
         text,
-        "    res.setHeader('X-Oshop-Admin-Auth', 'required');\n    return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });",
-        "    res.setHeader('X-Oshop-Admin-Auth', 'required');\n    if (req.method === 'GET' && normalizedPath(req) === '/api/staff/kb-badge-admin') {\n      res.setHeader('Location', '/admin-login.html?next=%2Fkb-badge-admin');\n      return res.status(302).end();\n    }\n    return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });",
-        "unauthenticated page redirect",
+        "  return path === '/api/staff' || path.startsWith('/api/staff/') || (req.method === 'PUT' && path === '/api/settings') || path.startsWith('/api/requests/');",
+        "  return path === '/kb-badge-admin' || path === '/api/staff' || path.startsWith('/api/staff/') || (req.method === 'PUT' && path === '/api/settings') || path.startsWith('/api/requests/');",
+        "standalone badge-admin page protection",
     )
+    old_redirect = "    res.setHeader('X-Oshop-Admin-Auth', 'required');\n    if (req.method === 'GET' && normalizedPath(req) === '/api/staff/kb-badge-admin') {\n      res.setHeader('Location', '/admin-login.html?next=%2Fkb-badge-admin');\n      return res.status(302).end();\n    }\n    return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });"
+    new_redirect = "    res.setHeader('X-Oshop-Admin-Auth', 'required');\n    if (req.method === 'GET' && ['/api/staff/kb-badge-admin', '/kb-badge-admin'].includes(normalizedPath(req))) {\n      res.setHeader('Location', '/admin-login.html?next=%2Fkb-badge-admin');\n      return res.status(302).end();\n    }\n    return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });"
+    if new_redirect not in text:
+        if old_redirect in text:
+            text = text.replace(old_redirect, new_redirect, 1)
+        else:
+            text = replace_once(
+                text,
+                "    res.setHeader('X-Oshop-Admin-Auth', 'required');\n    return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });",
+                new_redirect,
+                "unauthenticated page redirect",
+            )
     text = replace_once(
         text,
         "    if (!rule && req.method === 'GET' && path === '/api/settings') rule = { perIp: 120, global: 1200 };",
@@ -188,10 +200,24 @@ def patch_routes() -> None:
     path.write_text(json.dumps(vercel, ensure_ascii=False, indent=2) + "\n")
 
 
+def patch_api_direct_admin_route() -> None:
+    path = ROOT / "vercel-output/functions/api.func/index.cjs"
+    text = path.read_text()
+    route = 'e.get("/kb-badge-admin",(r,i)=>{i.setHeader("Cache-Control","no-store");i.setHeader("X-Robots-Tag","noindex, nofollow, noarchive");i.type("html").send(require("./kb-badge-admin-page.cjs"))}),'
+    count = text.count(route)
+    if count == 0:
+        text = replace_once(text, 'e.get("/api/staff/overview"', route + 'e.get("/api/staff/overview"', "direct standalone badge-admin page route")
+    elif count > 1:
+        keep_until = text.find(route) + len(route)
+        text = text[:keep_until] + text[keep_until:].replace(route, "", count - 1)
+    path.write_text(text)
+
+
 def main() -> None:
     patch_store()
     patch_security()
     patch_api_bundle()
+    patch_api_direct_admin_route()
     patch_storefront()
     patch_login()
     patch_routes()

@@ -75,6 +75,7 @@ grep -q 'admin-auth-redirect.js' vercel-output/static/index.html
 grep -q 'X-Oshop-Admin-Auth' vercel-output/static/admin-auth-redirect.js
 grep -q 'KB_BADGE_ADMIN_V1' vercel-output/functions/api.func/index.cjs
 grep -q 'kb-badge-admin' vercel-output/functions/api.func/admin-security.cjs
+grep -q 'e.get("/kb-badge-admin"' vercel-output/functions/api.func/index.cjs
 grep -q 'noindex, nofollow, noarchive' vercel-output/functions/api.func/kb-badge-admin-page.cjs
 grep -q 'Disallow: /kb-badge-admin' vercel-output/static/robots.txt
 if grep -q 'x-vercel-oidc-token' vercel-output/functions/api.func/index.cjs; then
@@ -126,6 +127,7 @@ assert 'apply-kb-badge-admin.py' in build, 'Missing badge-admin build patch'
 assert any(route.get('src') == '^/kb-badge-admin/?$' and route.get('dest') == '/api/staff/kb-badge-admin' and not route.get('continue') for route in routes), 'Missing Build Output standalone admin rewrite'
 assert any(item.get('source') == '/kb-badge-admin' and 'X-Robots-Tag' in {h.get('key') for h in item.get('headers', [])} for item in vercel.get('headers', [])), 'Missing admin noindex headers'
 assert any(item.get('source') == '/kb-badge-admin' and item.get('destination') == '/api/staff/kb-badge-admin' for item in vercel.get('rewrites', [])), 'Missing Vercel root standalone admin rewrite'
+assert Path('vercel-output/functions/api.func/index.cjs').read_text().count('e.get("/kb-badge-admin"') == 1, 'Expected one direct admin page route'
 PY
 
 echo "Oshop verification passed."

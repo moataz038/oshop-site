@@ -111,10 +111,14 @@ test('badge administration page and read/write routes require server-authenticat
   const pageRedirect = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-admin' }));
   assert.equal(pageRedirect.res.statusCode, 302);
   assert.equal(pageRedirect.res.headers.location, '/admin-login.html?next=%2Fkb-badge-admin');
+  const directPageRedirect = await runMiddleware(middleware, makeRequest({ path: '/kb-badge-admin' }));
+  assert.equal(directPageRedirect.res.statusCode, 302);
+  assert.equal(directPageRedirect.res.headers.location, '/admin-login.html?next=%2Fkb-badge-admin');
   const cookie = await sessionFromLogin(1_800_000_000_000, 'badge-admin-login', makeSharedStore());
   const authorizedPage = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-admin', headers: { cookie } }));
   assert.equal(authorizedPage.passed, true);
   assert.equal(authorizedPage.res.headers['x-robots-tag'], 'noindex, nofollow, noarchive');
+  assert.equal((await runMiddleware(middleware, makeRequest({ path: '/kb-badge-admin', headers: { cookie } }))).passed, true);
   assert.equal((await runMiddleware(middleware, makeRequest({ path: '/api/kb/badge-display' }))).passed, true);
 });
 
