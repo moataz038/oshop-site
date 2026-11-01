@@ -14,13 +14,119 @@
       "continue": true
     },
     {
-      "src": "^/kb-badge-admin/?$",
-      "dest": "/api/staff/kb-badge-admin",
+      "src": "^/(?:kb-badge-admin[^/]*(?:/.*)?|api/(?:kb-badge-admin(?:/.*)?|staff/kb-badge-(?:admin|copy)(?:/.*)?))$",
+      "caseSensitive": false,
+      "missing": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "kb-badge-admin.vercel.app"
+          }
+        }
+      ],
+      "status": 404,
       "headers": {
-        "X-Robots-Tag": "noindex, nofollow, noarchive",
-        "Cache-Control": "no-store"
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
+    },
+    {
+      "src": "^/(?:admin-login(?:\\.html|\\.js)?(?:/.*)?|api/admin(?:/.*)?)$",
+      "caseSensitive": false,
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "kb-online-store.vercel.app"
+          }
+        }
+      ],
+      "status": 404,
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
+    },
+    {
+      "src": "^/(.*)$",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "kb-badge-admin.vercel.app"
+          }
+        }
+      ],
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
       },
+      "continue": true
+    },
+    {
+      "src": "^/$",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "kb-badge-admin.vercel.app"
+          }
+        }
+      ],
+      "status": 302,
+      "headers": {
+        "Location": "/kb-badge-admin",
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
+    },
+    {
+      "src": "^/kb-badge-admin/?$",
+      "caseSensitive": false,
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "kb-badge-admin.vercel.app"
+          }
+        }
+      ],
+      "dest": "/api/staff/kb-badge-admin",
+      "check": true,
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
+    },
+    {
+      "src": "^/robots\\.txt$",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "kb-badge-admin.vercel.app"
+          }
+        }
+      ],
+      "dest": "/kb-badge-admin-robots.txt",
       "check": true
+    },
+    {
+      "src": "^/(?!(?:kb-badge-admin/?|kb-badge-admin-login\\.html|kb-badge-admin-login\\.js|kb-badge-admin\\.js|kb-badge-admin-robots\\.txt|api/(?:staff/kb-badge-(?:admin|copy)/?|kb-badge-admin/(?:login|logout)/?))$).*$",
+      "caseSensitive": false,
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "kb-badge-admin.vercel.app"
+          }
+        }
+      ],
+      "status": 404,
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
     },
     {
       "src": "^/api(/.*)?$",

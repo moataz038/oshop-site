@@ -27,6 +27,43 @@ function getAllowedOrigins(env) {
   }).filter(Boolean));
 }
 
+// KB_BADGE_HOST_ISOLATION_V1: no forwarded host is trusted.
+const KB_BADGE_ADMIN_HOST = 'kb-badge-admin.vercel.app';
+const KB_BADGE_ADMIN_ORIGIN = 'https://kb-badge-admin.vercel.app';
+const KB_PUBLIC_HOST = 'kb-online-store.vercel.app';
+function badgeRequestHost(req) {
+  const raw = req.headers?.host;
+  return typeof raw === 'string' && raw === raw.trim() ? raw.toLowerCase() : '';
+}
+function isBadgeAdminHost(req) { return badgeRequestHost(req) === KB_BADGE_ADMIN_HOST; }
+function isBadgeAdminPath(req) {
+  const path = normalizedPath(req);
+  return /^\/kb-badge-admin(?:[^/]*)(?:\/.*)?$/.test(path) ||
+    /^\/api\/kb-badge-admin(?:\/.*)?$/.test(path) ||
+    /^\/api\/staff\/kb-badge-(?:admin|copy)(?:\/.*)?$/.test(path);
+}
+function isAllowedBadgeOrigin(req) { return req.headers?.origin === KB_BADGE_ADMIN_ORIGIN; }
+function badgeNotFound(res) {
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  return res.status(404).end();
+}
+function createBadgeHostMiddleware() {
+  const allowed = new Set(['/kb-badge-admin', '/api/staff/kb-badge-admin', '/api/staff/kb-badge-copy', '/api/kb-badge-admin/login', '/api/kb-badge-admin/logout']);
+  return (req, res, next) => {
+    const path = normalizedPath(req);
+    const adminHost = isBadgeAdminHost(req);
+    if (isBadgeAdminPath(req) && !adminHost) return badgeNotFound(res);
+    if (badgeRequestHost(req) === KB_PUBLIC_HOST && /^\/api\/admin(?:\/.*)?$/.test(path)) return badgeNotFound(res);
+    if (!adminHost) return next();
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
+    if (!allowed.has(path)) return badgeNotFound(res);
+    if (!['GET', 'HEAD'].includes(req.method) && !isAllowedBadgeOrigin(req)) return sendJson(res, 403, { error: 'طلب غير مسموح.' });
+    return next();
+  };
+}
+
 function isAllowedOrigin(req, env) {
   const origin = req.headers?.origin;
   if (typeof origin !== 'string') return false;
@@ -167,13 +204,14 @@ function isExportRoute(req) { return req.method === 'GET' && /^\/api\/requests\/
 
 function createAdminMiddleware({ env = process.env, now = Date.now, getRequestById = () => null } = {}) {
   return asyncHandler(async (req, res, next) => {
+    if (isBadgeAdminPath(req) && !isBadgeAdminHost(req)) return badgeNotFound(res);
     if (!isAdminRoute(req)) return next();
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
     const configured = isConfigured(env);
     const cookie = parseCookieHeader(req.headers?.cookie, COOKIE_NAME);
     if (configured && verifySessionCookie(cookie, env.OSHOP_ADMIN_PASSWORD, now())) {
-      if (req.method !== 'GET' && !isAllowedOrigin(req, env)) return sendJson(res, 403, { error: 'مصدر الطلب غير مسموح.' });
+      if (req.method !== 'GET' && !(isBadgeAdminPath(req) ? isAllowedBadgeOrigin(req) : isAllowedOrigin(req, env))) return sendJson(res, 403, { error: 'مصدر الطلب غير مسموح.' });
       return next();
     }
     if (isExportRoute(req)) {
@@ -194,7 +232,7 @@ function createAdminMiddleware({ env = process.env, now = Date.now, getRequestBy
     }
     res.setHeader('X-Oshop-Admin-Auth', 'required');
     if (req.method === 'GET' && ['/api/staff/kb-badge-admin', '/kb-badge-admin'].includes(normalizedPath(req))) {
-      res.setHeader('Location', '/admin-login.html?next=%2Fkb-badge-admin');
+      res.setHeader('Location', '/kb-badge-admin-login.html?next=%2Fkb-badge-admin');
       return res.status(302).end();
     }
     return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });
@@ -271,6 +309,10 @@ function createInputGuard() {
 
 function installAdminSecurity(app, options = {}) {
   if (typeof app.set === 'function') app.set('trust proxy', 1);
+  app.use(createBadgeHostMiddleware());
+  const badgeOptions = { ...options, env: { ...(options.env || process.env), OSHOP_ADMIN_ALLOWED_ORIGINS: KB_BADGE_ADMIN_ORIGIN } };
+  app.post('/api/kb-badge-admin/login', makeLoginHandler(badgeOptions));
+  app.post('/api/kb-badge-admin/logout', makeLogoutHandler(badgeOptions));
   app.post('/api/admin/login', makeLoginHandler(options));
   app.post('/api/admin/logout', makeLogoutHandler(options));
   app.use(createInputGuard());
@@ -278,4 +320,4 @@ function installAdminSecurity(app, options = {}) {
   app.use(createAdminMiddleware(options));
 }
 
-module.exports = { COOKIE_NAME, DEFAULT_ORIGIN, DOWNLOAD_TTL_MS, createAdminMiddleware, createDownloadCapability, createInputGuard, createRateLimitMiddleware, createSessionCookie, installAdminSecurity, isAllowedOrigin, makeLoginHandler, makeLogoutHandler, verifyDownloadCapability, verifySessionCookie, asyncHandler };
+module.exports = { KB_BADGE_ADMIN_HOST, KB_BADGE_ADMIN_ORIGIN, createBadgeHostMiddleware, isAllowedBadgeOrigin, COOKIE_NAME, DEFAULT_ORIGIN, DOWNLOAD_TTL_MS, createAdminMiddleware, createDownloadCapability, createInputGuard, createRateLimitMiddleware, createSessionCookie, installAdminSecurity, isAllowedOrigin, makeLoginHandler, makeLogoutHandler, verifyDownloadCapability, verifySessionCookie, asyncHandler };

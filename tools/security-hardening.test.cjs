@@ -7,6 +7,8 @@ const security = require('../vercel-output/functions/api.func/admin-security.cjs
 
 const password = 'test-only-oshop-admin-password-0123456789';
 const origin = 'https://oshop-ly.vercel.app';
+const badgeHost = 'kb-badge-admin.vercel.app';
+const badgeOrigin = 'https://kb-badge-admin.vercel.app';
 const env = { OSHOP_ADMIN_PASSWORD: password, OSHOP_ADMIN_ALLOWED_ORIGINS: origin };
 
 function makeResponse() {
@@ -103,22 +105,25 @@ test('staff authorization normalizes uppercase/trailing slash and enforces origi
 
 test('badge administration page and read/write routes require server-authenticated session', async () => {
   const middleware = security.createAdminMiddleware({ env, now: () => 1_800_000_000_000 });
-  const anonymousRead = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-copy' }));
+  const anonymousRead = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-copy', headers: { host: badgeHost } }));
   assert.equal(anonymousRead.res.statusCode, 401);
   assert.equal(anonymousRead.res.headers['x-robots-tag'], 'noindex, nofollow, noarchive');
-  const anonymousWrite = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-copy', method: 'PUT', headers: { origin }, body: { items: ['x'] } }));
+  const anonymousWrite = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-copy', method: 'PUT', headers: { host: badgeHost, origin: badgeOrigin }, body: { items: ['x'] } }));
   assert.equal(anonymousWrite.res.statusCode, 401);
-  const pageRedirect = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-admin' }));
+  const pageRedirect = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-admin', headers: { host: badgeHost } }));
   assert.equal(pageRedirect.res.statusCode, 302);
-  assert.equal(pageRedirect.res.headers.location, '/admin-login.html?next=%2Fkb-badge-admin');
-  const directPageRedirect = await runMiddleware(middleware, makeRequest({ path: '/kb-badge-admin' }));
+  assert.equal(pageRedirect.res.headers.location, '/kb-badge-admin-login.html?next=%2Fkb-badge-admin');
+  const directPageRedirect = await runMiddleware(middleware, makeRequest({ path: '/kb-badge-admin', headers: { host: badgeHost } }));
   assert.equal(directPageRedirect.res.statusCode, 302);
-  assert.equal(directPageRedirect.res.headers.location, '/admin-login.html?next=%2Fkb-badge-admin');
+  assert.equal(directPageRedirect.res.headers.location, '/kb-badge-admin-login.html?next=%2Fkb-badge-admin');
   const cookie = await sessionFromLogin(1_800_000_000_000, 'badge-admin-login', makeSharedStore());
-  const authorizedPage = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-admin', headers: { cookie } }));
+  const authorizedPage = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-admin', headers: { host: badgeHost, cookie } }));
   assert.equal(authorizedPage.passed, true);
   assert.equal(authorizedPage.res.headers['x-robots-tag'], 'noindex, nofollow, noarchive');
-  assert.equal((await runMiddleware(middleware, makeRequest({ path: '/kb-badge-admin', headers: { cookie } }))).passed, true);
+  assert.equal((await runMiddleware(middleware, makeRequest({ path: '/kb-badge-admin', headers: { host: badgeHost, cookie } }))).passed, true);
+  const spoofed = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-copy', headers: { host: 'kb-online-store.vercel.app', 'x-forwarded-host': badgeHost, cookie } }));
+  assert.equal(spoofed.res.statusCode, 404);
+  assert.equal(spoofed.res.headers.location, undefined);
   assert.equal((await runMiddleware(middleware, makeRequest({ path: '/api/kb/badge-display' }))).passed, true);
 });
 

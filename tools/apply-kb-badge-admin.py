@@ -92,7 +92,7 @@ def patch_security() -> None:
     )
     old_redirect = "    res.setHeader('X-Oshop-Admin-Auth', 'required');\n    if (req.method === 'GET' && normalizedPath(req) === '/api/staff/kb-badge-admin') {\n      res.setHeader('Location', '/admin-login.html?next=%2Fkb-badge-admin');\n      return res.status(302).end();\n    }\n    return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });"
     new_redirect = "    res.setHeader('X-Oshop-Admin-Auth', 'required');\n    if (req.method === 'GET' && ['/api/staff/kb-badge-admin', '/kb-badge-admin'].includes(normalizedPath(req))) {\n      res.setHeader('Location', '/admin-login.html?next=%2Fkb-badge-admin');\n      return res.status(302).end();\n    }\n    return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });"
-    if new_redirect not in text:
+    if new_redirect not in text and "'/kb-badge-admin-login.html?next=%2Fkb-badge-admin'" not in text:
         if old_redirect in text:
             text = text.replace(old_redirect, new_redirect, 1)
         else:

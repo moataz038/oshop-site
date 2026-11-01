@@ -38,6 +38,7 @@ const server = http.createServer((req, res) => {
     let body;
     if (bodyText) { try { body = JSON.parse(bodyText); } catch { body = undefined; } }
     req.body = body;
+    if (typeof req.headers['x-test-host'] === 'string') req.headers.host = req.headers['x-test-host'];
     req.path = new URL(req.url, 'http://localhost').pathname;
     req.query = Object.fromEntries(new URL(req.url, 'http://localhost').searchParams);
     req.ip = req.headers['x-test-ip'] || '127.0.0.1';

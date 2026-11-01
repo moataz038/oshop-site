@@ -18,17 +18,20 @@ python3 tools/apply-shared-storage.py
 python3 tools/apply-kb-branding.py
 # تركيب لوحة العبارات المستقلة وحمايتها بعد توليد الحزمة، بصورة قابلة للتكرار.
 python3 tools/apply-kb-badge-admin.py
+# Restrict badge UI, APIs, and assets to the exact production admin hostname.
+python3 tools/apply-kb-badge-host-isolation.py
 # فحص بناء JavaScript الخلفي والواجهة قبل السماح بالنشر.
 node --check vercel-output/functions/api.func/index.cjs
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
 node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
 node --check vercel-output/static/admin-login.js
+node --check vercel-output/static/kb-badge-admin-login.js
 node --check vercel-output/static/admin-auth-redirect.js
 node --check vercel-output/static/kb-logo-3d.js
 python3 -m json.tool vercel-output/config.json >/dev/null
 python3 -m json.tool vercel.json >/dev/null
-node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/product-matching.test.cjs
+node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/kb-badge-host-isolation.test.cjs tools/product-matching.test.cjs
 
 # فحص الملفات المطلوبة والهوية والأسرار المكشوفة.
 bash tools/verify.sh

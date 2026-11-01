@@ -62,7 +62,15 @@
   "rewrites": [
     {
       "source": "/kb-badge-admin",
-      "destination": "/api/staff/kb-badge-admin"
+      "destination": "/api/staff/kb-badge-admin",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "kb-badge-admin.vercel.app"
+          }
+        }
+      ]
     }
   ]
 }

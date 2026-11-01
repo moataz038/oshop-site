@@ -13,7 +13,7 @@ function showStatus(message, kind = '') {
 }
 function requireLogin(response) {
   if (response.status !== 401 || response.headers.get('X-Oshop-Admin-Auth') !== 'required') return false;
-  window.location.replace('/admin-login.html?next=%2Fkb-badge-admin');
+  window.location.replace('/kb-badge-admin-login.html?next=%2Fkb-badge-admin');
   return true;
 }
 function renderFields(items) {
@@ -82,14 +82,14 @@ form.addEventListener('submit', async (event) => {
 logoutButton.addEventListener('click', async () => {
   logoutButton.disabled = true;
   try {
-    await fetch('/api/admin/logout', {
+    await fetch('/api/kb-badge-admin/logout', {
       method: 'POST',
       credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: '{}',
     });
   } finally {
-    window.location.replace('/admin-login.html');
+    window.location.replace('/kb-badge-admin-login.html?next=%2Fkb-badge-admin');
   }
 });
 loadItems();
