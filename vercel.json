@@ -1,5 +1,5 @@
 {
-  "buildCommand": "python3 tools/apply-product-matching-v3.py && python3 tools/apply-security-hardening.py && python3 tools/apply-shared-storage.py && node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/product-matching.test.cjs && mkdir -p .vercel/output && cp -R vercel-output/. .vercel/output/",
+  "buildCommand": "bash tools/build.sh && mkdir -p .vercel/output && cp -R vercel-output/. .vercel/output/",
   "framework": null,
   "outputDirectory": null,
   "headers": [

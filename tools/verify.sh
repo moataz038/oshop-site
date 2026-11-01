@@ -97,7 +97,10 @@ assert routes and routes[0].get('continue') is True and required <= set(routes[0
 vercel = json.loads(Path('vercel.json').read_text())
 assert any(item.get('source') == '/(.*)' and required <= {header.get('key') for header in item.get('headers', [])} for item in vercel.get('headers', [])), 'Missing vercel.json security headers'
 command = vercel.get('buildCommand', '')
-assert 'apply-shared-storage.py' in command and all(name in command for name in ('shared-store.test.cjs', 'runtime-security.test.cjs', 'security-hardening.test.cjs')), 'Missing shared storage or runtime security build/test gate'
+assert len(command) <= 256, 'Vercel buildCommand exceeds schema limit'
+assert command.startswith('bash tools/build.sh &&'), 'Missing verified build entry point'
+build = Path('tools/build.sh').read_text()
+assert 'apply-shared-storage.py' in build and all(name in build for name in ('shared-store.test.cjs', 'runtime-security.test.cjs', 'security-hardening.test.cjs')), 'Missing shared storage or runtime security build/test gate'
 PY
 
 echo "Oshop verification passed."

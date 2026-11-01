@@ -124,7 +124,7 @@ def patch_configs() -> None:
     OUTPUT_CONFIG.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     vercel = json.loads(VERCEL_CONFIG.read_text(encoding="utf-8"))
-    vercel["buildCommand"] = "python3 tools/apply-product-matching-v3.py && python3 tools/apply-security-hardening.py && python3 tools/apply-shared-storage.py && node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/product-matching.test.cjs && mkdir -p .vercel/output && cp -R vercel-output/. .vercel/output/"
+    vercel["buildCommand"] = "bash tools/build.sh && mkdir -p .vercel/output && cp -R vercel-output/. .vercel/output/"
     header_items = [{"key": key, "value": value} for key, value in security_headers().items()]
     vercel["headers"] = [{"source": "/(.*)", "headers": header_items}]
     VERCEL_CONFIG.write_text(json.dumps(vercel, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
