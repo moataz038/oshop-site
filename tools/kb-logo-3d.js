@@ -207,8 +207,9 @@
     const ratio = homeHero ? 0.67 : 0.84;
     const side = Math.max(1, Math.min(rect.width * ratio, rect.height * ratio, (window.innerWidth || rect.width) * 0.88));
     const centerY = rect.top + rect.height * (homeHero ? 0.54 : 0.50);
+    const centerX = homeHero ? (window.innerWidth || rect.width) / 2 : rect.left + rect.width / 2;
     return {
-      left: rect.left + rect.width / 2 - side / 2,
+      left: centerX - side / 2,
       top: centerY - side / 2,
       side,
     };
