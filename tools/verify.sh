@@ -24,6 +24,11 @@ required=(
   vercel-output/static/admin-auth-redirect.js
   tools/runtime-security.test.cjs
   tools/helpers/runtime-security-child.cjs
+  tools/shein-cart-quantity-core.cjs
+  tools/shein-cart-quantity-ui.js
+  tools/apply-shein-cart-quantity.py
+  tools/shein-cart-quantity.test.cjs
+  tools/shein-cart-quantity.browser.test.py
 )
 for path in "${required[@]}"; do
   test -s "$path" || { echo "Missing required file: $path" >&2; exit 1; }
@@ -38,12 +43,18 @@ node --check vercel-output/functions/api.func/admin-login-js.cjs
 node --check vercel-output/functions/api.func/kb-badge-admin-login-js.cjs
 node --check vercel-output/static/admin-auth-redirect.js
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
+node --check tools/shein-cart-quantity-core.cjs
+node --check tools/shein-cart-quantity-ui.js
 
 grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
 grep -q 'name:"KB"' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'وكيل الذكاء الاصطناعي المساعد' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'KB_SHEIN_ITEM_QUANTITY_CALL_V1' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'KB_SHEIN_ITEM_QUANTITY_API_V1' vercel-output/functions/api.func/index.cjs
+grep -q 'pricesComplete=available.every(item=>item.priceKnown===true)' vercel-output/functions/api.func/index.cjs
+grep -q 'مراجعة كمية كل منتج' vercel-output/static/assets/index-6ttDirym.js
 
 if grep -RnE 'Oshop|اوشوب|oshop\.company|oshop-mark\.png|img/chrome\.webp' \
   vercel-output/static/index.html \
@@ -131,6 +142,7 @@ assert len(command) <= 256, 'Vercel buildCommand exceeds schema limit'
 assert command.startswith('bash tools/build.sh &&'), 'Missing verified build entry point'
 build = Path('tools/build.sh').read_text()
 assert 'apply-shared-storage.py' in build and all(name in build for name in ('shared-store.test.cjs', 'runtime-security.test.cjs', 'security-hardening.test.cjs')), 'Missing shared storage or runtime security build/test gate'
+assert 'apply-shein-cart-quantity.py' in build and 'shein-cart-quantity.test.cjs' in build, 'Missing SHEIN quantity patch/test gate'
 assert 'apply-kb-badge-admin.py' in build, 'Missing badge-admin build patch'
 assert 'apply-kb-badge-host-isolation.py' in build, 'Missing badge host-isolation build patch'
 assert any(route.get('src') == '^/kb-badge-admin/?$' and route.get('dest') == '/api/staff/kb-badge-admin' and route.get('check') is True and not route.get('continue') for route in routes), 'Missing checked Build Output standalone admin rewrite'
