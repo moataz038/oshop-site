@@ -16,6 +16,8 @@ python3 tools/apply-security-hardening.py
 python3 tools/apply-shared-storage.py
 # تحديث الهوية المرئية والشعارات في الحزمة الجاهزة، مع إبقاء المسارات والمنطق.
 python3 tools/apply-kb-branding.py
+# تركيب لوحة العبارات المستقلة وحمايتها بعد توليد الحزمة، بصورة قابلة للتكرار.
+python3 tools/apply-kb-badge-admin.py
 # فحص بناء JavaScript الخلفي والواجهة قبل السماح بالنشر.
 node --check vercel-output/functions/api.func/index.cjs
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js

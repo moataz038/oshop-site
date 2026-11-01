@@ -24,7 +24,8 @@ form.addEventListener('submit', async (event) => {
       statusText.dataset.error = 'true';
       return;
     }
-    window.location.replace('/#/staff');
+    const requested = new URLSearchParams(window.location.search).get('next');
+    window.location.replace(requested === '/kb-badge-admin' ? requested : '/#/staff');
   } catch {
     passwordInput.value = '';
     statusText.textContent = 'تعذر الاتصال بالخدمة. تحقق من الاتصال ثم أعد المحاولة.';

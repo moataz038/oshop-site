@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /kb-badge-admin
+Disallow: /admin-login.html
+Disallow: /api/staff/
+Disallow: /api/admin/

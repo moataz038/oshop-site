@@ -21,7 +21,7 @@ function generic503(res) {
 }
 
 function getAllowedOrigins(env) {
-  const raw = env.OSHOP_ADMIN_ALLOWED_ORIGINS || DEFAULT_ORIGIN;
+  const raw = `${env.OSHOP_ADMIN_ALLOWED_ORIGINS || DEFAULT_ORIGIN},https://kb-online-store.vercel.app`;
   return new Set(raw.split(',').map((value) => {
     try { return new URL(value.trim()).origin; } catch { return ''; }
   }).filter(Boolean));
@@ -169,6 +169,7 @@ function createAdminMiddleware({ env = process.env, now = Date.now, getRequestBy
   return asyncHandler(async (req, res, next) => {
     if (!isAdminRoute(req)) return next();
     res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
     const configured = isConfigured(env);
     const cookie = parseCookieHeader(req.headers?.cookie, COOKIE_NAME);
     if (configured && verifySessionCookie(cookie, env.OSHOP_ADMIN_PASSWORD, now())) {
@@ -192,6 +193,10 @@ function createAdminMiddleware({ env = process.env, now = Date.now, getRequestBy
       return generic503(res);
     }
     res.setHeader('X-Oshop-Admin-Auth', 'required');
+    if (req.method === 'GET' && normalizedPath(req) === '/api/staff/kb-badge-admin') {
+      res.setHeader('Location', '/admin-login.html?next=%2Fkb-badge-admin');
+      return res.status(302).end();
+    }
     return sendJson(res, 401, { error: 'يلزم تسجيل الدخول للوحة الموظفين.' });
   });
 }
@@ -205,6 +210,7 @@ function createRateLimitMiddleware({ env = process.env, sharedStore, now = Date.
     const pair = limits.get(`${req.method} ${path}`);
     let group = path;
     let rule = pair && { perIp: pair[0], global: pair[1] };
+    if (!rule && req.method === 'GET' && path === '/api/kb/badge-display') rule = { perIp: 120, global: 1200 };
     if (!rule && req.method === 'GET' && path === '/api/settings') rule = { perIp: 120, global: 1200 };
     if (!rule && req.method === 'GET' && path === '/api/fx') rule = { perIp: 120, global: 1200 };
     if (!rule && req.method === 'GET' && path.startsWith('/api/track/')) { rule = { perIp: 60, global: 600 }; group = '/api/track/:code'; }

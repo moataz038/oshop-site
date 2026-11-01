@@ -16,6 +16,9 @@ required=(
   vercel-output/functions/api.func/shared-store.cjs
   vercel-output/static/admin-login.html
   vercel-output/static/admin-login.js
+  vercel-output/functions/api.func/kb-badge-admin-page.cjs
+  vercel-output/static/kb-badge-admin.js
+  vercel-output/static/robots.txt
   vercel-output/static/admin-auth-redirect.js
   tools/runtime-security.test.cjs
   tools/helpers/runtime-security-child.cjs
@@ -27,6 +30,8 @@ done
 node --check vercel-output/functions/api.func/index.cjs
 node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
+node --check vercel-output/functions/api.func/kb-badge-admin-page.cjs
+node --check vercel-output/static/kb-badge-admin.js
 node --check vercel-output/static/admin-login.js
 node --check vercel-output/static/admin-auth-redirect.js
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
@@ -68,6 +73,10 @@ grep -q 'installAdminSecurity' vercel-output/functions/api.func/index.cjs
 grep -q 'downloadTokenHash' vercel-output/functions/api.func/index.cjs
 grep -q 'admin-auth-redirect.js' vercel-output/static/index.html
 grep -q 'X-Oshop-Admin-Auth' vercel-output/static/admin-auth-redirect.js
+grep -q 'KB_BADGE_ADMIN_V1' vercel-output/functions/api.func/index.cjs
+grep -q 'kb-badge-admin' vercel-output/functions/api.func/admin-security.cjs
+grep -q 'noindex, nofollow, noarchive' vercel-output/functions/api.func/kb-badge-admin-page.cjs
+grep -q 'Disallow: /kb-badge-admin' vercel-output/static/robots.txt
 if grep -q 'x-vercel-oidc-token' vercel-output/functions/api.func/index.cjs; then
   echo "Client-supplied OIDC header handling must not return" >&2
   exit 1
@@ -113,6 +122,9 @@ assert len(command) <= 256, 'Vercel buildCommand exceeds schema limit'
 assert command.startswith('bash tools/build.sh &&'), 'Missing verified build entry point'
 build = Path('tools/build.sh').read_text()
 assert 'apply-shared-storage.py' in build and all(name in build for name in ('shared-store.test.cjs', 'runtime-security.test.cjs', 'security-hardening.test.cjs')), 'Missing shared storage or runtime security build/test gate'
+assert 'apply-kb-badge-admin.py' in build, 'Missing badge-admin build patch'
+assert any(route.get('src') == '^/kb-badge-admin/?$' and route.get('dest') == '/api/staff/kb-badge-admin' for route in routes), 'Missing protected standalone admin rewrite'
+assert any(item.get('source') == '/kb-badge-admin' and 'X-Robots-Tag' in {h.get('key') for h in item.get('headers', [])} for item in vercel.get('headers', [])), 'Missing admin noindex headers'
 PY
 
 echo "Oshop verification passed."

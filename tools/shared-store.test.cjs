@@ -134,6 +134,15 @@ test("actual Redis Lua integration: atomic IDs, limits, statuses, settings, expi
   assert.ok(settings.every((x) => x.usdToLyd === (x.rateMode === "parallel" ? x.parallelUsd : x.officialUsd)));
   assert.equal((await a.getSettings(defaults)).usdToLyd, 10.1);
 
+  const badgeDefaults = ["وكيل KB الذكي", "شحن مجاني من شي إن", "صفر عمولة على طلبك", "البطاقة نفس سعر الكاش", "توصيل لكل مدن ليبيا"];
+  const editedBadgeCopy = ["وكيل KB المتطور", "شحن سريع من شي إن", "بدون عمولة إضافية", "السعر موضح قبل الطلب", "توصيل داخل ليبيا"];
+  assert.deepEqual(await a.getKbBadgeCopy(badgeDefaults), badgeDefaults);
+  assert.deepEqual(await a.updateKbBadgeCopy(editedBadgeCopy), editedBadgeCopy);
+  assert.deepEqual(await b.getKbBadgeCopy(badgeDefaults), editedBadgeCopy);
+  await assert.rejects(a.updateKbBadgeCopy(["عبارة واحدة"]), { code: "INVALID_INPUT" });
+  await assert.rejects(a.updateKbBadgeCopy([" ", "", "", "", ""]), { code: "INVALID_INPUT" });
+  await assert.rejects(a.updateKbBadgeCopy(["x".repeat(81), "", "", "", ""]), { code: "INVALID_INPUT" });
+
   const outcomes = await Promise.all(Array.from({ length: 8 }, () => a.consumeRateLimit("local-bucket", 3, 150)));
   assert.equal(outcomes.filter((x) => x.allowed).length, 3);
   assert.equal(outcomes.filter((x) => !x.allowed).length, 5);

@@ -107,6 +107,14 @@ function prepareRecord(record) {
   return copy;
 }
 
+function normalizeKbBadgeCopy(items) {
+  if (!Array.isArray(items) || items.length !== 5 || items.some((item) => typeof item !== "string" || item.length > 80)) {
+    throw new SharedStoreError("invalid badge copy", "INVALID_INPUT");
+  }
+  const normalized = items.map((item) => item.replace(/[\u0000-\u001f\u007f]/g, " ").trim());
+  if (normalized.every((item) => !item)) throw new SharedStoreError("invalid badge copy", "INVALID_INPUT");
+  return normalized;
+}
 function validEndpoint(value) {
   if (typeof value !== "string" || !value) return false;
   try {
@@ -135,6 +143,7 @@ function createSharedStore({ env = process.env, fetchImpl = globalThis.fetch, pr
   const negotiationUpdated = key("negotiations:updated");
   const negotiationStats = key("negotiations:stats");
   const settingsKey = key("settings");
+  const kbBadgeCopyKey = key("kb:badge-copy");
 
   async function command(parts) {
     if (!configured) throw new SharedStoreError("shared store is not configured", "NOT_CONFIGURED");
@@ -214,6 +223,19 @@ function createSharedStore({ env = process.env, fetchImpl = globalThis.fetch, pr
       const [requests, values] = await Promise.all([command(["HLEN", requestRecords]), command(["HMGET", negotiationStats, "needs_approval", "approved"])]);
       if (!Array.isArray(values)) throw new SharedStoreError("shared store request failed", "STORE_UNAVAILABLE");
       return { requests: Number(requests || 0), pending: Number(values[0] || 0), approved: Number(values[1] || 0) };
+    },
+    async getKbBadgeCopy(defaults = []) {
+      const defaultItems = normalizeKbBadgeCopy(defaults);
+      const raw = await command(["HGET", kbBadgeCopyKey, "items"]);
+      if (!raw) return defaultItems;
+      let parsed;
+      try { parsed = JSON.parse(raw); } catch { throw new SharedStoreError("shared store request failed", "STORE_UNAVAILABLE"); }
+      try { return normalizeKbBadgeCopy(parsed); } catch { throw new SharedStoreError("shared store request failed", "STORE_UNAVAILABLE"); }
+    },
+    async updateKbBadgeCopy(items) {
+      const normalized = normalizeKbBadgeCopy(items);
+      await command(["HSET", kbBadgeCopyKey, "items", JSON.stringify(normalized)]);
+      return normalized;
     },
     async getSettings(defaults = {}) {
       if (!defaults || typeof defaults !== "object" || Array.isArray(defaults)) throw new SharedStoreError("invalid defaults", "INVALID_INPUT");

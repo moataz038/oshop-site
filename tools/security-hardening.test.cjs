@@ -15,6 +15,7 @@ function makeResponse() {
     setHeader(name, value) { this.headers[name.toLowerCase()] = value; return this; },
     status(code) { this.statusCode = code; return this; },
     json(body) { this.body = body; this.headersSent = true; return this; },
+    end() { this.headersSent = true; return this; },
   };
 }
 
@@ -80,6 +81,16 @@ test('login checks origin, counts failures across instances, and allows valid co
   assert.equal(security.verifySessionCookie(cookie.split('=')[1], password, 1_800_010_000_000), false);
 });
 
+test('current KB production origin is accepted while untrusted origins remain rejected', async () => {
+  const handler = security.makeLoginHandler({ env, sharedStore: makeSharedStore() });
+  const accepted = makeResponse();
+  await handler(makeRequest({ path: '/api/admin/login', method: 'POST', headers: { origin: 'https://kb-online-store.vercel.app' }, body: { password }, ip: 'kb-origin' }), accepted);
+  assert.equal(accepted.statusCode, 200);
+  const rejected = makeResponse();
+  await handler(makeRequest({ path: '/api/admin/login', method: 'POST', headers: { origin: 'https://untrusted.example' }, body: { password }, ip: 'bad-origin' }), rejected);
+  assert.equal(rejected.statusCode, 403);
+});
+
 test('staff authorization normalizes uppercase/trailing slash and enforces origin', async () => {
   const cookie = await sessionFromLogin(1_800_000_000_000, 'staff-login-ip', makeSharedStore());
   const middleware = security.createAdminMiddleware({ env, now: () => 1_800_000_000_000 });
@@ -88,6 +99,23 @@ test('staff authorization normalizes uppercase/trailing slash and enforces origi
   const wrongOrigin = await runMiddleware(middleware, makeRequest({ path: '/api/settings', method: 'PUT', headers: { cookie, origin: 'https://evil.example' } }));
   assert.equal(wrongOrigin.res.statusCode, 403);
   assert.equal((await runMiddleware(middleware, makeRequest({ path: '/API/SETTINGS/', method: 'PUT', headers: { cookie, origin } }))).passed, true);
+});
+
+test('badge administration page and read/write routes require server-authenticated session', async () => {
+  const middleware = security.createAdminMiddleware({ env, now: () => 1_800_000_000_000 });
+  const anonymousRead = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-copy' }));
+  assert.equal(anonymousRead.res.statusCode, 401);
+  assert.equal(anonymousRead.res.headers['x-robots-tag'], 'noindex, nofollow, noarchive');
+  const anonymousWrite = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-copy', method: 'PUT', headers: { origin }, body: { items: ['x'] } }));
+  assert.equal(anonymousWrite.res.statusCode, 401);
+  const pageRedirect = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-admin' }));
+  assert.equal(pageRedirect.res.statusCode, 302);
+  assert.equal(pageRedirect.res.headers.location, '/admin-login.html?next=%2Fkb-badge-admin');
+  const cookie = await sessionFromLogin(1_800_000_000_000, 'badge-admin-login', makeSharedStore());
+  const authorizedPage = await runMiddleware(middleware, makeRequest({ path: '/api/staff/kb-badge-admin', headers: { cookie } }));
+  assert.equal(authorizedPage.passed, true);
+  assert.equal(authorizedPage.res.headers['x-robots-tag'], 'noindex, nofollow, noarchive');
+  assert.equal((await runMiddleware(middleware, makeRequest({ path: '/api/kb/badge-display' }))).passed, true);
 });
 
 test('Excel capability lookup is async, saves record, and fails closed on lookup error', async () => {
