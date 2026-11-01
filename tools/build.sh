@@ -14,7 +14,8 @@ python3 tools/apply-security-hardening.py
 
 # تركيب المخزن المشترك بعد حماية الجلسات وقبل الاختبارات.
 python3 tools/apply-shared-storage.py
-
+# تحديث الهوية المرئية والشعارات في الحزمة الجاهزة، مع إبقاء المسارات والمنطق.
+python3 tools/apply-kb-branding.py
 # فحص بناء JavaScript الخلفي والواجهة قبل السماح بالنشر.
 node --check vercel-output/functions/api.func/index.cjs
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
@@ -29,4 +30,4 @@ node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/
 # فحص الملفات المطلوبة والهوية والأسرار المكشوفة.
 bash tools/verify.sh
 
-echo "Oshop build verification passed. vercel-output is ready for deployment."
+echo "KB build verification passed. vercel-output is ready for deployment."

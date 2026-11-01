@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="KB">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4df9b"/>
+      <stop offset=".55" stop-color="#c7a654"/>
+      <stop offset="1" stop-color="#8e6d2f"/>
+    </linearGradient>
+  </defs>
+  <path d="M174 151l-5-37 43 28 44-50 44 50 43-28-5 37 24 35H150z" fill="url(#gold)"/>
+  <path d="M150 194h212v12H150z" fill="url(#gold)"/>
+  <circle cx="169" cy="111" r="8" fill="#f6e9c2"/>
+  <circle cx="256" cy="91" r="8" fill="#f6e9c2"/>
+  <circle cx="343" cy="111" r="8" fill="#f6e9c2"/>
+  <text x="256" y="367" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="211" font-weight="700" letter-spacing="-15" fill="#fffaf0">KB</text>
+  <path d="M198 407h116" stroke="url(#gold)" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+  <path d="M256 397l9 10-9 10-9-10z" fill="#f4df9b"/>
+</svg>

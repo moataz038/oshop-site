@@ -35,3 +35,166 @@
     max-height: 260px;
   }
 }
+
+
+/* KB-inspired luxury palette — local preview; visual-only overrides. */
+:root {
+  --accent: #9b7b3f;
+  --accent-2: #c5a85f;
+  --accent-soft: rgba(155, 123, 63, .12);
+  --lavender: #f0e8d8;
+  --bg: #f6f3eb;
+  --bg-top: #f2ead9;
+  --bg-mid: #faf8f3;
+  --bg-low: #fcfbf8;
+  --bg-bottom: #f3eddf;
+  --surface: #fffefa;
+  --surface-2: #f6f2e9;
+  --surface-3: #ece6d8;
+  --ink: #201e19;
+  --ink-2: #68645b;
+  --ink-3: #918b7e;
+  --line: rgba(70, 58, 34, .09);
+  --line-2: rgba(70, 58, 34, .15);
+  --bubble-ai: #fffefa;
+  --shadow-sm: 0 2px 10px rgba(54, 42, 19, .045);
+  --shadow-md: 0 12px 30px -18px rgba(48, 37, 17, .22);
+  --shadow-accent: 0 8px 22px rgba(155, 123, 63, .2);
+  --background: 43 28% 96%;
+  --foreground: 40 10% 12%;
+  --border: 40 18% 88%;
+  --card: 43 32% 99%;
+  --card-foreground: 40 10% 12%;
+  --popover: 43 32% 99%;
+  --popover-foreground: 40 10% 12%;
+  --primary: 42 42% 42%;
+  --primary-foreground: 43 35% 98%;
+  --muted: 42 23% 93%;
+  --muted-foreground: 40 8% 42%;
+  --ring: 42 42% 42%;
+  --input: 40 18% 87%;
+}
+[data-theme="oshop"] {
+  --accent: #9b7b3f;
+  --accent-2: #c5a85f;
+}
+.dark {
+  --accent: #c6a75d;
+  --accent-2: #e0c77f;
+  --accent-soft: rgba(198, 167, 93, .15);
+  --bg: #12120f;
+  --bg-top: #1e1d17;
+  --bg-mid: #161610;
+  --bg-low: #12120f;
+  --bg-bottom: #12120f;
+  --surface: #1c1b16;
+  --surface-2: #25231b;
+  --surface-3: #302d22;
+  --ink: #f5f1e7;
+  --ink-2: #c2bcad;
+  --ink-3: #918a78;
+  --line: rgba(245, 238, 219, .08);
+  --line-2: rgba(245, 238, 219, .14);
+  --bubble-ai: #24221b;
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, .025) inset;
+  --shadow-md: 0 16px 38px -22px rgba(0, 0, 0, .7);
+  --shadow-accent: 0 8px 24px rgba(198, 167, 93, .15);
+  --background: 45 10% 7%;
+  --foreground: 43 32% 94%;
+  --border: 42 10% 19%;
+  --card: 45 10% 11%;
+  --card-foreground: 43 32% 94%;
+  --popover: 45 10% 11%;
+  --popover-foreground: 43 32% 94%;
+  --primary: 43 48% 57%;
+  --primary-foreground: 45 18% 10%;
+  --muted: 45 8% 15%;
+  --muted-foreground: 42 10% 68%;
+  --ring: 43 48% 57%;
+  --input: 42 10% 21%;
+}
+.dark[data-theme="oshop"],
+.dark [data-theme="oshop"] {
+  --accent: #c6a75d;
+  --accent-2: #e0c77f;
+}
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+}
+.app {
+  background:
+    radial-gradient(ellipse at 50% 6%, rgba(208, 181, 119, .16), transparent 42%),
+    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 35%, var(--bg-low) 72%, var(--bg-bottom) 100%);
+}
+.dark .app {
+  background:
+    radial-gradient(ellipse at 50% 5%, rgba(198, 167, 93, .1), transparent 40%),
+    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 40%, var(--bg-low) 100%);
+}
+.card, .row {
+  border-color: var(--line-2);
+  box-shadow: var(--shadow-sm);
+}
+.card {
+  border-radius: calc(var(--r) * .82);
+}
+.pill, .chip {
+  border: 1px solid var(--line-2);
+  box-shadow: 0 3px 12px rgba(54, 42, 19, .045);
+}
+.dark .pill, .dark .chip {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .025) inset;
+}
+.chip {
+  transition: transform .2s cubic-bezier(.22, 1, .36, 1), border-color .2s, box-shadow .2s;
+}
+.chip .hl {
+  color: var(--accent);
+  font-weight: 600;
+}
+.btn-accent, .round-accent {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #201b10;
+  font-weight: 700;
+  box-shadow: var(--shadow-accent);
+}
+.btn-white, .btn-ghost, .round {
+  border: 1px solid var(--line-2);
+}
+.input-bar {
+  border: 1px solid var(--line-2);
+  box-shadow: 0 8px 24px rgba(54, 42, 19, .07);
+}
+.input-bar:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 8px 24px rgba(54, 42, 19, .07);
+}
+.bubble-user {
+  color: #201b10;
+  background: linear-gradient(135deg, #d1b66f, #b7964d);
+}
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chip, .btn, .round { transition-duration: .01ms !important; }
+}
+
+/* Align remaining legacy orange UI accents with the new gold palette. */
+.grad {
+  background-image: linear-gradient(135deg, var(--accent), var(--accent-2)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+.app .canvas-wrap canvas {
+  filter: hue-rotate(18deg) saturate(.76) brightness(.97);
+}
+.icon-sq {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important;
+  color: #211b10 !important;
+}
+.icon-sq svg {
+  color: #211b10 !important;
+}

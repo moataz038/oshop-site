@@ -8,7 +8,9 @@ required=(
   vercel-output/static/index.html
   vercel-output/static/assets/index-6ttDirym.js
   vercel-output/static/assets/index-ca6a3825.css
-  vercel-output/static/img/oshop-mark.png
+  vercel-output/static/img/kb-mark.png
+  vercel-output/static/img/kb-hero.webp
+  vercel-output/static/favicon.png
   vercel-output/functions/api.func/index.cjs
   vercel-output/functions/api.func/admin-security.cjs
   vercel-output/functions/api.func/shared-store.cjs
@@ -31,8 +33,18 @@ node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
 
 grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
-grep -q 'name:"Oshop"' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'name:"KB"' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'وكيل الذكاء الاصطناعي المساعد' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/index-6ttDirym.js
+
+if grep -RnE 'Oshop|اوشوب|oshop\.company|oshop-mark\.png|img/chrome\.webp' \
+  vercel-output/static/index.html \
+  vercel-output/static/admin-login.html \
+  vercel-output/static/assets/index-6ttDirym.js \
+  vercel-output/functions/api.func/index.cjs >/dev/null; then
+  echo "Old visible brand reference found in runtime output" >&2
+  exit 1
+fi
 
 # Runtime output must contain only the current Oshop identity.
 legacy_brand=$(printf "\\x61\\x66\\x61\\x61\\x71")
