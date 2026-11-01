@@ -154,12 +154,15 @@ def patch_routes() -> None:
             "X-Robots-Tag": "noindex, nofollow, noarchive",
             "Cache-Control": "no-store",
         },
-        "continue": True,
     }
     routes = config.setdefault("routes", [])
-    if not any(item.get("src") == route["src"] for item in routes):
+    existing_route = next((item for item in routes if item.get("src") == route["src"]), None)
+    if existing_route is None:
         api_index = next((i for i, item in enumerate(routes) if item.get("src") == "^/api(/.*)?$"), len(routes))
         routes.insert(api_index, route)
+    else:
+        existing_route.update(route)
+        existing_route.pop("continue", None)
     path.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n")
 
     path = ROOT / "vercel.json"
@@ -174,6 +177,13 @@ def patch_routes() -> None:
                     {"key": "Cache-Control", "value": "no-store"},
                 ],
             })
+    rewrite = {"source": "^/kb-badge-admin/?$", "destination": "/api/staff/kb-badge-admin"}
+    rewrites = vercel.setdefault("rewrites", [])
+    existing_rewrite = next((item for item in rewrites if item.get("source") == rewrite["source"]), None)
+    if existing_rewrite is None:
+        rewrites.insert(0, rewrite)
+    else:
+        existing_rewrite.update(rewrite)
     path.write_text(json.dumps(vercel, ensure_ascii=False, indent=2) + "\n")
 
 
