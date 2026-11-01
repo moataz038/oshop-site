@@ -19,6 +19,7 @@ API = ROOT / "vercel-output" / "functions" / "api.func" / "index.cjs"
 GOLD_SOURCE = ROOT / "brand" / "kb-gold-only.png"
 GEOMETRY_SOURCE = ROOT / "brand" / "kb-gold-geometry.json"
 THREED = ROOT / "tools" / "kb-logo-3d.js"
+PROFILE_SOURCE = ROOT / "brand" / "kb-original-profile.jpg"
 
 
 def replace_all(text: str, old: str, new: str, label: str) -> str:
@@ -42,7 +43,7 @@ def patch_file(path: Path, pairs: list[tuple[str, str, str]], *, skip_if_new: bo
 
 
 def main() -> None:
-    if not all(path.is_file() for path in (JS, CSS, INDEX, ADMIN, API, GOLD_SOURCE, GEOMETRY_SOURCE, THREED)):
+    if not all(path.is_file() for path in (JS, CSS, INDEX, ADMIN, API, GOLD_SOURCE, GEOMETRY_SOURCE, THREED, PROFILE_SOURCE)):
         raise RuntimeError("A required runtime file is missing; refusing a partial branding update")
 
     patch_file(JS, [
@@ -55,6 +56,7 @@ def main() -> None:
         ('Oshop', 'KB', "visible English brand name"),
         ('اوشوب', 'KB', "visible Arabic brand name"),
         ('KB KB · Shipping & E-commerce · الإصدار 1.0', 'KB Online Store · Shipping & E-commerce · الإصدار 1.0', "footer brand lockup"),
+        ('oshop:{name:"KB",img:"img/kb-mark.png",role:', 'oshop:{name:"KB",img:"img/kb-original-profile.jpg",role:', "official KB profile logo near settings"),
     ])
 
     patch_file(API, [
@@ -98,6 +100,7 @@ def main() -> None:
         ROOT / "brand" / "kb-mark.png": STATIC / "img" / "kb-mark.png",
         ROOT / "brand" / "kb-mark-white.png": STATIC / "img" / "kb-mark-white.png",
         ROOT / "brand" / "kb-hero.webp": STATIC / "img" / "kb-hero.webp",
+        PROFILE_SOURCE: STATIC / "img" / "kb-original-profile.jpg",
         GOLD_SOURCE: STATIC / "img" / "kb-gold-only.png",
         GEOMETRY_SOURCE: STATIC / "kb-gold-geometry.json",
         THREED: STATIC / "kb-logo-3d.js",
@@ -121,6 +124,8 @@ def main() -> None:
         raise RuntimeError("AI assistant identity/role marker was unexpectedly changed")
     if "kb-gold-only.png" not in JS.read_text(encoding="utf-8") or "kb-gold-geometry.json" not in THREED.read_text(encoding="utf-8") or "kb-logo-3d.js" not in INDEX.read_text(encoding="utf-8"):
         raise RuntimeError("The transparent gold logo or 3D mesh renderer is not connected")
+    if 'oshop:{name:"KB",img:"img/kb-original-profile.jpg",role:' not in JS.read_text(encoding="utf-8"):
+        raise RuntimeError("The original KB profile logo is not connected to the small profile/avatar icon")
     for tool_name in ("compare_markets", "calculate_shein_cart", "track_shipment", "search_china_suppliers"):
         if tool_name not in API.read_text(encoding="utf-8"):
             raise RuntimeError(f"API tool missing after visual branding change: {tool_name}")
