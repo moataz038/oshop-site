@@ -46,7 +46,7 @@ def main() -> None:
         ('img/chrome.webp', 'img/kb-hero.webp', "welcome artwork asset"),
         ('children:c.jsx($k,{className:"w-full h-full"})', 'children:c.jsx("img",{src:"img/kb-hero.webp",alt:"",className:"w-full h-full object-contain"})', "welcome hero graphic"),
         ('children:c.jsx(Wk,{className:"w-full h-full"})', 'children:c.jsx("img",{src:"img/kb-hero.webp",alt:"",className:"w-full h-full object-contain"})', "home hero graphic"),
-        ('id:"oshop",hex:"#f37022",name:"اوشوب"', 'id:"oshop",hex:"#9b7b3f",name:"KB"', "default theme label"),
+        ('id:"oshop",hex:"#9b7b3f",name:"KB"', 'id:"oshop",hex:"#d0d0d0",name:"KB"', "default theme color"),
         ('https://www.instagram.com/oshop.company', 'https://www.instagram.com/kb.online.store', "Instagram target"),
         ('@oshop.company', '@kb.online.store', "Instagram handle"),
         ('Oshop', 'KB', "visible English brand name"),
@@ -66,7 +66,7 @@ def main() -> None:
     patch_file(INDEX, [
         ('<title>اوشوب Oshop | وكيلك الذكي للتسوق والشحن</title>', '<title>KB Online Store | وكيلك الذكي للتسوق والشحن</title>', "page title"),
         ('اوشوب للشحن والتجارة الإلكترونية:', 'KB للتسوق والشحن والتجارة الإلكترونية:', "page description"),
-        ('#FDE3D0', '#9B7B3F', "browser theme color"),
+        ('#9B7B3F', '#030303', "browser theme color"),
         ('./img/chrome.webp', './img/kb-hero.webp', "preloaded welcome artwork"),
     ])
 
