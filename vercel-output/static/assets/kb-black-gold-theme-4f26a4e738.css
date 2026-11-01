@@ -1,0 +1,87 @@
+/* KB black theme — color-only overrides; layout, assets, and behavior unchanged. */
+:root,
+:root.dark,
+:root[data-theme="oshop"],
+:root.dark[data-theme="oshop"],
+.dark,
+[data-theme="oshop"],
+.dark[data-theme="oshop"],
+.dark [data-theme="oshop"] {
+  color-scheme: dark;
+  --accent: #c9a65f;
+  --accent-2: #e4c97f;
+  --accent-soft: rgba(201, 166, 95, .14);
+  --lavender: #e2e2e2;
+  --bg: #000000;
+  --bg-top: #000000;
+  --bg-mid: #000000;
+  --bg-low: #000000;
+  --bg-bottom: #000000;
+  --surface: #0b0b0b;
+  --surface-2: #111111;
+  --surface-3: #191919;
+  --ink: #f5f5f5;
+  --ink-2: #c8c8c8;
+  --ink-3: #8d8d8d;
+  --line: rgba(255, 255, 255, .10);
+  --line-2: rgba(255, 255, 255, .18);
+  --bubble-ai: #101010;
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, .025) inset, 0 8px 24px rgba(0, 0, 0, .28);
+  --shadow-md: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 18px 42px -20px rgba(0, 0, 0, .82);
+  --shadow-accent: 0 8px 24px rgba(201, 166, 95, .16);
+  --ok: #c5c5c5;
+  --warn: #dedede;
+  --danger: #f5f5f5;
+  --background: 0 0% 0%;
+  --foreground: 0 0% 96%;
+  --border: 0 0% 17%;
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 96%;
+  --popover: 0 0% 5%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 42 48% 57%;
+  --primary-foreground: 0 0% 5%;
+  --muted: 0 0% 9%;
+  --muted-foreground: 0 0% 70%;
+  --destructive: 0 0% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 42 48% 57%;
+  --input: 0 0% 15%;
+  --secondary: 0 0% 12%;
+  --secondary-foreground: 0 0% 96%;
+  --sidebar: 0 0% 4%;
+  --sidebar-accent: 0 0% 13%;
+  --sidebar-accent-foreground: 0 0% 95%;
+  --sidebar-border: 0 0% 18%;
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-ring: 42 48% 57%;
+  --color-bg: #000000;
+  --color-border: rgba(255, 255, 255, .12);
+}
+
+html,
+body,
+#root {
+  background-color: #000000 !important;
+  color: #f5f5f5;
+}
+
+.grad {
+  background-image: linear-gradient(90deg, #b58f4c, #ecd797, #c9a65f, #b58f4c) !important;
+}
+
+.btn-accent,
+.round-accent,
+.bubble-user {
+  color: #080808 !important;
+}
+
+.app,
+.dark .app {
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 40%, var(--bg-low) 100%) !important;
+}
+
+/* Gold keeps the existing accents; page content and component surfaces remain unchanged. */
+.title { color: var(--accent) !important; }
+.app svg { color: var(--accent) !important; }
+.app :is(.btn-accent, .round-accent, .bubble-user) svg { color: inherit !important; }

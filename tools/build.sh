@@ -23,6 +23,7 @@ node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
 node --check vercel-output/static/admin-login.js
 node --check vercel-output/static/admin-auth-redirect.js
+node --check vercel-output/static/kb-logo-3d.js
 python3 -m json.tool vercel-output/config.json >/dev/null
 python3 -m json.tool vercel.json >/dev/null
 node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/product-matching.test.cjs
