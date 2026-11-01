@@ -61,7 +61,7 @@
   ],
   "rewrites": [
     {
-      "source": "^/kb-badge-admin/?$",
+      "source": "/kb-badge-admin",
       "destination": "/api/staff/kb-badge-admin"
     }
   ]

@@ -125,7 +125,7 @@ assert 'apply-shared-storage.py' in build and all(name in build for name in ('sh
 assert 'apply-kb-badge-admin.py' in build, 'Missing badge-admin build patch'
 assert any(route.get('src') == '^/kb-badge-admin/?$' and route.get('dest') == '/api/staff/kb-badge-admin' and not route.get('continue') for route in routes), 'Missing Build Output standalone admin rewrite'
 assert any(item.get('source') == '/kb-badge-admin' and 'X-Robots-Tag' in {h.get('key') for h in item.get('headers', [])} for item in vercel.get('headers', [])), 'Missing admin noindex headers'
-assert any(item.get('source') == '^/kb-badge-admin/?$' and item.get('destination') == '/api/staff/kb-badge-admin' for item in vercel.get('rewrites', [])), 'Missing Vercel root standalone admin rewrite'
+assert any(item.get('source') == '/kb-badge-admin' and item.get('destination') == '/api/staff/kb-badge-admin' for item in vercel.get('rewrites', [])), 'Missing Vercel root standalone admin rewrite'
 PY
 
 echo "Oshop verification passed."

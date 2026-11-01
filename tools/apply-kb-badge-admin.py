@@ -177,12 +177,13 @@ def patch_routes() -> None:
                     {"key": "Cache-Control", "value": "no-store"},
                 ],
             })
-    rewrite = {"source": "^/kb-badge-admin/?$", "destination": "/api/staff/kb-badge-admin"}
+    rewrite = {"source": "/kb-badge-admin", "destination": "/api/staff/kb-badge-admin"}
     rewrites = vercel.setdefault("rewrites", [])
-    existing_rewrite = next((item for item in rewrites if item.get("source") == rewrite["source"]), None)
+    existing_rewrite = next((item for item in rewrites if item.get("source") in {rewrite["source"], "^/kb-badge-admin/?$"}), None)
     if existing_rewrite is None:
         rewrites.insert(0, rewrite)
     else:
+        existing_rewrite.clear()
         existing_rewrite.update(rewrite)
     path.write_text(json.dumps(vercel, ensure_ascii=False, indent=2) + "\n")
 
