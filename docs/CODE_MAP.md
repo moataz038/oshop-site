@@ -16,6 +16,10 @@
 | `vercel-output/static/assets/ChromeLogo-BU19-cbJ.js` | الشعار ثلاثي الأبعاد في شاشة البداية | عند تعديل الرسم ثلاثي الأبعاد فقط |
 | `vercel-output/static/assets/Orb-Bm_qLAkp.js` | مؤثرات الحركة/الكرة المرئية | عند تعديل المؤثرات فقط |
 | `vercel-output/functions/api.func/index.cjs` | API الخلفي، تعليمات الوكيل، أدوات المقارنة والتسعير والتتبع وسلة SHEIN | عند تغيير قواعد الشركة أو تكاملات الخدمات؛ الأسرار تأتي من البيئة فقط |
+| `vercel-output/functions/api.func/admin-security.cjs` | جلسات الموظفين، حماية المسارات الإدارية، حدود المدخلات ومعدل الطلبات | عند تغيير سياسة الإدارة؛ لا تضع الأسرار في الملف |
+| `vercel-output/static/admin-login.html` و`admin-login.js` | نموذج دخول الموظفين؛ كلمة المرور لا تُحفظ في المتصفح | عند تعديل تدفق الدخول فقط |
+| `vercel-output/static/admin-auth-redirect.js` | تحويل الواجهة إلى صفحة الدخول عند رفض API الإدارة | عند تعديل UX المصادقة فقط |
+| `vercel-output/functions/api.func/shared-store.cjs` | Redis REST للسجلات والإعدادات والحجز الذري لحصص الطلبات | عند تعديل التخزين؛ اختبر Lua والتزامن الفعليين ولا تضف fallback محليًا |
 | `vercel-output/config.json` | تعريف Vercel Output API ومسار `/api` | نادرًا؛ أي تغيير قد يمنع الموقع من العمل |
 | `vercel.json` | أمر البناء ومصدر مخرج Vercel | عند تغيير استراتيجية النشر |
 
@@ -26,6 +30,10 @@
 | `tools/product-matching.cjs` | مصدر قواعد مطابقة نوع المنتج واللون والخامة والصفات الجوهرية |
 | `tools/product-matching.test.cjs` | اختبارات وحدات لقواعد المطابقة؛ يجب أن تبقى كلها ناجحة |
 | `tools/apply-product-matching-v3.py` | يحقن قواعد المطابقة في API المضغوط مرة واحدة وبشكل idempotent |
+| `tools/apply-security-hardening.py` | يركب مصادقة الإدارة والرموز والرؤوس الأمنية |
+| `tools/apply-shared-storage.py` | ينقل call sites في الحزمة إلى التخزين المشترك وعمليات async |
+| `tools/security-hardening.test.cjs` | اختبارات الجلسات والتفويض والمدخلات وحدود API |
+| `tools/shared-store.test.cjs` | اختبارات REST وLua والتزامن وديمومة البيانات عبر مثيلات مختلفة |
 | `tools/verify.sh` | يتحقق من الملفات الأساسية، صحة JavaScript، الهوية الحالية، وعدم وجود أسرار في runtime |
 | `tools/build.sh` | يشغل التحديث الآمن ثم فحوص JSON وJavaScript واختبارات الهوية |
 
@@ -76,6 +84,7 @@
 5. لا تحذف مسار API أو ميزة مخفية قبل التأكد من عدم استخدامها في الواجهة أو الوكيل.
 6. لا تغيّر اسم ملف bundle أو تضف query إلى رابط module؛ هذا سبق أن سبب شاشة بيضاء في المتصفح.
 7. ادفع commit واضحًا، ثم راقب نشر Vercel قبل اعتبار التعديل مكتملًا.
+8. قبل نشر حماية الموظفين، اضبط `OSHOP_ADMIN_PASSWORD` وRedis REST مشتركًا، وشغّل اختبارات Lua الفعلية واحصل على إذن النشر؛ راجع [دليل الحماية](SECURITY.md).
 
 ## تحسين الأداء في البحث
 

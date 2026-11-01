@@ -17,17 +17,24 @@
 ```text
 vercel-output/
 ├── static/                         # الواجهة الجاهزة للنشر والملفات الثابتة
-│   ├── index.html                  # نقطة دخول الموقع
+│   ├── index.html                  # نقطة دخول HTML
+│   ├── admin-login.html             # دخول الموظفين بجلسة HttpOnly
 │   ├── assets/                     # JavaScript وCSS والحزم المرئية
 │   ├── img/                        # شعار Oshop والرسومات المستخدمة
 │   ├── emoji/                      # رموز الواجهة
 │   └── flags/                      # أعلام الدول المستخدمة في المقارنات
-└── functions/api.func/index.cjs    # API ووكيل الذكاء الاصطناعي وأدوات التسعير
+├── functions/api.func/index.cjs    # API ووكيل الذكاء الاصطناعي وأدوات التسعير
+├── functions/api.func/admin-security.cjs # مصادقة الإدارة وحدود API والتحقق
+└── functions/api.func/shared-store.cjs # Redis دائم للسجلات والإعدادات وحدود المعدل
 
 tools/
 ├── product-matching.cjs            # قواعد مطابقة نتائج المنتجات
 ├── product-matching.test.cjs       # اختبارات المطابقة
 ├── apply-product-matching-v3.py    # تحديث قواعد المطابقة في حزمة API عند البناء
+├── apply-security-hardening.py     # تركيب حماية الإدارة والرؤوس الأمنية
+├── apply-shared-storage.py         # توصيل الحزمة بمخزن Redis المشترك
+├── security-hardening.test.cjs     # اختبارات المصادقة والمدخلات وحدود API
+├── shared-store.test.cjs           # اختبارات REST وLua والتزامن في Redis محلي
 ├── verify.sh                       # فحص سريع قبل النشر
 └── build.sh                        # تحقق وبناء حزمة Vercel الجاهزة
 ```
@@ -67,7 +74,7 @@ bash tools/build.sh
 node --test tools/product-matching.test.cjs
 ```
 
-`tools/build.sh` لا يعيد اختراع الحزمة أو يحذف ملفات الإنتاج؛ يطبق تحديث مطابقة المنتجات بشكل آمن، ثم يتحقق من JavaScript وملف نقطة الدخول. إذا أعاد سكربت المطابقة رسالة `already patched` فهذا طبيعي وآمن.
+`tools/build.sh` يطبق تحديث المطابقة والحماية والتخزين بصورة قابلة للتكرار، ثم يفحص الحزمة والإعدادات ويشغّل اختبارات وحدات وruntime. يختبر اختبار runtime الحزمة عبر عمليات منفصلة وخادم Redis Lua محلي؛ إن كانت ثنائيات Redis غير متاحة، يعلن Node عن الاختبار كـskipped ولا يعد ذلك تحققًا كاملًا للحماية المشتركة. راجع [دليل الحماية](docs/SECURITY.md) لمسارات أدوات الاختبار وسقف الخدمة المجانية. رسالة `already patched` طبيعية وآمنة.
 
 ## النشر
 
@@ -86,6 +93,8 @@ vercel deploy --prebuilt --prod
 3. نجاح `node --check vercel-output/functions/api.func/index.cjs`.
 4. نجاح فحص JavaScript للواجهة.
 5. عدم وضع أي مفتاح API داخل Git أو JavaScript الواجهة.
+
+قبل نشر النسخة المحمية إلى Production، أضف `OSHOP_ADMIN_PASSWORD` بطول 32 حرفًا عشوائيًا على الأقل، واربط Redis REST مشتركًا عبر أسرار `KV_REST_API_URL` و`KV_REST_API_TOKEN` أو زوج Upstash المكافئ. لا تعتمد النسخة عند غياب المخزن أو تخطي اختبار Lua. راجع [دليل الحماية](docs/SECURITY.md) لإعداد الدخول والتخزين وحدود الطلبات، واحصل على إذن مستقل قبل نشر الإنتاج.
 
 ## إعدادات البيئة السرية
 
