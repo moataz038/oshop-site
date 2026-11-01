@@ -162,6 +162,7 @@ def patch_routes() -> None:
     route = {
         "src": "^/kb-badge-admin/?$",
         "dest": "/api/staff/kb-badge-admin",
+        "check": True,
         "headers": {
             "X-Robots-Tag": "noindex, nofollow, noarchive",
             "Cache-Control": "no-store",
