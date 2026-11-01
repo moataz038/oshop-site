@@ -42,7 +42,7 @@ test('badge writes cannot use a legacy allowed origin even with a valid signed s
 });
 
 test('host guard is installed before all authentication handlers', () => {
-  const registered=[]; const app={set(){},use(fn){registered.push(['use',fn]);},post(path,fn){registered.push([path,fn]);}};
+  const registered=[]; const app={set(){},get(path,fn){registered.push(['GET '+path,fn]);},use(fn){registered.push(['use',fn]);},post(path,fn){registered.push([path,fn]);}};
   security.installAdminSecurity(app,{env:{}});
   assert.equal(registered[0][0],'use');
   assert.ok(registered.some(([path])=>path==='/api/kb-badge-admin/login'));
@@ -71,4 +71,9 @@ test('primary staff hash is hidden synchronously without changing legacy staff b
     assert.equal(replacements,hostname==='kb-online-store.vercel.app'?1:0);
     if(listeners.hashchange){hash='#/STAFF';listeners.hashchange();assert.equal(hash,'');}
   }
+});
+
+test('admin HTML and JavaScript are packaged only inside the guarded server function', () => {
+  for (const name of ['admin-login.html','admin-login.js','kb-badge-admin-login.html','kb-badge-admin-login.js','kb-badge-admin.js','kb-badge-admin-robots.txt']) assert.equal(fs.existsSync('vercel-output/static/'+name),false,name);
+  for (const name of ['admin-login-js.cjs','kb-badge-admin-login-js.cjs','kb-badge-admin-js.cjs']) new vm.Script(require('../vercel-output/functions/api.func/'+name));
 });

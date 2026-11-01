@@ -70,6 +70,16 @@ test('runtime HTTP integration uses real bundle, isolated children, Redis Lua, a
       const hidden = await request(aPort, path, { host: 'kb-online-store.vercel.app', cookie, forwardedHost: 'kb-badge-admin.vercel.app' }); assert.equal(hidden.status, 404); assert.equal(hidden.headers.get('location'), null); assert.equal(hidden.headers.get('x-oshop-admin-auth'), null);
     }
     assert.equal((await badgeRequest(aPort, '/api/settings')).status, 404);
+    for (const path of ['/kb-badge-admin-login.html', '/kb-badge-admin-login.js', '/kb-badge-admin.js', '/api/kb-badge-admin/assets/login-html']) {
+      const allowedAsset = await badgeRequest(aPort, path); assert.equal(allowedAsset.status, 200, path); assert.equal(allowedAsset.headers.get('cache-control'), 'no-store');
+      const hiddenAsset = await request(aPort, path, { host: 'kb-online-store.vercel.app', cookie }); assert.equal(hiddenAsset.status, 404, path); assert.equal(hiddenAsset.headers.get('location'), null);
+    }
+    for (const path of ['/admin-login.html', '/admin-login.js', '/api/legacy-admin/login-page']) {
+      assert.equal((await request(aPort, path)).status, 200, 'legacy '+path);
+      assert.equal((await request(aPort, path, { host: 'kb-online-store.vercel.app' })).status, 404, 'primary '+path);
+      assert.equal((await badgeRequest(aPort, path)).status, 404, 'admin '+path);
+    }
+
     const overview = await request(bPort, '/api/staff/overview', { cookie }); assert.equal(overview.status, 200); assert.ok(overview.json && overview.json.stats && Array.isArray(overview.json.requests) && Array.isArray(overview.json.negotiations)); assert.ok(overview.json.requests.every(r => !Object.prototype.hasOwnProperty.call(r, 'payload') && !Object.prototype.hasOwnProperty.call(r, 'downloadTokenHash') && !Object.prototype.hasOwnProperty.call(r, 'downloadTokenExpiresAt') && !Object.prototype.hasOwnProperty.call(r, 'downloadToken'))); assert.ok(!JSON.stringify(overview.json).includes('[object Promise]'));
     const adminPage = await badgeRequest(aPort, '/api/staff/kb-badge-admin', { cookie }); assert.equal(adminPage.status, 200); assert.match(adminPage.body.toString(), /noindex, nofollow, noarchive/);
     const directAdminPage = await badgeRequest(aPort, '/kb-badge-admin', { cookie }); assert.equal(directAdminPage.status, 200); assert.match(directAdminPage.body.toString(), /noindex, nofollow, noarchive/);

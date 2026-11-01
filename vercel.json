@@ -71,6 +71,26 @@
           }
         }
       ]
+    },
+    {
+      "source": "/kb-badge-admin-login.html",
+      "destination": "/api/kb-badge-admin/assets/login-html"
+    },
+    {
+      "source": "/kb-badge-admin-login.js",
+      "destination": "/api/kb-badge-admin/assets/login-js"
+    },
+    {
+      "source": "/kb-badge-admin.js",
+      "destination": "/api/kb-badge-admin/assets/panel-js"
+    },
+    {
+      "source": "/admin-login.html",
+      "destination": "/api/legacy-admin/login-page"
+    },
+    {
+      "source": "/admin-login.js",
+      "destination": "/api/legacy-admin/login-script"
     }
   ]
 }

@@ -4,6 +4,7 @@ set -euo pipefail
 # تحديد جذر المستودع حتى يعمل السكربت من أي مجلد.
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+python3 tools/apply-kb-badge-host-isolation.py --prepare
 
 
 # تحديث قواعد مطابقة المنتجات داخل حزمة API بشكل آمن ومتكرر.
@@ -25,8 +26,8 @@ node --check vercel-output/functions/api.func/index.cjs
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
 node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
-node --check vercel-output/static/admin-login.js
-node --check vercel-output/static/kb-badge-admin-login.js
+node --check vercel-output/functions/api.func/admin-login-js.cjs
+node --check vercel-output/functions/api.func/kb-badge-admin-login-js.cjs
 node --check vercel-output/static/admin-auth-redirect.js
 node --check vercel-output/static/kb-logo-3d.js
 python3 -m json.tool vercel-output/config.json >/dev/null

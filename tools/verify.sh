@@ -14,12 +14,12 @@ required=(
   vercel-output/functions/api.func/index.cjs
   vercel-output/functions/api.func/admin-security.cjs
   vercel-output/functions/api.func/shared-store.cjs
-  vercel-output/static/admin-login.html
-  vercel-output/static/admin-login.js
-  vercel-output/static/kb-badge-admin-login.html
-  vercel-output/static/kb-badge-admin-login.js
+  vercel-output/functions/api.func/admin-login-html.cjs
+  vercel-output/functions/api.func/admin-login-js.cjs
+  vercel-output/functions/api.func/kb-badge-admin-login-html.cjs
+  vercel-output/functions/api.func/kb-badge-admin-login-js.cjs
   vercel-output/functions/api.func/kb-badge-admin-page.cjs
-  vercel-output/static/kb-badge-admin.js
+  vercel-output/functions/api.func/kb-badge-admin-js.cjs
   vercel-output/static/robots.txt
   vercel-output/static/admin-auth-redirect.js
   tools/runtime-security.test.cjs
@@ -33,9 +33,9 @@ node --check vercel-output/functions/api.func/index.cjs
 node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
 node --check vercel-output/functions/api.func/kb-badge-admin-page.cjs
-node --check vercel-output/static/kb-badge-admin.js
-node --check vercel-output/static/admin-login.js
-node --check vercel-output/static/kb-badge-admin-login.js
+node --check vercel-output/functions/api.func/kb-badge-admin-js.cjs
+node --check vercel-output/functions/api.func/admin-login-js.cjs
+node --check vercel-output/functions/api.func/kb-badge-admin-login-js.cjs
 node --check vercel-output/static/admin-auth-redirect.js
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
 
@@ -47,7 +47,7 @@ grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/
 
 if grep -RnE 'Oshop|اوشوب|oshop\.company|oshop-mark\.png|img/chrome\.webp' \
   vercel-output/static/index.html \
-  vercel-output/static/admin-login.html \
+  vercel-output/functions/api.func/admin-login-html.cjs \
   vercel-output/static/assets/index-6ttDirym.js \
   vercel-output/functions/api.func/index.cjs >/dev/null; then
   echo "Old visible brand reference found in runtime output" >&2
@@ -78,7 +78,7 @@ grep -q 'admin-auth-redirect.js' vercel-output/static/index.html
 grep -q 'X-Oshop-Admin-Auth' vercel-output/static/admin-auth-redirect.js
 grep -q 'KB_BADGE_ADMIN_V1' vercel-output/functions/api.func/index.cjs
 grep -q 'kb-badge-admin.vercel.app' vercel-output/functions/api.func/admin-security.cjs
-grep -q 'kb-badge-admin-login.html' vercel-output/static/kb-badge-admin.js
+grep -q 'kb-badge-admin-login.html' vercel-output/functions/api.func/kb-badge-admin-js.cjs
 grep -q 'kb-badge-admin' vercel-output/functions/api.func/admin-security.cjs
 grep -q 'e.get("/kb-badge-admin"' vercel-output/functions/api.func/index.cjs
 grep -q 'noindex, nofollow, noarchive' vercel-output/functions/api.func/kb-badge-admin-page.cjs

@@ -49,12 +49,13 @@ function badgeNotFound(res) {
   return res.status(404).end();
 }
 function createBadgeHostMiddleware() {
-  const allowed = new Set(['/kb-badge-admin', '/api/staff/kb-badge-admin', '/api/staff/kb-badge-copy', '/api/kb-badge-admin/login', '/api/kb-badge-admin/logout']);
+  const allowed = new Set(['/kb-badge-admin', '/api/staff/kb-badge-admin', '/api/staff/kb-badge-copy', '/api/kb-badge-admin/login', '/api/kb-badge-admin/logout', '/kb-badge-admin-login.html', '/kb-badge-admin-login.js', '/kb-badge-admin.js', '/api/kb-badge-admin/assets/login-html', '/api/kb-badge-admin/assets/login-js', '/api/kb-badge-admin/assets/panel-js']);
+  const legacy = new Set(['/admin-login.html', '/admin-login.js', '/api/legacy-admin/login-page', '/api/legacy-admin/login-script']);
   return (req, res, next) => {
     const path = normalizedPath(req);
     const adminHost = isBadgeAdminHost(req);
     if (isBadgeAdminPath(req) && !adminHost) return badgeNotFound(res);
-    if (badgeRequestHost(req) === KB_PUBLIC_HOST && /^\/api\/admin(?:\/.*)?$/.test(path)) return badgeNotFound(res);
+    if (badgeRequestHost(req) === KB_PUBLIC_HOST && (legacy.has(path) || /^\/api\/admin(?:\/.*)?$/.test(path))) return badgeNotFound(res);
     if (!adminHost) return next();
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
@@ -62,6 +63,21 @@ function createBadgeHostMiddleware() {
     if (!['GET', 'HEAD'].includes(req.method) && !isAllowedBadgeOrigin(req)) return sendJson(res, 403, { error: 'طلب غير مسموح.' });
     return next();
   };
+}
+function installBadgeAssetRoutes(app) {
+  const assets = [
+    [['/kb-badge-admin-login.html', '/api/kb-badge-admin/assets/login-html'], './kb-badge-admin-login-html.cjs', 'text/html; charset=utf-8'],
+    [['/kb-badge-admin-login.js', '/api/kb-badge-admin/assets/login-js'], './kb-badge-admin-login-js.cjs', 'application/javascript; charset=utf-8'],
+    [['/kb-badge-admin.js', '/api/kb-badge-admin/assets/panel-js'], './kb-badge-admin-js.cjs', 'application/javascript; charset=utf-8'],
+    [['/admin-login.html', '/api/legacy-admin/login-page'], './admin-login-html.cjs', 'text/html; charset=utf-8'],
+    [['/admin-login.js', '/api/legacy-admin/login-script'], './admin-login-js.cjs', 'application/javascript; charset=utf-8'],
+  ];
+  for (const [paths, module, contentType] of assets) for (const path of paths) app.get(path, (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
+    res.setHeader('Content-Type', contentType);
+    return res.status(200).send(require(module));
+  });
 }
 
 function isAllowedOrigin(req, env) {
@@ -310,6 +326,7 @@ function createInputGuard() {
 function installAdminSecurity(app, options = {}) {
   if (typeof app.set === 'function') app.set('trust proxy', 1);
   app.use(createBadgeHostMiddleware());
+  installBadgeAssetRoutes(app);
   const badgeOptions = { ...options, env: { ...(options.env || process.env), OSHOP_ADMIN_ALLOWED_ORIGINS: KB_BADGE_ADMIN_ORIGIN } };
   app.post('/api/kb-badge-admin/login', makeLoginHandler(badgeOptions));
   app.post('/api/kb-badge-admin/logout', makeLogoutHandler(badgeOptions));

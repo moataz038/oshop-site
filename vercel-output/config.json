@@ -31,7 +31,7 @@
       }
     },
     {
-      "src": "^/(?:admin-login(?:\\.html|\\.js)?(?:/.*)?|api/admin(?:/.*)?)$",
+      "src": "^/(?:admin-login(?:\\.html|\\.js)?(?:/.*)?|api/admin(?:/.*)?|api/legacy-admin(?:/.*)?)$",
       "caseSensitive": false,
       "has": [
         {
@@ -99,20 +99,57 @@
       }
     },
     {
-      "src": "^/robots\\.txt$",
-      "has": [
-        {
-          "type": "host",
-          "value": {
-            "eq": "kb-badge-admin.vercel.app"
-          }
-        }
-      ],
-      "dest": "/kb-badge-admin-robots.txt",
-      "check": true
+      "src": "^/kb-badge-admin-login\\.html$",
+      "caseSensitive": false,
+      "dest": "/api/kb-badge-admin/assets/login-html",
+      "check": true,
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
     },
     {
-      "src": "^/(?!(?:kb-badge-admin/?|kb-badge-admin-login\\.html|kb-badge-admin-login\\.js|kb-badge-admin\\.js|kb-badge-admin-robots\\.txt|api/(?:staff/kb-badge-(?:admin|copy)/?|kb-badge-admin/(?:login|logout)/?))$).*$",
+      "src": "^/kb-badge-admin-login\\.js$",
+      "caseSensitive": false,
+      "dest": "/api/kb-badge-admin/assets/login-js",
+      "check": true,
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
+    },
+    {
+      "src": "^/kb-badge-admin\\.js$",
+      "caseSensitive": false,
+      "dest": "/api/kb-badge-admin/assets/panel-js",
+      "check": true,
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
+    },
+    {
+      "src": "^/admin-login\\.html$",
+      "caseSensitive": false,
+      "dest": "/api/legacy-admin/login-page",
+      "check": true,
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
+    },
+    {
+      "src": "^/admin-login\\.js$",
+      "caseSensitive": false,
+      "dest": "/api/legacy-admin/login-script",
+      "check": true,
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow, noarchive"
+      }
+    },
+    {
+      "src": "^/(?!(?:kb-badge-admin/?|kb-badge-admin-login\\.html|kb-badge-admin-login\\.js|kb-badge-admin\\.js|api/(?:staff/kb-badge-(?:admin|copy)/?|kb-badge-admin/(?:login|logout)/?|kb-badge-admin/assets/(?:login-html|login-js|panel-js)))$).*$",
       "caseSensitive": false,
       "has": [
         {
