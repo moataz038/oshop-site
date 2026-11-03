@@ -25,6 +25,8 @@ python3 tools/apply-kb-badge-host-isolation.py
 python3 tools/apply-shein-cart-quantity.py
 # Route SHEIN share links deterministically and fail closed on missing data.
 python3 tools/apply-shein-cart-routing.py
+# Add privacy-safe diagnostics for failed SHEIN reader calls.
+python3 tools/apply-shein-reader-safe-logging.py
 # فحص بناء JavaScript الخلفي والواجهة قبل السماح بالنشر.
 node --check vercel-output/functions/api.func/index.cjs
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
@@ -36,7 +38,7 @@ node --check vercel-output/static/admin-auth-redirect.js
 node --check vercel-output/static/kb-logo-3d.js
 python3 -m json.tool vercel-output/config.json >/dev/null
 python3 -m json.tool vercel.json >/dev/null
-node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/kb-badge-host-isolation.test.cjs tools/product-matching.test.cjs tools/shein-cart-quantity.test.cjs tools/shein-cart-routing.test.cjs
+node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/kb-badge-host-isolation.test.cjs tools/product-matching.test.cjs tools/shein-cart-quantity.test.cjs tools/shein-cart-routing.test.cjs tools/shein-reader-safe-log.test.cjs
 
 # فحص الملفات المطلوبة والهوية والأسرار المكشوفة.
 bash tools/verify.sh
