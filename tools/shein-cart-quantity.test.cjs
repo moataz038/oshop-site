@@ -14,7 +14,7 @@ function item(overrides = {}) {
 }
 function result(overrides = {}) {
   return {
-    source: 'omkar', live: true, exchangeRate: 8, shippingLyd: 0, serviceFeeLyd: 0,
+    source: 'omkar', live: true, exchangeRate: 8, exchangeRateConfigured: true, rateMode: 'official', shippingLyd: 0, serviceFeeLyd: 0,
     items: [item()], ...overrides
   };
 }
@@ -53,6 +53,15 @@ test('unavailable items can be edited locally but remain excluded from every tot
   assert.equal(calc.totalLyd, 160);
 });
 
+test('a cart with no available products does not become a zero-LYD order total', () => {
+  const source = result({ items: [item({ qty: 2, available: false })] });
+  assert.equal(Q.canRecalculate(source), false);
+  assert.equal(Q.recalculate(source, [2]).ok, false);
+  const root = path.resolve(__dirname, '..');
+  const bundle = fs.readFileSync(path.join(root, 'vercel-output/static/assets/index-6ttDirym.js'), 'utf8');
+  assert.match(bundle, /لم أعرض إجماليًا صفريًا كأنه سعر الطلب/);
+});
+
 test('missing or invalid price on an available item blocks recalculation instead of inventing zero', () => {
   const legacy = item({ unitUsd: 10 });
   delete legacy.priceKnown;
@@ -85,7 +94,28 @@ test('invalid quantities, mismatched arrays and unsupported result shapes fail c
   }
   assert.equal(Q.canRecalculate({ ...source, live: false }), false);
   assert.equal(Q.canRecalculate({ ...source, exchangeRate: 0 }), false);
+  assert.equal(Q.canRecalculate({ ...source, exchangeRateConfigured: false }), false);
   assert.equal(Q.canRecalculate({ ...source, shippingLyd: NaN }), false);
+  assert.equal(Q.canRecalculate({ ...source, items: [] }), false);
+  assert.equal(Q.recalculate({ ...source, items: [] }, []).ok, false);
+});
+
+test('missing quantities stay blank until the customer enters each item quantity', () => {
+  const source = result({ items: [item({ qty: null }), item({ id: 'sku-2', title: 'حذاء', qty: null, unitUsd: 20 })] });
+  assert.equal(Q.canRecalculate(source), true, 'valid USD prices and configured rate allow local quantity entry');
+  assert.equal(Q.recalculate(source, [NaN, NaN]).ok, false, 'blank quantities cannot create a total');
+  const calc = Q.recalculate(source, [2, 1]);
+  assert.equal(calc.ok, true);
+  assert.equal(calc.totalPieces, 3);
+  assert.equal(calc.items[0].unitLyd, 80);
+  assert.equal(calc.items[0].totalLyd, 160);
+  assert.equal(calc.totalLyd, 320);
+});
+
+test('a numeric default rate is not trusted until the administrator explicitly configures it', () => {
+  const defaultRate = result({ exchangeRate: 6.43, exchangeRateConfigured: false });
+  assert.equal(Q.canRecalculate(defaultRate), false);
+  assert.equal(Q.recalculate(defaultRate, [1]).ok, false);
 });
 
 test('generated API and UI fail closed on missing prices and are restricted to the KB host', () => {
@@ -95,10 +125,18 @@ test('generated API and UI fail closed on missing prices and are restricted to t
   assert.match(api, /KB_SHEIN_ITEM_QUANTITY_API_V1/);
   assert.match(api, /rawPrice=.*priceKnown=price!==null&&\(typeof rawPrice==="number"\|\|typeof rawPrice==="string"\)&&Number\.isFinite\(price\)&&price>=0/);
   assert.match(api, /pricesComplete=available\.every\(item=>item\.priceKnown===true\)/);
-  assert.match(api, /totalBeforeRoundingLyd:pricesComplete\?Math\.round\(subtotal\*100\)\/100:null/);
+  assert.match(api, /quantitiesComplete=items\.every\(item=>Number\.isInteger\(item\.qty\)&&item\.qty>=1\)/);
+  assert.match(api, /totalBeforeRoundingLyd:totalsComplete\?Math\.round\(subtotal\*100\)\/100:null/);
+  assert.match(api, /exchangeRateConfigured=rateConfig\.configured/);
+  assert.match(api, /unitLyd:priceKnown&&exchangeRateConfigured\?Math\.round\(price\*rate\*100\)\/100:null/);
+  assert.match(api, /totalsComplete=exchangeRateConfigured&&available\.length>0&&pricesComplete&&quantitiesComplete/);
+  assert.match(api, /qty=Number\.isInteger\(numericQty\)&&numericQty>=1&&numericQty<=100000\?numericQty:null/);
   assert.match(bundle, /KB_SHEIN_ITEM_QUANTITY_CALL_V1/);
   assert.match(bundle, /\["kb-online-store\.vercel\.app","localhost","127\.0\.0\.1"\]\.includes\(window\.location\.hostname\)/);
   assert.match(bundle, /تعذر إعادة حساب الإجمالي لأن سعر عنصر متاح غير موجود أو غير صالح/);
+  assert.match(bundle, /أدخل كمية كل صنف ليظهر إجمالي القطع والسلة/);
+  assert.match(bundle, /سعر الصرف USD\/LYD غير مضبوط من لوحة المدير/);
+  assert.match(bundle, /سعر الوحدة: .* USD = .* د\.ل/);
 });
 
 test('the generated API price parser accepts only explicit finite numbers or numeric strings', () => {
@@ -116,6 +154,22 @@ test('the generated API price parser accepts only explicit finite numbers or num
   assert.equal(parsePrice({ pricing: { sale_price: { amount_usd: [] } } }).priceKnown, false);
   assert.equal(parsePrice({ pricing: { sale_price: { amount_usd: 'not-a-price' } } }).priceKnown, false);
   assert.equal(parsePrice({}).priceKnown, false);
+});
+
+test('the generated API preserves only explicit valid quantities and never defaults to one', () => {
+  const root = path.resolve(__dirname, '..');
+  const api = fs.readFileSync(path.join(root, 'vercel-output/functions/api.func/index.cjs'), 'utf8');
+  const start = api.indexOf('rawQty=item.quantity');
+  const end = api.indexOf(',rawOptions=', start);
+  assert.ok(start >= 0 && end > start, 'explicit quantity parser must be present');
+  const parseQuantity = new Function('item', `let ${api.slice(start, end)}; return { rawQty, numericQty, qty };`);
+  assert.equal(parseQuantity({}).qty, null);
+  assert.equal(parseQuantity({ quantity: null }).qty, null);
+  assert.equal(parseQuantity({ quantity: 4 }).qty, 4);
+  assert.equal(parseQuantity({ quantity: '3' }).qty, 3);
+  assert.equal(parseQuantity({ quantity: 0 }).qty, null);
+  assert.equal(parseQuantity({ quantity: 'bad' }).qty, null);
+  assert.doesNotMatch(api, /qty=Math\.max\(1,Number\(item\.quantity/);
 });
 
 test('patcher is idempotent and generated JavaScript remains syntactically valid', () => {

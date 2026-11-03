@@ -55,8 +55,16 @@ if saved then
   for k,v in pairs(persisted) do base[k] = v end
 end
 local patch = cjson.decode(ARGV[2])
+-- SHEIN_FX_CONFIGURED_V1
+local rateTouched = patch.rateMode ~= nil or patch.officialUsd ~= nil or patch.parallelUsd ~= nil
 for k,v in pairs(patch) do
-  if k ~= 'usdToLyd' then base[k] = v end
+  if k ~= 'usdToLyd' and k ~= 'usdToLydConfigured' then base[k] = v end
+end
+if rateTouched then
+  local configuredRate = tonumber(base.rateMode == 'parallel' and base.parallelUsd or base.officialUsd)
+  base.usdToLydConfigured = configuredRate ~= nil and configuredRate > 0
+elseif base.usdToLydConfigured ~= true then
+  base.usdToLydConfigured = false
 end
 if base.rateMode == 'parallel' then
   base.usdToLyd = base.parallelUsd

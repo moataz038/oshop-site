@@ -29,6 +29,9 @@ required=(
   tools/apply-shein-cart-quantity.py
   tools/shein-cart-quantity.test.cjs
   tools/shein-cart-quantity.browser.test.py
+  tools/shein-cart-routing-core.cjs
+  tools/apply-shein-cart-routing.py
+  tools/shein-cart-routing.test.cjs
 )
 for path in "${required[@]}"; do
   test -s "$path" || { echo "Missing required file: $path" >&2; exit 1; }
@@ -45,6 +48,7 @@ node --check vercel-output/static/admin-auth-redirect.js
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
 node --check tools/shein-cart-quantity-core.cjs
 node --check tools/shein-cart-quantity-ui.js
+node --check tools/shein-cart-routing-core.cjs
 
 grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
@@ -53,7 +57,13 @@ grep -q 'وكيل الذكاء الاصطناعي المساعد' vercel-output/
 grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'KB_SHEIN_ITEM_QUANTITY_CALL_V1' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'KB_SHEIN_ITEM_QUANTITY_API_V1' vercel-output/functions/api.func/index.cjs
+grep -q 'KB_SHEIN_CART_ROUTE_V1' vercel-output/functions/api.func/index.cjs
 grep -q 'pricesComplete=available.every(item=>item.priceKnown===true)' vercel-output/functions/api.func/index.cjs
+grep -q 'usdToLydConfigured:false' vercel-output/functions/api.func/index.cjs
+grep -q 'totalsComplete=exchangeRateConfigured&&available.length>0&&pricesComplete&&quantitiesComplete' vercel-output/functions/api.func/index.cjs
+grep -q 'SHEIN_FX_CONFIGURED_V1' vercel-output/functions/api.func/shared-store.cjs
+grep -q "base.usdToLydConfigured = configuredRate ~= nil and configuredRate > 0" vercel-output/functions/api.func/shared-store.cjs
+grep -q 'unitLyd:priceKnown&&exchangeRateConfigured' vercel-output/functions/api.func/index.cjs
 grep -q 'مراجعة كمية كل منتج' vercel-output/static/assets/index-6ttDirym.js
 
 if grep -RnE 'Oshop|اوشوب|oshop\.company|oshop-mark\.png|img/chrome\.webp' \
@@ -143,6 +153,7 @@ assert command.startswith('bash tools/build.sh &&'), 'Missing verified build ent
 build = Path('tools/build.sh').read_text()
 assert 'apply-shared-storage.py' in build and all(name in build for name in ('shared-store.test.cjs', 'runtime-security.test.cjs', 'security-hardening.test.cjs')), 'Missing shared storage or runtime security build/test gate'
 assert 'apply-shein-cart-quantity.py' in build and 'shein-cart-quantity.test.cjs' in build, 'Missing SHEIN quantity patch/test gate'
+assert 'apply-shein-cart-routing.py' in build and 'shein-cart-routing.test.cjs' in build, 'Missing SHEIN routing patch/test gate'
 assert 'apply-kb-badge-admin.py' in build, 'Missing badge-admin build patch'
 assert 'apply-kb-badge-host-isolation.py' in build, 'Missing badge host-isolation build patch'
 assert any(route.get('src') == '^/kb-badge-admin/?$' and route.get('dest') == '/api/staff/kb-badge-admin' and route.get('check') is True and not route.get('continue') for route in routes), 'Missing checked Build Output standalone admin rewrite'

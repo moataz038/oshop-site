@@ -59,6 +59,16 @@ test("input validation rejects unsafe ids, invalid statuses and oversized payloa
   assert.equal(mock.calls.length, 0);
 });
 
+test("the configured FX marker is server-managed and requires an explicitly touched positive admin rate", () => {
+  const source = require("node:fs").readFileSync(path.join(__dirname, "../vercel-output/functions/api.func/shared-store.cjs"), "utf8");
+  const match = source.match(/const SETTINGS_LUA = `([\s\S]*?)`;/);
+  assert.ok(match, "settings Lua transaction must exist");
+  assert.match(match[1], /-- SHEIN_FX_CONFIGURED_V1/);
+  assert.match(match[1], /local rateTouched = patch\.rateMode ~= nil or patch\.officialUsd ~= nil or patch\.parallelUsd ~= nil/);
+  assert.match(match[1], /k ~= 'usdToLydConfigured'/);
+  assert.match(match[1], /base\.usdToLydConfigured = configuredRate ~= nil and configuredRate > 0/);
+});
+
 function redisBinary(name) {
   const candidate = process.env[name === "server" ? "REDIS_SERVER_BIN" : "REDIS_CLI_BIN"] || (name === "server" ? "redis-server" : "redis-cli");
   try { execFileSync(candidate, ["--version"], { stdio: "ignore" }); return candidate; } catch { return null; }
@@ -128,11 +138,17 @@ test("actual Redis Lua integration: atomic IDs, limits, statuses, settings, expi
   const storedRaw = await execFileAsync(cliBin, ["-s", redis.socket, "HGET", "actual:requests:records", String(ordered[0])]);
   assert.equal(JSON.parse(storedRaw.stdout).id, undefined);
 
-  const defaults = { rateMode: "official", officialUsd: 6.43, parallelUsd: 9.9, usdToLyd: 6.43 };
-  assert.equal((await a.updateSettings({ rateMode: "parallel", usdToLyd: 999 }, defaults)).usdToLyd, 9.9);
+  const defaults = { rateMode: "official", officialUsd: 6.43, parallelUsd: 9.9, usdToLyd: 6.43, usdToLydConfigured: false };
+  assert.equal((await a.updateSettings({ usdToLydConfigured: true, usdToLyd: 999 }, defaults)).usdToLydConfigured, false);
+  const selected = await a.updateSettings({ rateMode: "parallel", usdToLyd: 999 }, defaults);
+  assert.equal(selected.usdToLyd, 9.9);
+  assert.equal(selected.usdToLydConfigured, true);
   const settings = await Promise.all([a.updateSettings({ officialUsd: 6.5 }, defaults), b.updateSettings({ parallelUsd: 10.1 }, defaults)]);
   assert.ok(settings.every((x) => x.usdToLyd === (x.rateMode === "parallel" ? x.parallelUsd : x.officialUsd)));
+  assert.ok(settings.every((x) => x.usdToLydConfigured === true));
   assert.equal((await a.getSettings(defaults)).usdToLyd, 10.1);
+  const zeroRate = await a.updateSettings({ rateMode: "official", officialUsd: 0 }, defaults);
+  assert.equal(zeroRate.usdToLydConfigured, false);
 
   const badgeDefaults = ["وكيل KB الذكي", "شحن مجاني من شي إن", "صفر عمولة على طلبك", "البطاقة نفس سعر الكاش", "توصيل لكل مدن ليبيا"];
   const editedBadgeCopy = ["وكيل KB المتطور", "شحن سريع من شي إن", "بدون عمولة إضافية", "السعر موضح قبل الطلب", "توصيل داخل ليبيا"];

@@ -20,7 +20,26 @@ def unused_port():
         return sock.getsockname()[1]
 
 
-def sample_result(missing_price=False):
+def sample_result(missing_price=False, missing_quantity=False, missing_rate=False):
+    if missing_rate:
+        items = [
+            {"id": "test-rate-missing", "title": "اختبار صرف غير مضبوط", "qty": 1, "unitUsd": 10,
+             "unitLyd": None, "priceKnown": True, "totalUsd": 10, "totalLyd": None, "available": True,
+             "sku": "T-FX", "color": "أزرق", "size": "M", "options": None},
+        ]
+        return {"source": "omkar", "live": True, "exchangeRate": None, "exchangeRateConfigured": False,
+                "rateMode": "official", "shippingLyd": 0, "serviceFeeLyd": 0,
+                "subtotalLyd": None, "totalBeforeRoundingLyd": None, "totalLyd": None,
+                "items": items, "customerSummary": "سعر الصرف غير مضبوط"}
+    if missing_quantity:
+        items = [
+            {"id": "test-quantity-missing", "title": "اختبار كمية غير مؤكدة", "qty": None, "unitUsd": 10, "unitLyd": 80,
+             "priceKnown": True, "totalUsd": None, "totalLyd": None, "available": True,
+             "sku": "T-Q", "color": None, "size": None, "options": None},
+        ]
+        return {"source": "omkar", "live": True, "exchangeRate": 8, "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
+                "serviceFeeLyd": 0, "subtotalLyd": None, "totalBeforeRoundingLyd": None,
+                "totalLyd": None, "items": items, "customerSummary": "الكمية غير مؤكدة"}
     if missing_price:
         items = [
             {"id": "test-missing", "title": "اختبار سعر غير متاح", "qty": 2, "unitUsd": None,
@@ -30,7 +49,7 @@ def sample_result(missing_price=False):
              "priceKnown": True, "totalUsd": 3, "totalLyd": 24, "available": False,
              "sku": "T-2", "color": None, "size": None, "options": None},
         ]
-        return {"source": "omkar", "live": True, "exchangeRate": 8, "shippingLyd": 0,
+        return {"source": "omkar", "live": True, "exchangeRate": 8, "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
                 "serviceFeeLyd": 0, "subtotalLyd": None, "totalBeforeRoundingLyd": None,
                 "totalLyd": None, "items": items, "customerSummary": "لا إجمالي"}
     items = [
@@ -41,7 +60,7 @@ def sample_result(missing_price=False):
          "priceKnown": False, "totalUsd": None, "totalLyd": None, "available": False,
          "sku": "T-2", "color": None, "size": None, "options": None},
     ]
-    return {"source": "omkar", "live": True, "exchangeRate": 8, "shippingLyd": 0,
+    return {"source": "omkar", "live": True, "exchangeRate": 8, "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
             "serviceFeeLyd": 0, "subtotalLyd": 160, "totalBeforeRoundingLyd": 160,
             "totalLyd": 160, "items": items, "customerSummary": "تقرير اختباري"}
 
@@ -53,7 +72,7 @@ async def run_viewport(width, height, base_url):
 
     async def mock_chat(route):
         nonlocal api_calls
-        body = sample_result(missing_price=api_calls > 0)
+        body = sample_result(missing_price=api_calls == 1, missing_rate=api_calls == 2, missing_quantity=api_calls > 2)
         api_calls += 1
         event = {"t": "done", "reply": "STALE_RESULT_TEXT_SHOULD_NOT_APPEAR", "cards": [{"type": "shein_cart", "result": body}]}
         await route.fulfill(status=200, content_type="application/x-ndjson; charset=utf-8",
@@ -103,7 +122,28 @@ async def run_viewport(width, height, base_url):
         await expect(second.get_by_test_id("shein-quantity-status")).to_contain_text("لا يوجد سعر موثوق")
         await expect(second.get_by_test_id("shein-local-summary")).to_contain_text("تعذر إعادة حساب الإجمالي")
         assert "الإجمالي قبل التقريب:" not in await second.get_by_test_id("shein-local-summary").inner_text()
-        assert api_calls == 2, "editing/resetting quantities must not send extra requests"
+
+        await composer.fill("افحص نتيجة بصرف غير مضبوط")
+        await composer.press("Enter")
+        third = cards.nth(2)
+        await expect(third).to_be_visible(timeout=10000)
+        await expect(third.get_by_test_id("shein-quantity-input-0")).to_be_disabled()
+        await expect(third.get_by_test_id("shein-local-summary")).to_contain_text("سعر الصرف USD/LYD غير مضبوط")
+        assert "د.ل" not in await third.inner_text(), "an unconfigured rate must never display a converted amount"
+        assert "الإجمالي قبل التقريب:" not in await third.get_by_test_id("shein-local-summary").inner_text()
+
+        await composer.fill("افحص نتيجة بكمية غير مؤكدة")
+        await composer.press("Enter")
+        fourth = cards.nth(3)
+        await expect(fourth).to_be_visible(timeout=10000)
+        quantity_input = fourth.get_by_test_id("shein-quantity-input-0")
+        assert not await quantity_input.is_disabled(), "customer must be able to enter a missing quantity after rate is configured"
+        await expect(fourth.get_by_test_id("shein-local-summary")).to_contain_text("أدخل كمية كل صنف")
+        await quantity_input.fill("2")
+        await expect(fourth.get_by_test_id("shein-local-summary")).to_contain_text("إجمالي القطع في القائمة: 2")
+        await expect(fourth.get_by_test_id("shein-local-summary")).to_contain_text("الإجمالي المطلوب وفق قاعدة KB الحالية: 160")
+        await expect(page.get_by_text("STALE_RESULT_TEXT_SHOULD_NOT_APPEAR")).to_have_count(0)
+        assert api_calls == 4, "editing/resetting quantities must not send extra requests"
         shein_requests = [url for url in requested_urls if "shein.com" in url.lower() or "omkar.cloud" in url.lower()]
         assert not shein_requests, f"local quantity review must not contact SHEIN or the cart reader: {shein_requests}"
 
@@ -113,7 +153,8 @@ async def run_viewport(width, height, base_url):
         await browser.close()
         return {"viewport": f"{width}x{height}", "chat_api_calls": api_calls,
                 "horizontal_overflow": False, "shein_network_requests": len(shein_requests), "page_errors": page_errors,
-                "quantity_edit_and_reset": "passed", "missing_price_lockout": "passed"}
+                "quantity_edit_and_reset": "passed", "missing_price_lockout": "passed",
+                "missing_exchange_rate_lockout": "passed", "missing_quantity_entry": "passed"}
 
 
 async def main():

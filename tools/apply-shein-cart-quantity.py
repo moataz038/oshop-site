@@ -38,8 +38,9 @@ def patch_api(text):
         safe_guard = 'priceKnown=price!==null&&(typeof rawPrice==="number"||typeof rawPrice==="string")&&Number.isFinite(price)&&price>=0'
         if old_guard in text and safe_guard not in text:
             text = replace_once(text, old_guard, safe_guard, "raw-price type guard")
-        required = ("priceKnown", "pricesComplete", "totalBeforeRoundingLyd:pricesComplete?", safe_guard)
-        if not all(token in text for token in required):
+        required = ("priceKnown", "pricesComplete", safe_guard)
+        total_guard = "totalBeforeRoundingLyd:totalsComplete?" if "KB_SHEIN_CART_ROUTE_V1" in text else "totalBeforeRoundingLyd:pricesComplete?"
+        if not all(token in text for token in required) or total_guard not in text:
             fail("partial API quantity patch detected")
         return text
 
