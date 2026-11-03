@@ -10,7 +10,7 @@ STORE = ROOT / "vercel-output/functions/api.func/shared-store.cjs"
 MARK = "/* KB_SHEIN_CART_ROUTE_V1 */"
 STORE_MARK = "-- SHEIN_FX_CONFIGURED_V1"
 ROUTE_ANCHOR = 'let n=[],a=[],last=t[t.length-1]?.text||"";if(isProductRequest(last)){'
-ROUTE_REPLACEMENT = 'let n=[],a=[],last=t[t.length-1]?.text||"",route=__KBSheinCartRouting.classify(last,Boolean(process.env.OMKAR_API_KEY),isProductRequest(last));if(route.kind==="cart-unavailable")return __KBSheinCartRouting.unavailableResponse();if(route.kind==="cart"){let invocation=__KBSheinCartRouting.dispatch(route,url=>rCe("calculate_shein_cart",{url},e,n)),result=await invocation.value;return __KBSheinCartRouting.mapCartRead(result,n)}if(route.kind==="product-search"){'
+ROUTE_REPLACEMENT = 'let n=[],a=[],last=t[t.length-1]?.text||"",route=__KBSheinCartRouting.classify(last,Boolean(__KBSheinCartReaderPromise),isProductRequest(last));if(route.kind==="cart-unavailable")return __KBSheinCartRouting.unavailableResponse();if(route.kind==="cart"){let invocation=__KBSheinCartRouting.dispatch(route,url=>rCe("calculate_shein_cart",{url},e,n)),result=await invocation.value;return __KBSheinCartRouting.mapCartRead(result,n)}if(route.kind==="product-search"){'
 
 
 def fail(message):
@@ -80,14 +80,35 @@ def patch_api(text, core):
         if helper_end < 0:
             fail("cannot locate the chat handler after the routing helper")
         text = text[:helper_start] + "\n" + inline_core.rstrip() + text[helper_end:]
+        old_reader_classifier = "__KBSheinCartRouting.classify(last,Boolean(process.env.OMKAR_API_KEY),isProductRequest(last))"
+        new_reader_classifier = "__KBSheinCartRouting.classify(last,Boolean(__KBSheinCartReaderPromise),isProductRequest(last))"
+        if old_reader_classifier in text:
+            text = replace_once(text, old_reader_classifier, new_reader_classifier, "direct reader availability check")
         required = (
-            "__KBSheinCartRouting.classify(last,Boolean(process.env.OMKAR_API_KEY),isProductRequest(last))",
+            "__KBSheinCartRouting.classify(last,Boolean(__KBSheinCartReaderPromise),isProductRequest(last))",
             'if(route.kind==="cart-unavailable")',
             'if(route.kind==="cart")',
             'if(route.kind==="product-search")',
             'dispatch(route,url=>rCe("calculate_shein_cart",{url},e,n))',
         )
-        if not all(token in text for token in required):
+        if "/* KB_SHEIN_DIRECT_READER_V1 */" in text:
+            reader_required = (
+                'source:"shein-cart"',
+                "qty:null",
+                "totalLyd:null",
+                'exchangeRateConfigured:rateConfig.configured',
+            )
+        else:
+            reader_required = (
+                'quantitiesComplete=items.every(item=>Number.isInteger(item.qty)&&item.qty>=1)',
+                'totalsComplete=exchangeRateConfigured&&available.length>0&&pricesComplete&&quantitiesComplete',
+                'unitLyd:priceKnown&&exchangeRateConfigured?Math.round(price*rate*100)/100:null',
+                'exchangeRateConfigured,rateMode,shippingLyd:0',
+                'qty=Number.isInteger(numericQty)&&numericQty>=1&&numericQty<=100000?numericQty:null',
+                'for(let attempt=0;attempt<1;attempt++)',
+                'if(!resp?.ok||!data||data.error)',
+            )
+        if not all(token in text for token in (*required, *reader_required)):
             fail("partial or incomplete deterministic SHEIN route detected")
 
     default_old = 'var jTe={rateMode:"official",officialUsd:6.43,parallelUsd:9.9,usdToLyd:6.43,airUsdPerKg:9,seaUsdPerCbm:280,serviceFeePercent:5,customsPercent:0};'
@@ -178,18 +199,23 @@ def patch_api(text, core):
         MARK,
         'if(route.kind==="cart-unavailable")',
         'if(route.kind==="cart")',
-        'quantitiesComplete=items.every(item=>Number.isInteger(item.qty)&&item.qty>=1)',
-        'totalsComplete=exchangeRateConfigured&&available.length>0&&pricesComplete&&quantitiesComplete',
-        'unitLyd:priceKnown&&exchangeRateConfigured?Math.round(price*rate*100)/100:null',
-        'exchangeRateConfigured,rateMode,shippingLyd:0',
         'usdToLydConfigured:false',
         'لسلة SHEIN استخدم هذا السعر فقط إذا كان usdToLydConfigured=true',
-        'qty=Number.isInteger(numericQty)&&numericQty>=1&&numericQty<=100000?numericQty:null',
-        'for(let attempt=0;attempt<1;attempt++)',
-        'if(!resp?.ok||!data||data.error)',
-        'if(!items.length)return{error:"لم يعثر القارئ على عناصر في رابط السلة."}',
     )
-    if not all(token in text for token in required):
+    if "/* KB_SHEIN_DIRECT_READER_V1 */" in text:
+        reader_required = ('source:"shein-cart"', 'qty:null', 'totalLyd:null')
+    else:
+        reader_required = (
+            'quantitiesComplete=items.every(item=>Number.isInteger(item.qty)&&item.qty>=1)',
+            'totalsComplete=exchangeRateConfigured&&available.length>0&&pricesComplete&&quantitiesComplete',
+            'unitLyd:priceKnown&&exchangeRateConfigured?Math.round(price*rate*100)/100:null',
+            'exchangeRateConfigured,rateMode,shippingLyd:0',
+            'qty=Number.isInteger(numericQty)&&numericQty>=1&&numericQty<=100000?numericQty:null',
+            'for(let attempt=0;attempt<1;attempt++)',
+            'if(!resp?.ok||!data||data.error)',
+            'if(!items.length)return{error:"لم يعثر القارئ على عناصر في رابط السلة."}',
+        )
+    if not all(token in text for token in (*required, *reader_required)):
         fail("SHEIN routing patch is incomplete; refusing to write generated API")
     if "qty=Math.max(1,Number(item.quantity??item.qty??item.quantity_selected??item.purchase_quantity??1)||1)" in text:
         fail("a default quantity of one remains in the SHEIN reader")

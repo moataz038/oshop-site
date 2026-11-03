@@ -16,6 +16,7 @@ required=(
   vercel-output/functions/api.func/shared-store.cjs
   vercel-output/functions/api.func/admin-login-html.cjs
   vercel-output/functions/api.func/admin-login-js.cjs
+  vercel-output/functions/api.func/shein-direct-reader.mjs
   vercel-output/functions/api.func/kb-badge-admin-login-html.cjs
   vercel-output/functions/api.func/kb-badge-admin-login-js.cjs
   vercel-output/functions/api.func/kb-badge-admin-page.cjs
@@ -32,6 +33,11 @@ required=(
   tools/shein-cart-routing-core.cjs
   tools/apply-shein-cart-routing.py
   tools/shein-cart-routing.test.cjs
+  tools/shein-direct-reader.mjs
+  tools/apply-shein-direct-reader.py
+  tools/shein-direct-reader.test.cjs
+  vendor/shein-cart/LICENSE
+  vendor/shein-cart/NOTICE.md
 )
 for path in "${required[@]}"; do
   test -s "$path" || { echo "Missing required file: $path" >&2; exit 1; }
@@ -40,6 +46,7 @@ done
 node --check vercel-output/functions/api.func/index.cjs
 node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
+node --check vercel-output/functions/api.func/shein-direct-reader.mjs
 node --check vercel-output/functions/api.func/kb-badge-admin-page.cjs
 node --check vercel-output/functions/api.func/kb-badge-admin-js.cjs
 node --check vercel-output/functions/api.func/admin-login-js.cjs
@@ -49,6 +56,7 @@ node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
 node --check tools/shein-cart-quantity-core.cjs
 node --check tools/shein-cart-quantity-ui.js
 node --check tools/shein-cart-routing-core.cjs
+node --check tools/shein-direct-reader.mjs
 
 grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
@@ -58,13 +66,22 @@ grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/
 grep -q 'KB_SHEIN_ITEM_QUANTITY_CALL_V1' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'KB_SHEIN_ITEM_QUANTITY_API_V1' vercel-output/functions/api.func/index.cjs
 grep -q 'KB_SHEIN_CART_ROUTE_V1' vercel-output/functions/api.func/index.cjs
-grep -q 'pricesComplete=available.every(item=>item.priceKnown===true)' vercel-output/functions/api.func/index.cjs
+grep -q 'KB_SHEIN_DIRECT_READER_V1' vercel-output/functions/api.func/index.cjs
+grep -q 'var __KBSheinCartReaderPromise=import("./shein-direct-reader.mjs");' vercel-output/functions/api.func/index.cjs
+grep -q 'source:"shein-cart"' vercel-output/functions/api.func/index.cjs
+grep -q 'qty:null' vercel-output/functions/api.func/index.cjs
+grep -q 'totalLyd:null' vercel-output/functions/api.func/index.cjs
+grep -q 'priceKnown=priceAmount!==null&&priceCurrency==="USD"' vercel-output/functions/api.func/index.cjs
+grep -Fq 'priceCurrency=currencies.length===1&&items.every(item=>item.priceCurrency===currencies[0])?currencies[0]:currencies.length?"MIXED":""' vercel-output/functions/api.func/index.cjs
+grep -q 'exchangeRateConfigured:rateConfig.configured' vercel-output/functions/api.func/index.cjs
 grep -q 'usdToLydConfigured:false' vercel-output/functions/api.func/index.cjs
-grep -q 'totalsComplete=exchangeRateConfigured&&available.length>0&&pricesComplete&&quantitiesComplete' vercel-output/functions/api.func/index.cjs
 grep -q 'SHEIN_FX_CONFIGURED_V1' vercel-output/functions/api.func/shared-store.cjs
 grep -q "base.usdToLydConfigured = configuredRate ~= nil and configuredRate > 0" vercel-output/functions/api.func/shared-store.cjs
-grep -q 'unitLyd:priceKnown&&exchangeRateConfigured' vercel-output/functions/api.func/index.cjs
 grep -q 'مراجعة كمية كل منتج' vercel-output/static/assets/index-6ttDirym.js
+if grep -RE 'OMKAR_API_KEY|shein-scraper\.omkar\.cloud|API-Key' vercel-output/functions/api.func/index.cjs >/dev/null; then
+  echo "Paid Omkar reader code must not remain in the runtime API" >&2
+  exit 1
+fi
 
 if grep -RnE 'Oshop|اوشوب|oshop\.company|oshop-mark\.png|img/chrome\.webp' \
   vercel-output/static/index.html \
@@ -136,7 +153,7 @@ patterns = {
 }
 for root in ('vercel-output', 'tools'):
     for path in Path(root).rglob('*'):
-        if path.is_file() and path.suffix in {'.cjs', '.js', '.py', '.html', '.json', '.sh'}:
+        if path.is_file() and path.suffix in {'.cjs', '.js', '.mjs', '.py', '.html', '.json', '.sh'}:
             text = path.read_text(errors='replace')
             for label, pattern in patterns.items():
                 assert not re.search(pattern, text), f'Possible {label} in {path}; value withheld'
@@ -154,6 +171,7 @@ build = Path('tools/build.sh').read_text()
 assert 'apply-shared-storage.py' in build and all(name in build for name in ('shared-store.test.cjs', 'runtime-security.test.cjs', 'security-hardening.test.cjs')), 'Missing shared storage or runtime security build/test gate'
 assert 'apply-shein-cart-quantity.py' in build and 'shein-cart-quantity.test.cjs' in build, 'Missing SHEIN quantity patch/test gate'
 assert 'apply-shein-cart-routing.py' in build and 'shein-cart-routing.test.cjs' in build, 'Missing SHEIN routing patch/test gate'
+assert 'apply-shein-direct-reader.py' in build and 'shein-direct-reader.test.cjs' in build, 'Missing direct SHEIN reader patch/test gate'
 assert 'apply-kb-badge-admin.py' in build, 'Missing badge-admin build patch'
 assert 'apply-kb-badge-host-isolation.py' in build, 'Missing badge host-isolation build patch'
 assert any(route.get('src') == '^/kb-badge-admin/?$' and route.get('dest') == '/api/staff/kb-badge-admin' and route.get('check') is True and not route.get('continue') for route in routes), 'Missing checked Build Output standalone admin rewrite'

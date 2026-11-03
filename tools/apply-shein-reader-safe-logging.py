@@ -10,6 +10,8 @@ MARK = "/* KB_SHEIN_READER_SAFE_LOG_V1 */"
 CALL = "__KBSheinReaderSafeLog({response:resp,error:lastErr,hasData:Boolean(data),providerError:Boolean(data?.error)})"
 FAILURE_ANCHOR = 'if(!resp?.ok||!data||data.error)return{error:data?.message||data?.error?.message||`تعذر قراءة سلة SHEIN (${resp?.status||lastErr?.message||"خطأ اتصال"}).`};'
 FAILURE_REPLACEMENT = 'if(!resp?.ok||!data||data.error){' + CALL + ';return{error:data?.message||data?.error?.message||`تعذر قراءة سلة SHEIN (${resp?.status||lastErr?.message||"خطأ اتصال"}).`};}'
+DIRECT_MARK = "/* KB_SHEIN_DIRECT_READER_V1 */"
+DIRECT_CALL = '__KBSheinReaderSafeLog({response:err&&Number.isInteger(err.status)?{ok:false,status:err.status}:null,error:err?.code==="timeout"?{name:"TimeoutError"}:err?.code==="network"?{name:"TypeError"}:null,hasData:false,providerError:false})'
 HELPER_ANCHOR = "function iCe(){"
 EXPORT_LINE = "module.exports = createSheinReaderSafeLogger;"
 
@@ -49,11 +51,15 @@ def patch_api(text, helper):
             "pre-routing logger helper injection",
         )
 
-    call_count = text.count(CALL)
-    if call_count == 0:
-        text = replace_once(text, FAILURE_ANCHOR, FAILURE_REPLACEMENT, "reader failure log call")
-    elif call_count != 1:
-        fail(f"invalid safe-logging call count: {call_count}")
+    if DIRECT_MARK in text:
+        if text.count(DIRECT_CALL) != 1 or CALL in text or FAILURE_ANCHOR in text:
+            fail("direct-reader safe-logging call is missing, duplicated, or mixed with provider logging")
+    else:
+        call_count = text.count(CALL)
+        if call_count == 0:
+            text = replace_once(text, FAILURE_ANCHOR, FAILURE_REPLACEMENT, "reader failure log call")
+        elif call_count != 1:
+            fail(f"invalid safe-logging call count: {call_count}")
 
     start = text.index(MARK) + len(MARK)
     end = text.find(HELPER_ANCHOR, start)
@@ -71,10 +77,14 @@ def patch_api(text, helper):
     forbidden = ("message", "url", "items", "API-Key", "process.env", "secret")
     if any(token.lower() in helper_section.lower() for token in forbidden):
         fail("safe logger helper contains a field that must not be logged")
-    if text.count(CALL) != 1:
-        fail("safe logger call is missing or duplicated")
-    if FAILURE_ANCHOR in text:
-        fail("reader failure path was not instrumented")
+    if DIRECT_MARK in text:
+        if text.count(DIRECT_CALL) != 1:
+            fail("direct reader safe logger call is missing or duplicated")
+    else:
+        if text.count(CALL) != 1:
+            fail("safe logger call is missing or duplicated")
+        if FAILURE_ANCHOR in text:
+            fail("reader failure path was not instrumented")
     return text
 
 

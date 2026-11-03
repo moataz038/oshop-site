@@ -81,7 +81,9 @@ test("safe logger patcher is idempotent", () => {
 test("the generated API contains only the safe helper and one failure-path call", () => {
   const bundle = fs.readFileSync(bundlePath, "utf8");
   assert.equal(bundle.split(marker).length - 1, 1);
-  assert.equal(bundle.split("__KBSheinReaderSafeLog({response:resp,error:lastErr,hasData:Boolean(data),providerError:Boolean(data?.error)})").length - 1, 1);
+  assert.equal(bundle.split("__KBSheinReaderSafeLog({response:err&&Number.isInteger(err.status)").length - 1, 1);
+  assert.equal(bundle.includes("__KBSheinReaderSafeLog({response:resp,error:lastErr,hasData:Boolean(data),providerError:Boolean(data?.error)})"), false);
+  assert.equal(bundle.includes("OMKAR_API_KEY"), false);
   const helperStart = bundle.indexOf(marker) + marker.length;
   const helperEnd = bundle.indexOf("function iCe(){", helperStart);
   assert.ok(helperEnd > helperStart, "safe logger helper is present before provider setup");

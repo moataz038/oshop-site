@@ -10,7 +10,7 @@
   function round2(value) { return Math.round(value * 100) / 100; }
 
   function canRecalculate(result) {
-    if (!result || result.source !== "omkar" || result.live !== true || !Array.isArray(result.items) || result.items.length === 0 || !result.items.some(function (item) { return item && item.available === true; }) ||
+    if (!result || result.source !== "shein-cart" || result.live !== true || !Array.isArray(result.items) || result.items.length === 0 || result.priceCurrency !== "USD" || !result.items.some(function (item) { return item && item.available === true; }) ||
         result.exchangeRateConfigured !== true || !finite(result.exchangeRate) || result.exchangeRate <= 0 || !finite(result.shippingLyd) ||
         !finite(result.serviceFeeLyd) || result.shippingLyd < 0 || result.serviceFeeLyd < 0) return false;
     return result.items.every(function (item) {

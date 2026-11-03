@@ -14,7 +14,7 @@ function item(overrides = {}) {
 }
 function result(overrides = {}) {
   return {
-    source: 'omkar', live: true, exchangeRate: 8, exchangeRateConfigured: true, rateMode: 'official', shippingLyd: 0, serviceFeeLyd: 0,
+    source: "shein-cart", live: true, priceCurrency: "USD", exchangeRate: 8, exchangeRateConfigured: true, rateMode: "official", shippingLyd: 0, serviceFeeLyd: 0,
     items: [item()], ...overrides
   };
 }
@@ -118,58 +118,30 @@ test('a numeric default rate is not trusted until the administrator explicitly c
   assert.equal(Q.recalculate(defaultRate, [1]).ok, false);
 });
 
-test('generated API and UI fail closed on missing prices and are restricted to the KB host', () => {
+test('generated API and UI use the direct reader, configured USD rate, and KB-host-only quantity card', () => {
   const root = path.resolve(__dirname, '..');
   const api = fs.readFileSync(path.join(root, 'vercel-output/functions/api.func/index.cjs'), 'utf8');
   const bundle = fs.readFileSync(path.join(root, 'vercel-output/static/assets/index-6ttDirym.js'), 'utf8');
   assert.match(api, /KB_SHEIN_ITEM_QUANTITY_API_V1/);
-  assert.match(api, /rawPrice=.*priceKnown=price!==null&&\(typeof rawPrice==="number"\|\|typeof rawPrice==="string"\)&&Number\.isFinite\(price\)&&price>=0/);
-  assert.match(api, /pricesComplete=available\.every\(item=>item\.priceKnown===true\)/);
-  assert.match(api, /quantitiesComplete=items\.every\(item=>Number\.isInteger\(item\.qty\)&&item\.qty>=1\)/);
-  assert.match(api, /totalBeforeRoundingLyd:totalsComplete\?Math\.round\(subtotal\*100\)\/100:null/);
-  assert.match(api, /exchangeRateConfigured=rateConfig\.configured/);
-  assert.match(api, /unitLyd:priceKnown&&exchangeRateConfigured\?Math\.round\(price\*rate\*100\)\/100:null/);
-  assert.match(api, /totalsComplete=exchangeRateConfigured&&available\.length>0&&pricesComplete&&quantitiesComplete/);
-  assert.match(api, /qty=Number\.isInteger\(numericQty\)&&numericQty>=1&&numericQty<=100000\?numericQty:null/);
+  assert.match(api, /KB_SHEIN_DIRECT_READER_V1/);
+  assert.match(api, /var __KBSheinCartReaderPromise=import\("\.\/shein-direct-reader\.mjs"\)/);
+  assert.match(api, /source:"shein-cart"/);
+  assert.match(api, /qty:null/);
+  assert.match(api, /totalLyd:null/);
+  assert.match(api, /exchangeRateConfigured:rateConfig\.configured/);
+  assert.doesNotMatch(api, /OMKAR_API_KEY|shein-scraper\.omkar\.cloud|API-Key/);
   assert.match(bundle, /KB_SHEIN_ITEM_QUANTITY_CALL_V1/);
   assert.match(bundle, /\["kb-online-store\.vercel\.app","localhost","127\.0\.0\.1"\]\.includes\(window\.location\.hostname\)/);
-  assert.match(bundle, /تعذر إعادة حساب الإجمالي لأن سعر عنصر متاح غير موجود أو غير صالح/);
   assert.match(bundle, /أدخل كمية كل صنف ليظهر إجمالي القطع والسلة/);
   assert.match(bundle, /سعر الصرف USD\/LYD غير مضبوط من لوحة المدير/);
-  assert.match(bundle, /سعر الوحدة: .* USD = .* د\.ل/);
+  assert.match(bundle, /لن أستخدم سعر USD\/LYD لتحويل هذه العملة أو حساب إجمالي/);
+  assert.match(bundle, /سعر الوحدة .* USD/);
 });
 
-test('the generated API price parser accepts only explicit finite numbers or numeric strings', () => {
-  const root = path.resolve(__dirname, '..');
-  const api = fs.readFileSync(path.join(root, 'vercel-output/functions/api.func/index.cjs'), 'utf8');
-  const start = api.indexOf('let rawPrice=');
-  const end = api.indexOf(',qty=', start);
-  assert.ok(start >= 0 && end > start, 'API price expression must be present');
-  const parsePrice = new Function('item', api.slice(start, end) + '; return { rawPrice, price, priceKnown };');
-  assert.deepEqual(parsePrice({ pricing: { sale_price: { amount_usd: '12.5' } } }),
-    { rawPrice: '12.5', price: 12.5, priceKnown: true });
-  assert.deepEqual(parsePrice({ pricing: { sale_price: { amount_usd: 0 } } }),
-    { rawPrice: 0, price: 0, priceKnown: true });
-  assert.equal(parsePrice({ pricing: { sale_price: { amount_usd: false } } }).priceKnown, false);
-  assert.equal(parsePrice({ pricing: { sale_price: { amount_usd: [] } } }).priceKnown, false);
-  assert.equal(parsePrice({ pricing: { sale_price: { amount_usd: 'not-a-price' } } }).priceKnown, false);
-  assert.equal(parsePrice({}).priceKnown, false);
-});
-
-test('the generated API preserves only explicit valid quantities and never defaults to one', () => {
-  const root = path.resolve(__dirname, '..');
-  const api = fs.readFileSync(path.join(root, 'vercel-output/functions/api.func/index.cjs'), 'utf8');
-  const start = api.indexOf('rawQty=item.quantity');
-  const end = api.indexOf(',rawOptions=', start);
-  assert.ok(start >= 0 && end > start, 'explicit quantity parser must be present');
-  const parseQuantity = new Function('item', `let ${api.slice(start, end)}; return { rawQty, numericQty, qty };`);
-  assert.equal(parseQuantity({}).qty, null);
-  assert.equal(parseQuantity({ quantity: null }).qty, null);
-  assert.equal(parseQuantity({ quantity: 4 }).qty, 4);
-  assert.equal(parseQuantity({ quantity: '3' }).qty, 3);
-  assert.equal(parseQuantity({ quantity: 0 }).qty, null);
-  assert.equal(parseQuantity({ quantity: 'bad' }).qty, null);
-  assert.doesNotMatch(api, /qty=Math\.max\(1,Number\(item\.quantity/);
+test('quantity core never converts a non-USD SHEIN price with the USD/LYD rate', () => {
+  const foreign = result({ priceCurrency: 'SAR', items: [item({ unitUsd: null, unitPrice: 10, priceText: 'SR 10', priceCurrency: 'SAR', priceKnown: false })] });
+  assert.equal(Q.canRecalculate(foreign), false);
+  assert.equal(Q.recalculate(foreign, [2]).ok, false);
 });
 
 test('patcher is idempotent and generated JavaScript remains syntactically valid', () => {

@@ -13,6 +13,7 @@ API_MARK = "/* KB_SHEIN_ITEM_QUANTITY_API_V1 */"
 CORE_MARK = "/* KB_SHEIN_ITEM_QUANTITY_CORE_V1 */"
 UI_MARK = "/* KB_SHEIN_ITEM_QUANTITY_UI_V1 */"
 CALL_MARK = "/* KB_SHEIN_ITEM_QUANTITY_CALL_V1 */"
+DIRECT_MARK = "/* KB_SHEIN_DIRECT_READER_V1 */"
 OSC_ANCHOR = "function OSC("
 CHAT_TEXT = 'n.text&&c.jsx("div",{className:"bubble-ai whitespace-pre-wrap",style:n.error?{borderColor:"var(--danger)"}:void 0,children:n.text})'
 CHAT_CARD_END = 'l.type==="track"?c.jsx(rS,{data:l.data},h):null'
@@ -34,6 +35,17 @@ def patch_api(text):
     if count not in (0, 1):
         fail(f"invalid API marker count: {count}")
     if count:
+        if DIRECT_MARK in text:
+            direct_required = (
+                'source:"shein-cart"',
+                "qty:null",
+                "totalLyd:null",
+                'exchangeRateConfigured:rateConfig.configured',
+                'priceKnown=priceAmount!==null&&priceCurrency==="USD"',
+            )
+            if not all(token in text for token in direct_required):
+                fail("partial direct SHEIN quantity contract detected")
+            return text
         old_guard = 'priceKnown=price!==null&&Number.isFinite(price)&&price>=0'
         safe_guard = 'priceKnown=price!==null&&(typeof rawPrice==="number"||typeof rawPrice==="string")&&Number.isFinite(price)&&price>=0'
         if old_guard in text and safe_guard not in text:

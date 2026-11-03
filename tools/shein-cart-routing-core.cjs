@@ -53,9 +53,10 @@ function createSheinCartRoutingCore() {
 
   function mapCartRead(result, cards) {
     var items = result && Array.isArray(result.items) ? result.items : [];
-    var hasCard = Array.isArray(cards) && cards.some(function (card) {
+    var sourceCards = Array.isArray(cards) ? cards.filter(function (card) {
       return card && card.type === "shein_cart" && card.result && Array.isArray(card.result.items) && card.result.items.length > 0;
-    });
+    }) : [];
+    var hasCard = sourceCards.length > 0;
     if (!result || result.error || items.length === 0 || !hasCard) {
       return {
         reply: "تعذرت قراءة سلة SHEIN الآن، لذلك لم أعرض نتائج بحث بديلة أو أي إجمالي. جرّب لاحقًا.",
@@ -64,19 +65,52 @@ function createSheinCartRoutingCore() {
         provider: "direct-shein-cart"
       };
     }
-    var quantitiesKnown = items.every(function (item) {
-      return item && Number.isInteger(item.qty) && item.qty >= 1;
+    var safeItems = items.map(function (item) {
+      return {
+        id: item && item.id,
+        title: item && item.title,
+        qty: null,
+        unitUsd: item && item.unitUsd,
+        unitPrice: item && item.unitPrice,
+        priceText: item && item.priceText,
+        priceCurrency: item && item.priceCurrency,
+        priceKnown: item && item.priceKnown === true,
+        available: item && item.available === true,
+        sku: item && item.sku,
+        color: item && item.color,
+        size: item && item.size,
+        options: item && item.options
+      };
     });
-    var totalPieces = quantitiesKnown ? items.reduce(function (sum, item) { return sum + item.qty; }, 0) : null;
+    var priceCurrency = String(result.priceCurrency || result.currency || "").toUpperCase();
+    var safeResult = {
+      source: "shein-cart",
+      live: true,
+      currency: priceCurrency,
+      priceCurrency: priceCurrency,
+      exchangeRate: result.exchangeRate,
+      exchangeRateConfigured: result.exchangeRateConfigured === true,
+      rateMode: result.rateMode,
+      shippingLyd: 0,
+      serviceFeeLyd: 0,
+      subtotalLyd: null,
+      totalBeforeRoundingLyd: null,
+      totalLyd: null,
+      items: safeItems,
+      customerSummary: "حدّد كمية كل صنف قبل طلب الإجمالي."
+    };
+    var safeCards = sourceCards.slice(0, 1).map(function (card) {
+      return { type: "shein_cart", result: safeResult };
+    });
     var reply;
-    if (!resolveRate(result).configured) {
-      reply = "قرأت " + items.length + " عناصر. ستظهر أسعارها بالدولار فقط حتى يضبط المدير سعر USD/LYD؛ لن أعرض تحويلًا أو إجماليًا بالدينار قبل ذلك.";
-    } else if (quantitiesKnown) {
-      reply = "قرأت " + items.length + " عناصر، ومجموع الكميات المقروءة " + totalPieces + " قطعة. راجع القائمة أدناه وأكّد أن هذا هو إجمالي القطع المطلوب.";
+    if (priceCurrency !== "USD") {
+      reply = "قرأت " + safeItems.length + " أصناف. العملة " + (priceCurrency || "غير معروفة أو متعددة") + "؛ سأعرض الأسعار كما أعادها SHEIN، ولا أستخدم سعر USD/LYD لتحويل عملة أخرى. حدّد كمية كل صنف، ولن أعرض إجماليًا بالدينار.";
+    } else if (!resolveRate(result).configured) {
+      reply = "قرأت " + safeItems.length + " أصناف. ستظهر الأسعار بالدولار فقط حتى يضبط المدير سعر USD/LYD. حدّد كمية كل صنف؛ لن أعرض إجماليًا قبل تأكيد الكميات وسعر الصرف.";
     } else {
-      reply = "قرأت " + items.length + " عناصر، لكن القارئ لم يرسل كمية بعض الأصناف. أدخل كمية كل صنف؛ بعدها يظهر إجمالي القطع والسلة. لن أفترض أن كل صنف قطعة واحدة أو أوزع إجمالي القطع عليك.";
+      reply = "قرأت " + safeItems.length + " أصناف. حدّد كمية كل صنف؛ لن أفترض قطعة واحدة ولن يظهر إجمالي قبل إدخال الكميات.";
     }
-    return { reply: reply, cards: cards, steps: ["calculate_shein_cart"], provider: "direct-shein-cart" };
+    return { reply: reply, cards: safeCards, steps: ["calculate_shein_cart"], provider: "direct-shein-cart" };
   }
 
   return {

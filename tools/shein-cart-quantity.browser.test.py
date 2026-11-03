@@ -23,46 +23,47 @@ def unused_port():
 def sample_result(missing_price=False, missing_quantity=False, missing_rate=False):
     if missing_rate:
         items = [
-            {"id": "test-rate-missing", "title": "اختبار صرف غير مضبوط", "qty": 1, "unitUsd": 10,
-             "unitLyd": None, "priceKnown": True, "totalUsd": 10, "totalLyd": None, "available": True,
+            {"id": "test-rate-missing", "title": "اختبار صرف غير مضبوط", "qty": None, "unitUsd": 10,
+             "unitLyd": None, "priceKnown": True, "priceCurrency": "USD", "totalUsd": None, "totalLyd": None, "available": True,
              "sku": "T-FX", "color": "أزرق", "size": "M", "options": None},
         ]
-        return {"source": "omkar", "live": True, "exchangeRate": None, "exchangeRateConfigured": False,
+        return {"source": "shein-cart", "live": True, "currency": "USD", "priceCurrency": "USD", "exchangeRate": None, "exchangeRateConfigured": False,
                 "rateMode": "official", "shippingLyd": 0, "serviceFeeLyd": 0,
                 "subtotalLyd": None, "totalBeforeRoundingLyd": None, "totalLyd": None,
                 "items": items, "customerSummary": "سعر الصرف غير مضبوط"}
     if missing_quantity:
         items = [
-            {"id": "test-quantity-missing", "title": "اختبار كمية غير مؤكدة", "qty": None, "unitUsd": 10, "unitLyd": 80,
-             "priceKnown": True, "totalUsd": None, "totalLyd": None, "available": True,
+            {"id": "test-quantity-missing", "title": "اختبار كمية غير مؤكدة", "qty": None, "unitUsd": 10, "unitLyd": None,
+             "priceKnown": True, "priceCurrency": "USD", "totalUsd": None, "totalLyd": None, "available": True,
              "sku": "T-Q", "color": None, "size": None, "options": None},
         ]
-        return {"source": "omkar", "live": True, "exchangeRate": 8, "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
+        return {"source": "shein-cart", "live": True, "currency": "USD", "priceCurrency": "USD", "exchangeRate": 8, "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
                 "serviceFeeLyd": 0, "subtotalLyd": None, "totalBeforeRoundingLyd": None,
                 "totalLyd": None, "items": items, "customerSummary": "الكمية غير مؤكدة"}
     if missing_price:
         items = [
-            {"id": "test-missing", "title": "اختبار سعر غير متاح", "qty": 2, "unitUsd": None,
-             "priceKnown": False, "totalUsd": None, "totalLyd": None, "available": True,
+            {"id": "test-missing", "title": "اختبار سعر غير متاح", "qty": None, "unitUsd": None,
+             "priceKnown": False, "priceCurrency": "USD", "totalUsd": None, "totalLyd": None, "available": True,
              "sku": "T-1", "color": None, "size": None, "options": None},
-            {"id": "test-unavailable", "title": "غير متاح", "qty": 1, "unitUsd": 3,
-             "priceKnown": True, "totalUsd": 3, "totalLyd": 24, "available": False,
+            {"id": "test-unavailable", "title": "غير متاح", "qty": None, "unitUsd": 3,
+             "priceKnown": True, "priceCurrency": "USD", "totalUsd": None, "totalLyd": None, "available": False,
              "sku": "T-2", "color": None, "size": None, "options": None},
         ]
-        return {"source": "omkar", "live": True, "exchangeRate": 8, "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
+        return {"source": "shein-cart", "live": True, "currency": "USD", "priceCurrency": "USD", "exchangeRate": 8, "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
                 "serviceFeeLyd": 0, "subtotalLyd": None, "totalBeforeRoundingLyd": None,
                 "totalLyd": None, "items": items, "customerSummary": "لا إجمالي"}
     items = [
-        {"id": "test-available", "title": "اختبار قميص", "qty": 2, "unitUsd": 10,
-         "priceKnown": True, "totalUsd": 20, "totalLyd": 160, "available": True,
+        {"id": "test-available", "title": "اختبار قميص", "qty": None, "unitUsd": 10,
+         "priceKnown": True, "priceCurrency": "USD", "totalUsd": None, "totalLyd": None, "available": True,
          "sku": "T-1", "color": "أسود", "size": "M", "options": None},
-        {"id": "test-unavailable", "title": "اختبار مستبعد", "qty": 3, "unitUsd": None,
-         "priceKnown": False, "totalUsd": None, "totalLyd": None, "available": False,
+        {"id": "test-unavailable", "title": "اختبار مستبعد", "qty": None, "unitUsd": None,
+         "priceKnown": False, "priceCurrency": "USD", "totalUsd": None, "totalLyd": None, "available": False,
          "sku": "T-2", "color": None, "size": None, "options": None},
     ]
-    return {"source": "omkar", "live": True, "exchangeRate": 8, "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
-            "serviceFeeLyd": 0, "subtotalLyd": 160, "totalBeforeRoundingLyd": 160,
-            "totalLyd": 160, "items": items, "customerSummary": "تقرير اختباري"}
+    return {"source": "shein-cart", "live": True, "currency": "USD", "priceCurrency": "USD", "exchangeRate": 8,
+            "exchangeRateConfigured": True, "rateMode": "official", "shippingLyd": 0,
+            "serviceFeeLyd": 0, "subtotalLyd": None, "totalBeforeRoundingLyd": None,
+            "totalLyd": None, "items": items, "customerSummary": "حدّد الكميات قبل الإجمالي"}
 
 
 async def run_viewport(width, height, base_url):
@@ -102,17 +103,17 @@ async def run_viewport(width, height, base_url):
         unavailable_input = first.get_by_test_id("shein-quantity-input-1")
         assert not await unavailable_input.is_disabled(), "every listed item should allow local quantity review"
         await unavailable_input.fill("4")
-        await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("غير المتاح: 4")
-        await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("الإجمالي المطلوب وفق قاعدة KB الحالية: 160")
+        await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("أدخل كمية كل صنف")
         input0 = first.get_by_test_id("shein-quantity-input-0")
         await input0.fill("3")
+        await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("غير المتاح: 4")
         await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("240")
         await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("الكمية: 3")
         await expect(page.get_by_text("STALE_RESULT_TEXT_SHOULD_NOT_APPEAR")).to_have_count(0)
         await input0.fill("0")
         await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("الإجمالي المطلوب وفق قاعدة KB الحالية: 0")
         await first.get_by_test_id("shein-quantity-reset").click()
-        await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("الإجمالي المطلوب وفق قاعدة KB الحالية: 160")
+        await expect(first.get_by_test_id("shein-local-summary")).to_contain_text("أدخل كمية كل صنف")
 
         await composer.fill("افحص نتيجة أخرى بسعر ناقص")
         await composer.press("Enter")
@@ -140,7 +141,7 @@ async def run_viewport(width, height, base_url):
         assert not await quantity_input.is_disabled(), "customer must be able to enter a missing quantity after rate is configured"
         await expect(fourth.get_by_test_id("shein-local-summary")).to_contain_text("أدخل كمية كل صنف")
         await quantity_input.fill("2")
-        await expect(fourth.get_by_test_id("shein-local-summary")).to_contain_text("إجمالي القطع في القائمة: 2")
+        await expect(fourth.get_by_test_id("shein-local-summary")).to_contain_text("عدد القطع في القائمة: 2")
         await expect(fourth.get_by_test_id("shein-local-summary")).to_contain_text("الإجمالي المطلوب وفق قاعدة KB الحالية: 160")
         await expect(page.get_by_text("STALE_RESULT_TEXT_SHOULD_NOT_APPEAR")).to_have_count(0)
         assert api_calls == 4, "editing/resetting quantities must not send extra requests"

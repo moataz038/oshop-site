@@ -24,7 +24,7 @@ def validate(text: str) -> None:
         'f.negotiation&&await HTe(',
         'content:eCe(e,r,__oshopPromptSettings)',
         'system:eCe(e,r,await Vs())',
-        'let cfg=await Vs()',
+        'cfg=await Vs()',
         '__oshopSecurity.asyncHandler(async(r,i)=>i.json(await Vs()))',
         'r.oshopRequestRecord||await WTe(',
     ]

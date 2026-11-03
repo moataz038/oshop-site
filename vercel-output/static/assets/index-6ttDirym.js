@@ -29,7 +29,7 @@ Error generating stack: `+d.message+`
   function round2(value) { return Math.round(value * 100) / 100; }
 
   function canRecalculate(result) {
-    if (!result || result.source !== "omkar" || result.live !== true || !Array.isArray(result.items) || result.items.length === 0 || !result.items.some(function (item) { return item && item.available === true; }) ||
+    if (!result || result.source !== "shein-cart" || result.live !== true || !Array.isArray(result.items) || result.items.length === 0 || result.priceCurrency !== "USD" || !result.items.some(function (item) { return item && item.available === true; }) ||
         result.exchangeRateConfigured !== true || !finite(result.exchangeRate) || result.exchangeRate <= 0 || !finite(result.shippingLyd) ||
         !finite(result.serviceFeeLyd) || result.shippingLyd < 0 || result.serviceFeeLyd < 0) return false;
     return result.items.every(function (item) {
@@ -98,7 +98,8 @@ function KBSheinCartQuantityCard({ card }) {
   var result = card && card.result;
   var sourceItems = result && Array.isArray(result.items) ? result.items : [];
   var core = typeof globalThis !== "undefined" ? globalThis.__KBSheinQuantityCore : null;
-  var rateConfigured = !!result && result.exchangeRateConfigured === true && typeof result.exchangeRate === "number" && Number.isFinite(result.exchangeRate) && result.exchangeRate > 0;
+  var priceCurrency = String(result && result.priceCurrency || "").toUpperCase();
+  var rateConfigured = !!result && result.exchangeRateConfigured === true && typeof result.exchangeRate === "number" && Number.isFinite(result.exchangeRate) && result.exchangeRate > 0 && priceCurrency === "USD";
   var [draftQtys, setDraftQtys] = N.useState(function () {
     return sourceItems.map(function (item) { return String(item.qty == null ? "" : item.qty); });
   });
@@ -108,9 +109,12 @@ function KBSheinCartQuantityCard({ card }) {
   });
   var totals = trusted ? core.recalculate(result, quantities) : { ok: false, reason: "price-or-result-unavailable" };
   var missingPrice = sourceItems.some(function (item) {
-    return item && item.available && !(item.priceKnown === true && typeof item.unitUsd === "number" && Number.isFinite(item.unitUsd) && item.unitUsd >= 0);
+    var rawPriceKnown = item && ((typeof item.unitPrice === "number" && Number.isFinite(item.unitPrice) && item.unitPrice >= 0) || (typeof item.priceText === "string" && item.priceText.trim()));
+    var usdPriceKnown = item && item.priceKnown === true && typeof item.unitUsd === "number" && Number.isFinite(item.unitUsd) && item.unitUsd >= 0;
+    return item && item.available && (priceCurrency === "USD" ? !usdPriceKnown : !rawPriceKnown);
   });
-  var missingRate = !rateConfigured;
+  var missingRate = priceCurrency === "USD" && !rateConfigured;
+  var unsupportedCurrency = priceCurrency !== "USD";
   var noAvailableItems = sourceItems.length > 0 && sourceItems.every(function (item) { return !item || item.available !== true; });
   var missingQuantity = sourceItems.some(function (item) {
     return !item || !Number.isInteger(item.qty) || item.qty < 1;
@@ -136,7 +140,7 @@ function KBSheinCartQuantityCard({ card }) {
             item && item.options ? " · " + item.options : ""
           ].join("") || "تفاصيل المنتج حسب القراءة الأخيرة" }),
           c.jsx("div", { className: "faint", style: { fontSize: ".76rem" }, children: item && item.available
-            ? (unit === null ? "السعر غير متاح من القارئ؛ لا يدخل في إعادة الحساب." : !rateConfigured ? "سعر الوحدة " + unit + " USD · لم يُحوّل للدينار لأن سعر الصرف غير مضبوط." : "سعر الوحدة " + unit + " USD = " + unitLyd.toLocaleString("en-US", { maximumFractionDigits: 2 }) + " د.ل · " + (lineLyd === null ? (Number.isInteger(item.qty) ? "أدخل كمية صحيحة" : "أدخل كمية هذا الصنف؛ لا أفترض 1") : "قيمة الصنف " + lineLyd.toLocaleString("en-US", { maximumFractionDigits: 2 }) + " د.ل"))
+            ? (unsupportedCurrency ? "السعر كما عرضه SHEIN: " + String(item.priceText || (item.unitPrice == null ? "غير متاح" : item.unitPrice)) + (item.priceCurrency ? " " + item.priceCurrency : " · العملة غير واضحة") + " · لن أستخدم سعر USD/LYD لتحويل هذه العملة أو حساب إجمالي." : unit === null ? "السعر غير متاح من القارئ؛ لا يدخل في إعادة الحساب." : !rateConfigured ? "سعر الوحدة " + (item.priceText || unit + " USD") + " · لم يُحوّل للدينار لأن سعر الصرف الإداري غير مضبوط." : "سعر الوحدة " + (item.priceText || unit + " USD") + " = " + unitLyd.toLocaleString("en-US", { maximumFractionDigits: 2 }) + " د.ل · " + (lineLyd === null ? (Number.isInteger(item.qty) ? "أدخل كمية صحيحة" : "أدخل كمية هذا الصنف؛ لا أفترض 1") : "قيمة الصنف " + lineLyd.toLocaleString("en-US", { maximumFractionDigits: 2 }) + " د.ل"))
             : "غير متاح حسب القراءة الأخيرة؛ مستبعد من الإجمالي." })
         ] }),
         c.jsxs("label", { style: { display: "grid", gap: 4, justifyItems: "center", fontSize: ".75rem", whiteSpace: "nowrap" }, children: [
@@ -180,6 +184,8 @@ function KBSheinCartQuantityCard({ card }) {
       "\n\nتأكيد قبل المتابعة: هل تؤكد أن إجمالي الكمية المطلوبة هو " + totals.totalPieces + " قطعة؟";
   } else if (noAvailableItems) {
     summary = "لا توجد عناصر متاحة حسب قراءة SHEIN؛ لم أعرض إجماليًا صفريًا كأنه سعر الطلب.";
+  } else if (unsupportedCurrency) {
+    summary = "عملة السعر " + (priceCurrency || "غير معروفة") + "; تظهر الأسعار كما أعادها SHEIN، لكن سعر المدير USD/LYD لا يصلح لتحويلها. لن أعرض إجماليًا بالدينار.";
   } else if (missingRate) {
     summary = "سعر الصرف USD/LYD غير مضبوط من لوحة المدير. تظهر أسعار الأصناف بالدولار فقط؛ لن أعرض تحويلًا أو إجماليًا بالدينار حتى يضبط المدير السعر ثم تُعاد قراءة السلة.";
   } else if (missingPrice) {
