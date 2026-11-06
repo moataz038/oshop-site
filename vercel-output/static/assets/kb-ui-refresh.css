@@ -117,6 +117,180 @@ body,
   outline-offset: 3px;
 }
 
+/* Editorial product recommendations inspired by the user's LOSKE reference.
+   Keep KB's dark-and-gold shell; bring the reference's ivory product editorial,
+   generous imagery, precise rules, and deep-wine purchase action into the chat. */
+.bubble-ai {
+  background: linear-gradient(145deg, #fffdf9 0%, #f4efe7 100%) !important;
+  color: #28231d !important;
+  border: 1px solid #e7dfd2;
+  border-radius: 18px 18px 18px 6px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .14), 0 1px 0 rgba(255, 255, 255, .8) inset;
+}
+
+[data-testid="card-compare"] {
+  --ink: #241f19;
+  --ink-2: #675f54;
+  --ink-3: #8d8375;
+  --line: #e6dfd3;
+  --line-2: #d7cdbd;
+  --surface: #fffdf9;
+  --surface-2: #f4efe7;
+  --surface-3: #e9e1d4;
+  background: #fcfaf6 !important;
+  color: #241f19;
+  border: 1px solid #e3dbce !important;
+  border-radius: 22px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .16), 0 1px 0 rgba(255, 255, 255, .8) inset;
+}
+
+[data-testid="card-compare"] > div:first-child {
+  padding: 14px 16px !important;
+  background: #f6f1e9;
+  border-bottom: 1px solid #e3dbce !important;
+}
+
+[data-testid="card-compare"] > div:first-child .icon-sq {
+  color: #493919 !important;
+  background: #eadbb8 !important;
+  border-radius: 9px !important;
+}
+
+[data-testid="card-compare"] > div:first-child .font-medium {
+  color: #241f19;
+  font-size: .94rem;
+  letter-spacing: -.015em;
+}
+
+[data-testid="card-compare"] > ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 12px;
+  background: #fcfaf6;
+}
+
+[data-testid="card-compare"] > ul > li {
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch !important;
+  gap: 0 !important;
+  min-width: 0;
+  padding: 0 !important;
+  overflow: hidden;
+  border: 1px solid #e6dfd3 !important;
+  border-radius: 14px;
+  background: #fffefa;
+  box-shadow: 0 4px 14px rgba(55, 43, 24, .055);
+}
+
+[data-testid="card-compare"] > ul > li > div:first-child {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1.04;
+  padding: 10px;
+  border-radius: 0 !important;
+  background: #f1ede5 !important;
+}
+
+[data-testid="card-compare"] > ul > li > div:first-child img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+[data-testid="card-compare"] > ul > li > div:nth-child(2) {
+  display: flex;
+  flex: none !important;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 10px 2px;
+}
+
+[data-testid="card-compare"] > ul > li > div:nth-child(2) > div:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 5px;
+  min-height: 22px;
+  color: #655d52;
+  font-size: .68rem;
+  line-height: 1.25;
+}
+
+[data-testid="card-compare"] > ul > li > div:nth-child(2) a {
+  display: -webkit-box !important;
+  overflow: hidden;
+  color: #26211b !important;
+  font-size: .77rem !important;
+  font-weight: 600;
+  line-height: 1.45;
+  min-height: 2.9em;
+  white-space: normal !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+[data-testid="card-compare"] > ul > li > div:last-child {
+  display: grid;
+  justify-items: stretch;
+  gap: 2px;
+  width: 100%;
+  padding: 6px 10px 11px;
+  text-align: start !important;
+}
+
+[data-testid="card-compare"] > ul > li > div:last-child > div:first-child {
+  color: #211c17;
+  font-size: 1.08rem;
+  letter-spacing: -.025em;
+}
+
+[data-testid="card-compare"] > ul > li > div:last-child > div:nth-child(2) {
+  color: #81786b;
+}
+
+[data-testid="card-compare"] > ul > li > div:last-child button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 35px;
+  margin-top: 7px !important;
+  padding: 5px 10px !important;
+  border: 1px solid #57202a !important;
+  border-radius: 8px !important;
+  background: #57202a !important;
+  color: #fffaf3 !important;
+  font-size: .75rem !important;
+  line-height: 1.2;
+  box-shadow: none !important;
+  transition: background-color .18s ease, transform .18s ease;
+}
+
+[data-testid="card-compare"] > ul > li > div:last-child button:hover {
+  background: #39141b !important;
+  transform: translateY(-1px);
+}
+
+[data-testid="card-compare"] > div:last-child {
+  padding: 11px 14px !important;
+  border-top: 1px solid #e3dbce !important;
+  background: #f6f1e9 !important;
+  color: #746b5e !important;
+  line-height: 1.6;
+}
+
+@media (max-width: 420px) {
+  [data-testid="card-compare"] > div:first-child { padding: 12px 13px !important; }
+  [data-testid="card-compare"] > ul { gap: 8px; padding: 10px; }
+  [data-testid="card-compare"] > ul > li > div:first-child { padding: 8px; }
+  [data-testid="card-compare"] > ul > li > div:nth-child(2) { padding: 9px 8px 2px; }
+  [data-testid="card-compare"] > ul > li > div:last-child { padding: 6px 8px 9px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .row,
   .btn,

@@ -75,7 +75,7 @@ def main() -> None:
         ('#9B7B3F', '#000000', "browser theme color"),
         ('./img/kb-hero.webp', './img/kb-gold-only.png', "preloaded transparent 3D logo"),
         ('<link rel="stylesheet" href="./assets/kb-black-gold-theme-4f26a4e738.css">', '<link rel="stylesheet" href="./assets/kb-black-gold-theme-4f26a4e738.css">\n    <link rel="stylesheet" href="./assets/kb-ui-refresh.css">', "KB visual refresh stylesheet"),
-    ])
+    ], skip_if_new=True)
 
     if "kb-logo-3d.js" not in INDEX.read_text(encoding="utf-8"):
         patch_file(INDEX, [
