@@ -20,6 +20,7 @@ GOLD_SOURCE = ROOT / "brand" / "kb-gold-only.png"
 GEOMETRY_SOURCE = ROOT / "brand" / "kb-gold-geometry.json"
 THREED = ROOT / "tools" / "kb-logo-3d.js"
 PROFILE_SOURCE = ROOT / "brand" / "kb-original-profile.jpg"
+UI_REFRESH_SOURCE = ROOT / "brand" / "kb-ui-refresh.css"
 
 
 def replace_all(text: str, old: str, new: str, label: str) -> str:
@@ -43,7 +44,7 @@ def patch_file(path: Path, pairs: list[tuple[str, str, str]], *, skip_if_new: bo
 
 
 def main() -> None:
-    if not all(path.is_file() for path in (JS, CSS, INDEX, ADMIN, API, GOLD_SOURCE, GEOMETRY_SOURCE, THREED, PROFILE_SOURCE)):
+    if not all(path.is_file() for path in (JS, CSS, INDEX, ADMIN, API, GOLD_SOURCE, GEOMETRY_SOURCE, THREED, PROFILE_SOURCE, UI_REFRESH_SOURCE)):
         raise RuntimeError("A required runtime file is missing; refusing a partial branding update")
 
     patch_file(JS, [
@@ -73,6 +74,7 @@ def main() -> None:
         ('اوشوب للشحن والتجارة الإلكترونية:', 'KB للتسوق والشحن والتجارة الإلكترونية:', "page description"),
         ('#9B7B3F', '#000000', "browser theme color"),
         ('./img/kb-hero.webp', './img/kb-gold-only.png', "preloaded transparent 3D logo"),
+        ('<link rel="stylesheet" href="./assets/kb-black-gold-theme-4f26a4e738.css">', '<link rel="stylesheet" href="./assets/kb-black-gold-theme-4f26a4e738.css">\n    <link rel="stylesheet" href="./assets/kb-ui-refresh.css">', "KB visual refresh stylesheet"),
     ])
 
     if "kb-logo-3d.js" not in INDEX.read_text(encoding="utf-8"):
@@ -101,6 +103,7 @@ def main() -> None:
         ROOT / "brand" / "kb-mark-white.png": STATIC / "img" / "kb-mark-white.png",
         ROOT / "brand" / "kb-hero.webp": STATIC / "img" / "kb-hero.webp",
         PROFILE_SOURCE: STATIC / "img" / "kb-original-profile.jpg",
+        UI_REFRESH_SOURCE: STATIC / "assets" / "kb-ui-refresh.css",
         GOLD_SOURCE: STATIC / "img" / "kb-gold-only.png",
         GEOMETRY_SOURCE: STATIC / "kb-gold-geometry.json",
         THREED: STATIC / "kb-logo-3d.js",
@@ -122,6 +125,8 @@ def main() -> None:
         raise RuntimeError("Old visible brand text remains in the runtime output")
     if 'role:"وكيل الذكاء الاصطناعي المساعد"' not in JS.read_text(encoding="utf-8"):
         raise RuntimeError("AI assistant identity/role marker was unexpectedly changed")
+    if 'href="./assets/kb-ui-refresh.css"' not in INDEX.read_text(encoding="utf-8"):
+        raise RuntimeError("KB visual refresh stylesheet is not linked from the page")
     if "kb-gold-only.png" not in JS.read_text(encoding="utf-8") or "kb-gold-geometry.json" not in THREED.read_text(encoding="utf-8") or "kb-logo-3d.js" not in INDEX.read_text(encoding="utf-8"):
         raise RuntimeError("The transparent gold logo or 3D mesh renderer is not connected")
     if 'oshop:{name:"KB",img:"img/kb-original-profile.jpg",role:' not in JS.read_text(encoding="utf-8"):

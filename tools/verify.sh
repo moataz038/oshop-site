@@ -8,6 +8,7 @@ required=(
   vercel-output/static/index.html
   vercel-output/static/assets/index-6ttDirym.js
   vercel-output/static/assets/index-ca6a3825.css
+  vercel-output/static/assets/kb-ui-refresh.css
   vercel-output/static/img/kb-mark.png
   vercel-output/static/img/kb-hero.webp
   vercel-output/static/favicon.png
@@ -60,6 +61,7 @@ node --check tools/shein-direct-reader.mjs
 
 grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
+grep -q 'href="./assets/kb-ui-refresh.css"' vercel-output/static/index.html
 grep -q 'name:"KB"' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'وكيل الذكاء الاصطناعي المساعد' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/index-6ttDirym.js

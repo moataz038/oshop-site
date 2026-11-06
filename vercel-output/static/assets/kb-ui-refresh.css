@@ -1,0 +1,127 @@
+/* KB visual refresh: richer black-and-gold surfaces; no layout or behavior changes. */
+:root,
+:root.dark,
+:root[data-theme="oshop"],
+:root.dark[data-theme="oshop"],
+.dark,
+[data-theme="oshop"],
+.dark[data-theme="oshop"],
+.dark [data-theme="oshop"] {
+  --accent: #d4b46a;
+  --accent-2: #f0d995;
+  --accent-soft: rgba(212, 180, 106, .15);
+  --bg: #080706;
+  --bg-top: #17130c;
+  --bg-mid: #0d0b08;
+  --bg-low: #080706;
+  --bg-bottom: #050504;
+  --surface: #12100d;
+  --surface-2: #191612;
+  --surface-3: #211d17;
+  --ink: #f5f0e5;
+  --ink-2: #c9c1ae;
+  --ink-3: #928a78;
+  --line: rgba(231, 205, 145, .12);
+  --line-2: rgba(231, 205, 145, .21);
+  --bubble-ai: #15120d;
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, .035) inset, 0 10px 28px rgba(0, 0, 0, .28);
+  --shadow-md: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 20px 48px -22px rgba(0, 0, 0, .88);
+  --shadow-accent: 0 8px 26px rgba(212, 180, 106, .2);
+  --primary: 43 55% 62%;
+  --ring: 43 55% 62%;
+}
+
+html,
+body,
+#root {
+  background-color: #080706 !important;
+  color: #f5f0e5;
+}
+
+.app,
+.dark .app {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(194, 156, 72, .13), transparent 38%),
+    linear-gradient(180deg, #17130c 0%, #0d0b08 38%, #080706 100%) !important;
+}
+
+.title {
+  color: #e2c77f !important;
+  text-shadow: 0 8px 32px rgba(212, 180, 106, .12);
+}
+
+.card {
+  background: linear-gradient(145deg, rgba(27, 24, 18, .96), rgba(16, 14, 11, .98)) !important;
+  border-color: rgba(231, 205, 145, .16) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .035) inset, 0 14px 34px rgba(0, 0, 0, .24);
+}
+
+.row {
+  border-radius: 16px;
+  transition: background-color .18s ease, border-color .18s ease;
+}
+
+.row:hover,
+.chip:hover,
+.pill:hover {
+  border-color: rgba(231, 205, 145, .32);
+  background-color: rgba(212, 180, 106, .07);
+}
+
+.btn-accent,
+.round-accent {
+  background: linear-gradient(135deg, #f0d995 0%, #d4b46a 48%, #b9954b 100%) !important;
+  color: #17130b !important;
+  box-shadow: 0 8px 24px rgba(212, 180, 106, .2), 0 1px 0 rgba(255, 255, 255, .28) inset;
+}
+
+.btn-accent:hover,
+.round-accent:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 10px 28px rgba(212, 180, 106, .27), 0 1px 0 rgba(255, 255, 255, .3) inset;
+}
+
+.btn-white,
+.btn-ghost,
+.round,
+.pill,
+.chip {
+  border-color: rgba(231, 205, 145, .17);
+}
+
+.input-bar {
+  background: linear-gradient(145deg, rgba(27, 24, 18, .98), rgba(17, 15, 12, .98)) !important;
+  border-color: rgba(231, 205, 145, .2) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .32), 0 1px 0 rgba(255, 255, 255, .035) inset;
+}
+
+.input-bar:focus-within {
+  border-color: rgba(240, 217, 149, .6) !important;
+  box-shadow: 0 0 0 3px rgba(212, 180, 106, .13), 0 14px 34px rgba(0, 0, 0, .35);
+}
+
+.bubble-ai {
+  background: linear-gradient(145deg, #191610, #12100d) !important;
+  border: 1px solid rgba(231, 205, 145, .12);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .18);
+}
+
+.bubble-user {
+  background: linear-gradient(135deg, #f0d995, #d4b46a 58%, #bd9a50) !important;
+  color: #17130b !important;
+  box-shadow: 0 8px 24px rgba(212, 180, 106, .14);
+}
+
+.app :focus-visible {
+  outline: 2px solid #e5cb84;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .btn,
+  .round,
+  .chip {
+    transition-duration: .01ms !important;
+  }
+}
