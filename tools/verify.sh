@@ -72,7 +72,7 @@ grep -q 'oshop:{name:"مساعد الشحن",img:"img/assistant-avatar.svg",role
 grep -q 'button-home-attach' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'button-home-voice-mode' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'kb-wave-bars' vercel-output/static/assets/index-6ttDirym.js
-cmp -s brand/kb-ui-refresh.css vercel-output/static/assets/kb-ui-refresh.css
+python3 -c 'from pathlib import Path; assert Path("brand/kb-ui-refresh.css").read_bytes() == Path("vercel-output/static/assets/kb-ui-refresh.css").read_bytes()'
 grep -q 'kbBottomTide' vercel-output/static/assets/kb-ui-refresh.css
 grep -q 'kbInputFlow' vercel-output/static/assets/kb-ui-refresh.css
 grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/index-6ttDirym.js
