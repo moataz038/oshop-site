@@ -36,7 +36,10 @@ python3 tools/apply-shein-cart-routing.py
 node --check vercel-output/functions/api.func/index.cjs
 node --check vercel-output/functions/api.func/shein-direct-reader.mjs
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
-node --check vercel-output/static/assets/kb-crystal-orb.js
+node --input-type=module --check < vercel-output/static/assets/kb-crystal-orb.js
+node --input-type=module --check < vercel-output/static/assets/kb-fluid-background.js
+node --input-type=module --check < vercel-output/static/assets/ai-orb-core.js
+node --input-type=module --check < vercel-output/static/assets/webgl-fluid-enhanced.js
 node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
 node --check vercel-output/functions/api.func/admin-login-js.cjs
@@ -45,7 +48,7 @@ node --check vercel-output/static/admin-auth-redirect.js
 node --check vercel-output/static/kb-logo-3d.js
 python3 -m json.tool vercel-output/config.json >/dev/null
 python3 -m json.tool vercel.json >/dev/null
-node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/kb-badge-host-isolation.test.cjs tools/product-matching.test.cjs tools/shein-cart-quantity.test.cjs tools/shein-cart-routing.test.cjs tools/shein-reader-safe-log.test.cjs tools/shein-direct-reader.test.cjs tools/voice-pill-ui.test.cjs
+node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/kb-badge-host-isolation.test.cjs tools/product-matching.test.cjs tools/shein-cart-quantity.test.cjs tools/shein-cart-routing.test.cjs tools/shein-reader-safe-log.test.cjs tools/shein-direct-reader.test.cjs tools/voice-pill-ui.test.cjs tools/kb-visual-effects.test.cjs
 
 # فحص الملفات المطلوبة والهوية والأسرار المكشوفة.
 bash tools/verify.sh

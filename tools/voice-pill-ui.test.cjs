@@ -29,6 +29,7 @@ test('Voice Pill decorates the single existing recorder and keeps its controls',
   assert.match(bundle, /onClick:ke,disabled:x==="sending","aria-label":"إرسال التسجيل"/);
   assert.match(bundle, /Wy\(A\)/, 'the recording duration still updates');
   assert.match(bundle, /v\.current\?\.level\(\)/, 'bars still respond to live microphone level');
+  assert.match(bundle, /window\.kbFluidAudio\?\.\(level\)/, 'the same live meter also drives the local fluid/orb effect');
   assert.match(bundle, /await \$y\(se\)/, 'the existing transcription path remains');
   assert.match(bundle, /r\.send\(de,void 0,"shipping",n\.persona/);
 });
@@ -40,5 +41,16 @@ test('Voice Pill styling stays aligned with the blue-violet glass refresh', () =
   assert.match(sourceCss, /\.voice-pill-equalizer/);
   assert.match(sourceCss, /kbVoicePillExpand/);
   assert.match(sourceCss, /prefers-reduced-motion: reduce/);
+  const idleComposerStart = sourceCss.indexOf('/* Idle composer:');
+  assert.ok(idleComposerStart >= 0, 'the ordinary, non-recording composer has its own styling');
+  const idleComposerCss = sourceCss.slice(idleComposerStart);
+  for (const selector of [
+    '.input-bar:not(.voice-pill-expanded)',
+    '.kb-input-add',
+    '.kb-input-wave',
+    '[data-testid="button-home-voice"]',
+    'input::placeholder',
+  ]) assert.ok(idleComposerCss.includes(selector), `idle composer styling includes ${selector}`);
+  assert.match(idleComposerCss, /@keyframes kbIdleComposerFlow/);
   assert.doesNotMatch(sourceCss.slice(sourceCss.indexOf('/* Voice Pill:'), sourceCss.length), /#c9a65f|#c6a75d|#9b7b3f/i);
 });

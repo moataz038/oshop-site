@@ -124,6 +124,11 @@ def main() -> None:
             "existing audio-level bars",
         ),
         (
+            '()=>x(v.current?.level()??0)',
+            '()=>{const level=v.current?.level()??0;x(level);window.kbFluidAudio?.(level)}',
+            "bridge existing live microphone level to the local fluid visuals",
+        ),
+        (
             'className:"round round-accent !w-[42px] !h-[42px]",whileTap:{scale:.9},onClick:G,disabled:r.busy,"aria-label":"سجّل رسالة صوتية","data-testid":"button-voice"',
             'className:"round round-accent voice-pill-trigger !w-[42px] !h-[42px]",whileTap:{scale:.9},onClick:G,disabled:r.busy,"aria-label":"سجّل رسالة صوتية","data-testid":"button-voice"',
             "existing chat microphone button",
