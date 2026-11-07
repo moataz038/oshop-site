@@ -46,6 +46,41 @@ def patch_html() -> bool:
         "page title",
     )
     changed |= did_change
+    source, did_change = replace_once(
+        source,
+        '<meta property="og:site_name" content="KB Online Store" />',
+        '<meta property="og:site_name" content="مساعد التسوق والشحن" />',
+        "Open Graph site name",
+    )
+    changed |= did_change
+    source, did_change = replace_once(
+        source,
+        '<meta property="og:title" content="KB Online Store | وكيلك الذكي للتسوق والشحن" />',
+        '<meta property="og:title" content="التسوق والشحن | مساعدك الذكي" />',
+        "Open Graph title",
+    )
+    changed |= did_change
+    source, did_change = replace_once(
+        source,
+        '<meta property="og:image:alt" content="الشعار الأصلي لمتجر KB" />',
+        '<meta property="og:image:alt" content="مساعد التسوق والشحن" />',
+        "Open Graph image alt text",
+    )
+    changed |= did_change
+    source, did_change = replace_once(
+        source,
+        '<meta name="twitter:title" content="KB Online Store | وكيلك الذكي للتسوق والشحن" />',
+        '<meta name="twitter:title" content="التسوق والشحن | مساعدك الذكي" />',
+        "Twitter title",
+    )
+    changed |= did_change
+    source, did_change = replace_once(
+        source,
+        '<meta name="twitter:image:alt" content="الشعار الأصلي لمتجر KB" />',
+        '<meta name="twitter:image:alt" content="مساعد التسوق والشحن" />',
+        "Twitter image alt text",
+    )
+    changed |= did_change
     source, did_change = replace_all(source, "KB للتسوق والشحن", "التسوق والشحن", "brand metadata")
     changed |= did_change
     main_script = '<script type="module" crossorigin src="./assets/index-6ttDirym.js?palette=64a124f9d2"></script>'

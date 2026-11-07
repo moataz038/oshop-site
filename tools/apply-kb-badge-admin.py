@@ -8,10 +8,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULTS = [
     "مرحبًا بك",
-    "شحن مجاني من شي إن",
-    "صفر عمولة على طلبك",
-    "البطاقة نفس سعر الكاش",
-    "توصيل لكل مدن ليبيا",
+    "مرحبًا بك",
+    "مرحبًا بك",
+    "مرحبًا بك",
+    "مرحبًا بك",
 ]
 
 
@@ -136,8 +136,8 @@ def patch_api_bundle() -> None:
 def patch_storefront() -> None:
     path = ROOT / "vercel-output/static/assets/index-6ttDirym.js"
     text = path.read_text()
-    old = 'const OSF=["مرحبًا بك","شحن مجاني من شي إن","صفر عمولة على طلبك","البطاقة نفس سعر الكاش","توصيل لكل مدن ليبيا"];function OSO(){const[i,x]=N.useState(0);return N.useEffect(()=>{const t=setInterval(()=>x(v=>(v+1)%OSF.length),3200);return()=>clearInterval(t)},[]),c.jsx(oe.span,{initial:{opacity:0,y:6},animate:{opacity:1,y:0},transition:Oe,children:OSF[i]},i)}'
-    new = 'const OSF=["مرحبًا بك","شحن مجاني من شي إن","صفر عمولة على طلبك","البطاقة نفس سعر الكاش","توصيل لكل مدن ليبيا"];function OSO(){const[a,b]=N.useState(OSF),[i,x]=N.useState(0);return N.useEffect(()=>{let live=true;fetch("/api/kb/badge-display",{credentials:"same-origin",cache:"no-store"}).then(r=>r.ok?r.json():null).then(r=>{if(live&&Array.isArray(r?.items)&&r.items.length===OSF.length&&r.items.every(t=>typeof t==="string"))b(r.items)}).catch(()=>{});return()=>{live=false}},[]),N.useEffect(()=>{const t=setInterval(()=>x(v=>(v+1)%a.length),3200);return()=>clearInterval(t)},[a.length]),c.jsx(oe.span,{initial:{opacity:0,y:6},animate:{opacity:1,y:0},transition:Oe,children:a[i]},i)}'
+    old = 'const OSF=["مرحبًا بك","شحن مجاني من شي إن","صفر عمولة على طلبك","البطاقة نفس سعر الكاش","توصيل لكل مدن ليبيا"];function OSO(){const[a,b]=N.useState(OSF),[i,x]=N.useState(0);return N.useEffect(()=>{let live=true;fetch("/api/kb/badge-display",{credentials:"same-origin",cache:"no-store"}).then(r=>r.ok?r.json():null).then(r=>{if(live&&Array.isArray(r?.items)&&r.items.length===OSF.length&&r.items.every(t=>typeof t==="string"))b(r.items)}).catch(()=>{});return()=>{live=false}},[]),N.useEffect(()=>{const t=setInterval(()=>x(v=>(v+1)%a.length),3200);return()=>clearInterval(t)},[a.length]),c.jsx(oe.span,{initial:{opacity:0,y:6},animate:{opacity:1,y:0},transition:Oe,children:a[i]},i)}'
+    new = 'const OSF=["مرحبًا بك","مرحبًا بك","مرحبًا بك","مرحبًا بك","مرحبًا بك"];function OSO(){const[a,b]=N.useState(OSF),[i,x]=N.useState(0);return N.useEffect(()=>{let live=true;fetch("/api/kb/badge-display",{credentials:"same-origin",cache:"no-store"}).then(r=>r.ok?r.json():null).then(r=>{if(live&&Array.isArray(r?.items)&&r.items.length===OSF.length&&r.items.every(t=>typeof t==="string"))b(r.items)}).catch(()=>{});return()=>{live=false}},[]),N.useEffect(()=>{const t=setInterval(()=>x(v=>(v+1)%a.length),3200);return()=>clearInterval(t)},[a.length]),c.jsx(oe.span,{initial:{opacity:0,y:6},animate:{opacity:1,y:0},transition:Oe,children:a[i]},i)}'
     text = replace_once(text, old, new, "storefront badge rotation source")
     path.write_text(text)
 

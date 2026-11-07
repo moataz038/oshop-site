@@ -150,8 +150,8 @@ test("actual Redis Lua integration: atomic IDs, limits, statuses, settings, expi
   const zeroRate = await a.updateSettings({ rateMode: "official", officialUsd: 0 }, defaults);
   assert.equal(zeroRate.usdToLydConfigured, false);
 
-  const badgeDefaults = ["وكيل KB الذكي", "شحن مجاني من شي إن", "صفر عمولة على طلبك", "البطاقة نفس سعر الكاش", "توصيل لكل مدن ليبيا"];
-  const editedBadgeCopy = ["وكيل KB المتطور", "شحن سريع من شي إن", "بدون عمولة إضافية", "السعر موضح قبل الطلب", "توصيل داخل ليبيا"];
+  const badgeDefaults = ["مرحبًا بك", "مرحبًا بك", "مرحبًا بك", "مرحبًا بك", "مرحبًا بك"];
+  const editedBadgeCopy = ["مرحبًا بك", "كيف نساعدك؟", "وكيلك للشحن", "تسوق بثقة", "توصيل لكل مدن ليبيا"];
   assert.deepEqual(await a.getKbBadgeCopy(badgeDefaults), badgeDefaults);
   assert.deepEqual(await a.updateKbBadgeCopy(editedBadgeCopy), editedBadgeCopy);
   assert.deepEqual(await b.getKbBadgeCopy(badgeDefaults), editedBadgeCopy);

@@ -41,7 +41,7 @@ test('runtime HTTP integration uses real bundle, isolated children, Redis Lua, a
     const storeA = createSharedStore({ env: ENV_BASE, fetchImpl, prefix: 'oshop:v1:runtime-integration-test:' });
     const storeB = createSharedStore({ env: ENV_BASE, fetchImpl, prefix: 'oshop:v1:runtime-integration-test:' });
     const defaults = { rateMode: 'official', officialUsd: 6.43, parallelUsd: 9.9, usdToLyd: 6.43, usdToLydConfigured: false, airUsdPerKg: 9, seaUsdPerCbm: 280, serviceFeePercent: 5, customsPercent: 0 };
-    const defaultBadgeCopy = ['وكيل KB الذكي', 'شحن مجاني من شي إن', 'صفر عمولة على طلبك', 'البطاقة نفس سعر الكاش', 'توصيل لكل مدن ليبيا'];
+    const defaultBadgeCopy = ['مرحبًا بك', 'مرحبًا بك', 'مرحبًا بك', 'مرحبًا بك', 'مرحبًا بك'];
     const cap = capability();
     const nested = { request: { items: [{ options: [], meta: {} }], empty: [] }, results: [{ offer: { tags: [] }, flags: [] }] };
     const exportPayload = { generatedAt: Date.now(), request: { mode: 'air', qty: 1 }, options: [], ...nested, translated: { original: 'test', searchTerm: 'test', method: 'local' }, searchTerms: ['test'], searchedCount: 0, fx: { cnyToLyd: 1, usdToLyd: 12.34 }, chinaDomestic: { cnyPerKg: 1 }, freight: { air: { usdPerKg: 1 }, sea: { usdPerCbm: 1 } }, packagingWeightFactor: 1, defaultDensityKgPerCbm: 1, fallbackUnitWeightKg: 1, customsPercent: 0, serviceFeePercent: 0, paymentFeePercent: 0, creditsUsed: 0, warnings: [] };
