@@ -1003,3 +1003,78 @@ body,
   }
   .kb-wave-bar { transform: none !important; }
 }
+
+/* Voice Pill: glass expansion around the existing recorder. */
+.voice-pill-trigger {
+  border: 1px solid rgba(220, 235, 255, .24) !important;
+  box-shadow: 0 0 22px rgba(108, 131, 255, .4), 0 1px 0 rgba(255, 255, 255, .42) inset !important;
+}
+
+.voice-pill-expanded {
+  gap: 8px !important;
+  padding: 5px !important;
+  border-color: rgba(190, 211, 255, .3) !important;
+  background: linear-gradient(118deg, rgba(68, 83, 184, .62), rgba(46, 143, 190, .38) 56%, rgba(111, 80, 189, .55)) !important;
+  box-shadow: 0 12px 34px rgba(12, 28, 84, .34), 0 0 24px rgba(105, 132, 255, .16), 0 1px 0 rgba(255, 255, 255, .22) inset !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.22);
+  backdrop-filter: blur(20px) saturate(1.22);
+  transform-origin: right center;
+  animation: kbVoicePillExpand .38s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.voice-pill-expanded [data-testid="button-rec-cancel"] {
+  flex: 0 0 34px;
+  border: 1px solid rgba(210, 225, 255, .2);
+  color: rgba(242, 247, 255, .92);
+  background: rgba(11, 19, 49, .34);
+}
+
+.voice-pill-dot {
+  flex: 0 0 10px;
+  box-shadow: 0 0 12px rgba(117, 216, 255, .78);
+}
+
+.voice-pill-timer {
+  flex: 0 0 38px;
+  color: #f7f9ff;
+  text-shadow: 0 0 12px rgba(150, 190, 255, .38);
+}
+
+.voice-pill-equalizer {
+  min-width: 0;
+  height: 34px !important;
+  padding: 0 8px;
+  border: 1px solid rgba(205, 223, 255, .18);
+  border-radius: 999px;
+  background: linear-gradient(100deg, rgba(19, 30, 85, .32), rgba(75, 106, 195, .18), rgba(25, 77, 110, .28));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .12) inset, 0 0 16px rgba(96, 152, 255, .1);
+}
+
+.voice-pill-equalizer i.voice-pill-bar {
+  flex: 0 1 3px;
+  min-height: 3px;
+  max-height: 26px;
+  background: linear-gradient(180deg, #d8f7ff 0%, var(--accent-2) 45%, var(--accent) 100%) !important;
+  box-shadow: 0 0 8px rgba(125, 205, 255, .56);
+}
+
+.voice-pill-expanded [data-testid="button-rec-send"] {
+  flex: 0 0 42px;
+  box-shadow: 0 0 22px rgba(109, 135, 255, .36), 0 1px 0 rgba(255, 255, 255, .32) inset;
+}
+
+@keyframes kbVoicePillExpand {
+  0% { opacity: .7; transform: scaleX(.78); filter: blur(3px); }
+  70% { opacity: 1; transform: scaleX(1.018); filter: blur(0); }
+  100% { opacity: 1; transform: scaleX(1); }
+}
+
+@media (max-width: 360px) {
+  .voice-pill-expanded { gap: 6px !important; }
+  .voice-pill-equalizer { padding-inline: 5px; gap: 2px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-pill-expanded { animation: none !important; }
+  .voice-pill-expanded .voice-pill-equalizer i { transition: none !important; }
+}

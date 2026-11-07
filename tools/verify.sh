@@ -29,6 +29,8 @@ required=(
   vercel-output/static/admin-auth-redirect.js
   tools/runtime-security.test.cjs
   tools/helpers/runtime-security-child.cjs
+  tools/apply-kb-voice-pill.py
+  tools/voice-pill-ui.test.cjs
   tools/shein-cart-quantity-core.cjs
   tools/shein-cart-quantity-ui.js
   tools/apply-shein-cart-quantity.py
@@ -61,6 +63,8 @@ node --check tools/shein-cart-quantity-core.cjs
 node --check tools/shein-cart-quantity-ui.js
 node --check tools/shein-cart-routing-core.cjs
 node --check tools/shein-direct-reader.mjs
+python3 -m py_compile tools/apply-kb-voice-pill.py
+node --test tools/voice-pill-ui.test.cjs
 
 grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
@@ -72,10 +76,14 @@ grep -q 'assistant-avatar.svg' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'oshop:{name:"مساعد الشحن",img:"img/assistant-avatar.svg",role:"وكيل الشحن الذكي"' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'button-home-attach' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'button-home-voice-mode' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'voice-pill-expanded' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'voice-pill-equalizer' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'voice-pill-trigger' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'kb-wave-bars' vercel-output/static/assets/index-6ttDirym.js
 python3 -c 'from pathlib import Path; assert Path("brand/kb-ui-refresh.css").read_bytes() == Path("vercel-output/static/assets/kb-ui-refresh.css").read_bytes()'
 grep -q 'kbBottomTide' vercel-output/static/assets/kb-ui-refresh.css
 grep -q 'kbInputFlow' vercel-output/static/assets/kb-ui-refresh.css
+grep -q 'kbVoicePillExpand' vercel-output/static/assets/kb-ui-refresh.css
 grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'KB_SHEIN_ITEM_QUANTITY_CALL_V1' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'KB_SHEIN_ITEM_QUANTITY_API_V1' vercel-output/functions/api.func/index.cjs

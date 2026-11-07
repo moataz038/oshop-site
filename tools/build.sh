@@ -19,6 +19,8 @@ python3 tools/apply-shared-storage.py
 python3 tools/apply-kb-branding.py
 # تركيب لوحة العبارات المستقلة وحمايتها بعد توليد الحزمة، بصورة قابلة للتكرار.
 python3 tools/apply-kb-reference-design.py
+# Style the existing chat recorder as a glass Voice Pill; no new recorder logic.
+python3 tools/apply-kb-voice-pill.py
 python3 tools/apply-kb-badge-admin.py
 # Restrict badge UI, APIs, and assets to the exact production admin hostname.
 python3 tools/apply-kb-badge-host-isolation.py
@@ -43,7 +45,7 @@ node --check vercel-output/static/admin-auth-redirect.js
 node --check vercel-output/static/kb-logo-3d.js
 python3 -m json.tool vercel-output/config.json >/dev/null
 python3 -m json.tool vercel.json >/dev/null
-node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/kb-badge-host-isolation.test.cjs tools/product-matching.test.cjs tools/shein-cart-quantity.test.cjs tools/shein-cart-routing.test.cjs tools/shein-reader-safe-log.test.cjs tools/shein-direct-reader.test.cjs
+node --test tools/security-hardening.test.cjs tools/shared-store.test.cjs tools/runtime-security.test.cjs tools/kb-badge-host-isolation.test.cjs tools/product-matching.test.cjs tools/shein-cart-quantity.test.cjs tools/shein-cart-routing.test.cjs tools/shein-reader-safe-log.test.cjs tools/shein-direct-reader.test.cjs tools/voice-pill-ui.test.cjs
 
 # فحص الملفات المطلوبة والهوية والأسرار المكشوفة.
 bash tools/verify.sh
