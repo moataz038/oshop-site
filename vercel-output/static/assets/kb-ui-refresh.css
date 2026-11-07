@@ -1308,3 +1308,393 @@ body,
   .app .kb-orb-host { transition: none !important; }
   .app > .kb-fluid-layer { opacity: .42; }
 }
+
+
+/* Reference-matched mobile assistant screen. Scope every surface change to the
+   welcome/home composition so chat, settings, cart, and profile retain styling. */
+.app:has(.kb-ref-copy),
+#root .app:has(.kb-ref-copy) {
+  background:
+    radial-gradient(ellipse 92% 26% at 72% 88%, rgba(52, 174, 245, .34), transparent 75%),
+    radial-gradient(ellipse 95% 25% at 25% 94%, rgba(87, 72, 225, .34), transparent 74%),
+    radial-gradient(ellipse 70% 18% at 55% 78%, rgba(71, 91, 224, .2), transparent 72%),
+    linear-gradient(180deg, #020307 0%, #020307 52%, #050916 70%, #071343 100%) !important;
+}
+
+.app:has(.kb-ref-copy) > .kb-fluid-layer {
+  opacity: .68;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 28%, rgba(0, 0, 0, .34) 52%, #000 86%);
+  mask-image: linear-gradient(180deg, transparent 0%, transparent 28%, rgba(0, 0, 0, .34) 52%, #000 86%);
+}
+
+.kb-ref-statusbar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
+  padding: 2px 20px 0;
+  color: rgba(255, 255, 255, .95);
+  font: 600 11px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  letter-spacing: .01em;
+  direction: ltr;
+}
+
+.kb-ref-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 14px;
+}
+
+.kb-ref-status-icons svg { display: block; }
+
+.kb-ref-battery {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 25px;
+  height: 12px;
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 4px;
+  color: #fff;
+  font: 700 7px/1 -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.kb-ref-battery::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  width: 2px;
+  height: 5px;
+  border-radius: 0 2px 2px 0;
+  background: rgba(255, 255, 255, .9);
+}
+
+.kb-ref-header {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  flex: 0 0 43px;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 18px 0;
+  direction: ltr;
+}
+
+.kb-ref-icon,
+.kb-ref-smart-mode {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  border: 1px solid rgba(234, 241, 255, .13);
+  color: rgba(248, 250, 255, .94);
+  background: rgba(255, 255, 255, .075);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .09) inset, 0 6px 16px rgba(0, 0, 0, .18);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  cursor: pointer;
+}
+
+.kb-ref-icon {
+  width: 36px;
+  border-radius: 50%;
+}
+
+.kb-ref-icon:active,
+.kb-ref-smart-mode:active { transform: scale(.96); }
+
+.kb-ref-smart-mode {
+  justify-self: center;
+  gap: 4px;
+  min-width: 84px;
+  height: 31px;
+  padding: 0 13px;
+  border-color: rgba(255, 255, 255, .045);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .09);
+  color: rgba(248, 250, 255, .87);
+  font: 500 9px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+}
+
+.kb-ref-smart-mode svg { color: rgba(175, 192, 255, .9); }
+
+.kb-ref-copy {
+  transform: translateY(24px);
+}
+
+.kb-greeting {
+  min-height: 14px;
+  color: rgba(232, 237, 248, .58);
+  font: 400 10px/1.3 -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  letter-spacing: .01em;
+  direction: ltr;
+}
+
+.kb-ref-copy .title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-top: 4px !important;
+  color: #f7f8fc !important;
+  font-size: 1.55rem !important;
+  font-weight: 600 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.025em;
+  text-shadow: 0 3px 18px rgba(170, 197, 255, .12) !important;
+  direction: rtl;
+}
+
+.kb-ref-copy .title > span {
+  display: block;
+  color: #f7f8fc !important;
+  font-size: 1.55rem !important;
+  font-weight: 600 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.025em;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: 0 3px 18px rgba(170, 197, 255, .12) !important;
+}
+
+.kb-ref-copy [data-testid="chip-rows"] {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 7px !important;
+  height: 38px !important;
+  margin-top: 18px !important;
+  padding-inline: 2px !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x;
+}
+
+.kb-ref-copy [data-testid="chip-rows"]::-webkit-scrollbar { display: none; }
+.kb-ref-copy [data-testid="chip-rows"] > .marquee-wrap { flex: 0 0 max-content; }
+.kb-ref-copy [data-testid="chip-rows"] .marquee { display: flex; gap: 7px; animation: none !important; transform: none !important; }
+.kb-ref-copy [data-testid="chip-rows"] .chip {
+  min-height: 25px;
+  padding: 0 10px;
+  border: 1px solid rgba(229, 237, 255, .12) !important;
+  border-radius: 999px;
+  background: rgba(235, 241, 255, .055) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .055) inset !important;
+  color: rgba(237, 241, 250, .63) !important;
+  font-size: 8px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.kb-ref-copy [data-testid="chip-rows"] .chip .icon-sq { display: none !important; }
+
+.app:has(.kb-ref-copy) form.safe-bottom {
+  padding-top: 9px !important;
+  padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+}
+
+.app:has(.kb-ref-copy) .input-bar {
+  min-height: 48px;
+  gap: 6px;
+  padding: 4px 5px !important;
+  border-radius: 999px !important;
+  direction: ltr;
+}
+
+.app:has(.kb-ref-copy) .input-bar input {
+  min-width: 0;
+  text-align: left;
+  direction: ltr;
+  font-size: 11px;
+}
+
+.app:has(.kb-ref-copy) .input-bar input::placeholder {
+  color: rgba(235, 240, 255, .6) !important;
+  text-shadow: none;
+}
+
+.app:has(.kb-ref-copy) .input-bar .kb-input-add,
+.app:has(.kb-ref-copy) .input-bar .kb-input-wave,
+.app:has(.kb-ref-copy) .input-bar [data-testid="button-home-voice"] {
+  flex: 0 0 36px;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px;
+}
+
+.app:has(.kb-ref-copy) .input-bar .kb-input-wave {
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(191, 215, 255, .93), rgba(106, 130, 255, .9) 55%, rgba(67, 195, 229, .87)) !important;
+  box-shadow: 0 0 16px rgba(109, 140, 255, .38), 0 1px 0 rgba(255, 255, 255, .5) inset !important;
+}
+
+.app:has(.kb-ref-copy) .input-bar .kb-input-add {
+  background: linear-gradient(145deg, rgba(148, 164, 255, .53), rgba(93, 101, 204, .4) 60%, rgba(83, 172, 207, .48)) !important;
+}
+
+.app:has(.kb-ref-copy) .input-bar [data-testid="button-home-voice"] {
+  background: linear-gradient(145deg, rgba(205, 225, 255, .96), rgba(114, 143, 255, .9) 50%, rgba(76, 199, 225, .9)) !important;
+}
+
+.app:has(.kb-ref-copy) .kb-orb-holder {
+  transform: translateY(120px) !important;
+}
+
+.app:has(.kb-ref-copy) .kb-orb-host {
+  width: clamp(154px, 44vw, 184px) !important;
+  height: clamp(154px, 44vw, 184px) !important;
+}
+
+.app:has(.kb-ref-copy) .kb-orb-holder > .orbling-face {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  container-type: size;
+  --eye: rgba(250, 253, 255, .98);
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .kb-ref-statusbar { padding-inline: 18px; }
+  .kb-ref-header { padding-inline: 16px; }
+  .kb-ref-copy { transform: translateY(20px); }
+  .app:has(.kb-ref-copy) .kb-orb-holder { transform: translateY(112px) !important; }
+  .kb-ref-copy .title,
+  .kb-ref-copy .title > span { font-size: 1.42rem !important; }
+  .app:has(.kb-ref-copy) .input-bar .kb-input-add,
+  .app:has(.kb-ref-copy) .input-bar .kb-input-wave,
+  .app:has(.kb-ref-copy) .input-bar [data-testid="button-home-voice"] {
+    flex-basis: 34px;
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px;
+  }
+}
+
+@media (max-height: 740px) {
+  .app:has(.kb-ref-copy) .kb-orb-holder { transform: translateY(88px) !important; }
+  .kb-ref-copy { transform: translateY(12px); }
+  .kb-ref-copy [data-testid="chip-rows"] { margin-top: 12px !important; }
+}
+
+
+/* Final reference tuning: chips live beside—not inside—the copy block. */
+.app:has(.kb-ref-copy) .canvas-wrap {
+  height: 62% !important;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, rgba(0, 0, 0, .78) 72%, transparent 100%) !important;
+  mask-image: linear-gradient(180deg, #000 0%, #000 45%, rgba(0, 0, 0, .78) 72%, transparent 100%) !important;
+}
+
+.app:has(.kb-ref-copy) .kb-orb-holder {
+  transform: translateY(42px) !important;
+}
+
+.app:has(.kb-ref-copy) .kb-orb-holder::after { display: none !important; }
+.app:has(.kb-ref-copy) .kb-orb-holder > .kb-orb-host::before { display: none !important; }
+
+.kb-ref-copy { transform: none !important; }
+.kb-ref-copy .kb-greeting,
+.kb-ref-copy .title {
+  position: relative;
+  top: -76px;
+}
+
+.app:has(.kb-ref-copy) > [data-testid="chip-rows"] {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 7px !important;
+  height: 158px !important;
+  margin-top: 20px !important;
+  padding-inline: 2px !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x;
+}
+
+.app:has(.kb-ref-copy) > [data-testid="chip-rows"]::-webkit-scrollbar { display: none; }
+.app:has(.kb-ref-copy) > [data-testid="chip-rows"] > .marquee-wrap { flex: 0 0 max-content; }
+.app:has(.kb-ref-copy) > [data-testid="chip-rows"] .marquee { display: flex; gap: 7px; animation: none !important; transform: none !important; }
+.app:has(.kb-ref-copy) > [data-testid="chip-rows"] .chip {
+  min-height: 25px !important;
+  height: 25px !important;
+  padding: 0 10px !important;
+  border: 1px solid rgba(229, 237, 255, .12) !important;
+  border-radius: 999px !important;
+  background: rgba(235, 241, 255, .055) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .055) inset !important;
+  color: rgba(237, 241, 250, .63) !important;
+  font-size: 8px !important;
+  font-weight: 400 !important;
+  white-space: nowrap !important;
+}
+
+.app:has(.kb-ref-copy) > [data-testid="chip-rows"] .chip .icon-sq { display: none !important; }
+
+.app:has(.kb-ref-copy) .kb-orb-holder > .orbling-face {
+  font-size: 100%;
+  --eye: rgba(250, 253, 255, .98);
+}
+
+
+.kb-ref-smart-mode { cursor: default; }
+.kb-ref-smart-mode:active { transform: none; }
+
+
+/* DOM-scoped GitHub face overlay and the sibling suggestion rail. */
+.app:has(.kb-ref-copy) .kb-orb-host > .orbling-face {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 4 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 100%;
+  container-type: size;
+  --eye: rgba(250, 253, 255, .98);
+  pointer-events: none;
+}
+
+.app:has(.kb-ref-copy) [data-testid="chip-rows"] {
+  height: 158px !important;
+  align-items: center !important;
+}
+
+.app:has(.kb-ref-copy) [data-testid="chip-rows"] .chip {
+  min-height: 25px !important;
+  height: 25px !important;
+  padding: 0 10px !important;
+  border: 1px solid rgba(229, 237, 255, .12) !important;
+  border-radius: 999px !important;
+  background: rgba(235, 241, 255, .055) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .055) inset !important;
+  color: rgba(237, 241, 250, .63) !important;
+  font-size: 8px !important;
+  font-weight: 400 !important;
+  white-space: nowrap !important;
+}
+
+.app:has(.kb-ref-copy) [data-testid="chip-rows"] .chip .icon-sq { display: none !important; }
+
+
+.app:has(.kb-ref-copy) .kb-orb-host > .orbling-face {
+  inset: 15% !important;
+  width: auto !important;
+  height: auto !important;
+}

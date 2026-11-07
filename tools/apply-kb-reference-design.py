@@ -21,6 +21,16 @@ def replace_once(source: str, old: str, new: str, label: str) -> tuple[str, bool
         return source.replace(old, new, 1), True
     if count == 0 and label == "home attachment and voice controls" and 'data-testid":"button-home-attach"' in source and 'data-testid":"button-home-voice-mode"' in source:
         return source, False
+    if count == 0 and label == "replace previous orb with transparent WebGL vessel host" and 'className:"kb-orb-host"' in source:
+        return source, False
+    if count == 0 and label == "brand pill to smart mode" and 'className:"kb-ref-smart-mode"' in source:
+        return source, False
+    if count == 0 and label == "remove KB name from home greeting" and 'className:"kb-greeting"' in source:
+        return source, False
+    if count == 0 and label == "two-line localized shipping prompt" and 'children:[["شن تبي تشحن",""],["اليوم؟",""]]' in source:
+        return source, False
+    if count == 0 and label == "reference screen copy layout" and 'className:"kb-ref-copy relative z-10 px-6 text-center"' in source:
+        return source, False
     if count == 0 and new in source:
         return source, False
     raise SystemExit(f"Expected exactly one {label} source marker, found {count}.")
@@ -41,6 +51,7 @@ def copy_visual_assets() -> bool:
         (ROOT / "tools/kb-fluid-background.js", ASSETS / "kb-fluid-background.js"),
         (ROOT / "vendor/ai-orb/dist/ai-orb-core.js", ASSETS / "ai-orb-core.js"),
         (ROOT / "vendor/webgl-fluid-enhanced/dist/index.es.js", ASSETS / "webgl-fluid-enhanced.js"),
+        (ROOT / "vendor/orbling/orbling.css", ASSETS / "orbling.css"),
     ]
     changed = False
     for source, target in assets:
@@ -101,6 +112,13 @@ def patch_html() -> bool:
     changed |= did_change
     source, did_change = replace_all(source, "KB للتسوق والشحن", "التسوق والشحن", "brand metadata")
     changed |= did_change
+    ui_stylesheet = '<link rel="stylesheet" href="./assets/kb-ui-refresh.css">'
+    orbling_stylesheet = '<link rel="stylesheet" href="./assets/orbling.css">'
+    if source.count(ui_stylesheet) != 1:
+        raise SystemExit(f"Expected exactly one refreshed UI stylesheet link, found {source.count(ui_stylesheet)}.")
+    if orbling_stylesheet not in source:
+        source = source.replace(ui_stylesheet, ui_stylesheet + "\n    " + orbling_stylesheet, 1)
+        changed = True
     main_script = '<script type="module" crossorigin src="./assets/index-6ttDirym.js?palette=64a124f9d2"></script>'
     orb_script = '<script type="module" crossorigin src="./assets/kb-crystal-orb.js?orb=vessel-1"></script>'
     fluid_script = '<script type="module" crossorigin src="./assets/kb-fluid-background.js?fluid=webgl-1"></script>'
@@ -173,9 +191,14 @@ def main() -> None:
             "home attachment and voice controls",
         ),
         (
-            'placeholder:`اكتب لـ${p.name}…`,"aria-label":"رسالتك","data-testid":"input-home"',
             'placeholder:"اكتب سؤالك…","aria-label":"رسالتك","data-testid":"input-home"',
+            'placeholder:"Ask anything...","aria-label":"رسالتك","data-testid":"input-home"',
             "neutral home input placeholder",
+        ),
+        (
+            'className:"relative z-10 px-6 text-center",children:[c.jsxs(oe.div',
+            'className:"kb-ref-copy relative z-10 px-6 text-center",children:[c.jsxs(oe.div',
+            "reference screen copy layout",
         ),
         (
             'const OSF=["وكيل KB الذكي"',
@@ -191,6 +214,57 @@ def main() -> None:
     for old, new, label in patches:
         source, did_change = replace_once(source, old, new, label)
         changed |= did_change
+
+    # Replace the old two-sided site navigation with the reference's status bar
+    # and compact three-control assistant header. Route controls to existing app
+    # screens/actions rather than adding decorative dead buttons.
+    header_start = source.find('c.jsxs("div",{className:"safe-top relative z-10 px-4 pt-2 flex items-center justify-between"')
+    if header_start >= 0:
+        header_end = source.find(',c.jsx("div",{className:"flex-1"})', header_start)
+        if header_end < 0:
+            raise SystemExit("Could not locate the home screen spacer after its navigation header.")
+        header = '''c.jsxs("div",{className:"kb-ref-statusbar", "aria-hidden":!0,children:[c.jsx("span",{children:"9:41"}),c.jsxs("div",{className:"kb-ref-status-icons",children:[c.jsx("svg",{width:"16",height:"12",viewBox:"0 0 20 14",fill:"currentColor",children:c.jsx("path",{d:"M1 12h2V8H1zm4 0h2V5H5zm4 0h2V2H9zm4 0h2V0h-2zm4 0h2V4h-2z"})}),c.jsx("svg",{width:"18",height:"14",viewBox:"0 0 20 16",fill:"none",stroke:"currentColor",strokeWidth:"2.4",strokeLinecap:"round",children:c.jsx("path",{d:"M2 5.5C6.5 1.5 13.5 1.5 18 5.5M5 9c3-2.7 7-2.7 10 0m-6.8 3.3c1.1-.9 2.5-.9 3.6 0M10 14h.01"})}),c.jsx("span",{className:"kb-ref-battery",children:"70"})]})]}),c.jsxs("div",{className:"kb-ref-header relative z-10",children:[c.jsx("button",{type:"button",className:"kb-ref-icon",onClick:()=>s("/settings"),"aria-label":"القائمة","data-testid":"button-settings",children:c.jsx("svg",{width:"18",height:"18",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.8",strokeLinecap:"round",children:c.jsx("path",{d:"M4 6h16M4 12h16M4 18h16"})})}),c.jsxs("button",{type:"button",className:"kb-ref-smart-mode",onClick:()=>s("/settings/appearance"),"aria-label":"Smart Mode",children:[c.jsx("span",{children:"Smart Mode"}),c.jsx("svg",{width:"11",height:"11",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round",children:c.jsx("path",{d:"m7 10 5 5 5-5"})})]}),c.jsx("button",{type:"button",className:"kb-ref-icon kb-ref-edit",onClick:()=>{a.newThread(),s("/chat")},"aria-label":"محادثة جديدة","data-testid":"button-new-chat",children:c.jsx("svg",{width:"18",height:"18",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.8",strokeLinecap:"round",strokeLinejoin:"round",children:c.jsx("path",{d:"M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"})})})]})'''
+        source = source[:header_start] + header + source[header_end:]
+        changed = True
+    elif 'className:"kb-ref-header relative z-10"' not in source or 'className:"kb-ref-statusbar"' not in source:
+        raise SystemExit("Could not locate the source home navigation header.")
+
+    source, did_change = replace_once(
+        source,
+        'className:"kb-ref-smart-mode",onClick:()=>s("/settings/appearance"),"aria-label":"Smart Mode"',
+        'className:"kb-ref-smart-mode","aria-label":"Smart Mode"',
+        "keep Smart Mode as a visual-only pill",
+    )
+    changed |= did_change
+    source, did_change = replace_once(
+        source,
+        'onClick:()=>{a.newThread(),s("/chat")},"aria-label":"محادثة جديدة","data-testid":"button-new-chat"',
+        'onClick:()=>s("/profile"),"aria-label":"الملف الشخصي","data-testid":"button-profile"',
+        "preserve the existing profile button behavior",
+    )
+    changed |= did_change
+
+    # Use the reference's small plain greeting and two-line translated prompt.
+    greeting_start = source.find('c.jsxs(oe.div,{className:"pill mx-auto !text-[0.8rem]"')
+    if greeting_start >= 0:
+        greeting_end = source.find(',c.jsx(oe.h1,', greeting_start)
+        if greeting_end < 0:
+            raise SystemExit("Could not locate the assistant title after its greeting.")
+        greeting = 'c.jsx(oe.div,{className:"kb-greeting",initial:{y:12,opacity:0},animate:{y:0,opacity:1},transition:{...Oe,delay:.15},children:"Hello Alex"})'
+        source = source[:greeting_start] + greeting + source[greeting_end:]
+        changed = True
+    elif 'className:"kb-greeting"' not in source:
+        raise SystemExit("Could not locate the assistant greeting source.")
+
+    title_start = source.find('children:[["أهلًا بك",""]')
+    if title_start >= 0:
+        title_end = source.find('].map(([x,C],A)=>', title_start)
+        if title_end < 0:
+            raise SystemExit("Could not locate the title word renderer.")
+        source = source[:title_start] + 'children:[["شن تبي تشحن",""],["اليوم؟",""]]' + source[title_end + 1:]
+        changed = True
+    elif 'children:[["شن تبي تشحن",""],["اليوم؟",""]]' not in source:
+        raise SystemExit("Could not locate the assistant title source.")
 
     old_wave = 'className:"kb-input-wave",onClick:()=>s("/voice"),"aria-label":"محادثة صوتية","data-testid":"button-home-voice-mode",children:c.jsx("svg",{width:"19",height:"19",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"1.8",strokeLinecap:"round",children:c.jsx("path",{d:"M3 10v4m4-8v12m5-15v18m5-14v10m4-7v4"})})})'
     new_wave = 'className:"kb-input-wave",onClick:()=>s("/voice"),"aria-label":"محادثة صوتية","data-testid":"button-home-voice-mode",children:c.jsxs("div",{className:"kb-wave-bars","aria-hidden":"true",children:[c.jsx("span",{className:"kb-wave-bar kb-wave-bar-1"},"wave-1"),c.jsx("span",{className:"kb-wave-bar kb-wave-bar-2"},"wave-2"),c.jsx("span",{className:"kb-wave-bar kb-wave-bar-3"},"wave-3"),c.jsx("span",{className:"kb-wave-bar kb-wave-bar-4"},"wave-4"),c.jsx("span",{className:"kb-wave-bar kb-wave-bar-5"},"wave-5")]})})'

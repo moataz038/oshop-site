@@ -7,7 +7,16 @@ function mount(host) {
   const canvas = document.createElement("canvas");
   canvas.className = "kb-orb-webgl";
   canvas.setAttribute("aria-hidden", "true");
-  host.replaceChildren(canvas);
+  const face = document.createElement("span");
+  face.className = "orbling orbling-face";
+  face.dataset.act = "idle";
+  face.dataset.palette = "night";
+  face.setAttribute("aria-hidden", "true");
+  const eyes = document.createElement("span");
+  eyes.className = "orbling-eyes";
+  eyes.append(document.createElement("i"), document.createElement("i"));
+  face.append(eyes);
+  host.replaceChildren(canvas, face);
   host.removeAttribute("aria-hidden");
   host.setAttribute("role", "img");
   host.setAttribute("aria-label", "كرة زجاجية ثلاثية الأبعاد تفاعلية");
