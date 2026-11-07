@@ -101,3 +101,19 @@ test('assistant home matches the supplied phone screen while keeping real naviga
   assert.match(css, /\.app:has\(\.kb-ref-copy\) > \[data-testid="chip-rows"\]/);
   assert.match(css, /direction: ltr/);
 });
+
+test('phone reference tuning keeps the orb proportional and complete chips inside the screen', () => {
+  assert.match(css, /Final phone-reference tuning/);
+  assert.match(css, /width: clamp\(140px, 43\.3vw, 184px\) !important/);
+  assert.match(css, /transform: translateY\(40px\) !important/);
+  assert.match(css, /\.kb-ref-copy \.kb-greeting,[\s\S]*top: -46px/);
+  assert.match(css, /height: 142px !important;\s*margin-top: 40px !important/);
+  assert.match(css, /calc\(100% - 332px\)/);
+  assert.match(css, /min-height: 44px/);
+  assert.match(css, /ellipse 55% 15% at 82% 90%/);
+  assert.doesNotMatch(css, /\.chip:nth-child\(n\s*\+\s*4\)/, 'suggestions remain available to swipe');
+  assert.equal(
+    fs.readFileSync(path.join(root, 'brand/kb-ui-refresh.css'), 'utf8'),
+    fs.readFileSync(path.join(root, 'vercel-output/static/assets/kb-ui-refresh.css'), 'utf8'),
+  );
+});
