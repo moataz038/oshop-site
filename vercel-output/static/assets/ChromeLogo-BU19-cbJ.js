@@ -1,4 +1,4 @@
-import{r as p,j as h}from"./index-6ttDirym.js";import{u as k,M as W,a as G,W as L,P as $,b as q,c as N,C as K,S as V,B as J,d as Q,e as Y,A as e0,f as t0,E as r0,g as n0,F as o0}from"./react-three-fiber.esm-sYP6ER8-.js";function j(){return j=Object.assign?Object.assign.bind():function(r){for(var v=1;v<arguments.length;v++){var t=arguments[v];for(var a in t)({}).hasOwnProperty.call(t,a)&&(r[a]=t[a])}return r},j.apply(null,arguments)}const s0={uniforms:{tDiffuse:{value:null},h:{value:1/512}},vertexShader:`
+import{r as p,j as h}from"./index-6ttDirym.js?palette=64a124f9d2";import{u as k,M as W,a as G,W as L,P as $,b as q,c as N,C as K,S as V,B as J,d as Q,e as Y,A as e0,f as t0,E as r0,g as n0,F as o0}from"./react-three-fiber.esm-sYP6ER8-.js";function j(){return j=Object.assign?Object.assign.bind():function(r){for(var v=1;v<arguments.length;v++){var t=arguments[v];for(var a in t)({}).hasOwnProperty.call(t,a)&&(r[a]=t[a])}return r},j.apply(null,arguments)}const s0={uniforms:{tDiffuse:{value:null},h:{value:1/512}},vertexShader:`
       varying vec2 vUv;
 
       void main() {

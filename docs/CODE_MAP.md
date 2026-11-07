@@ -41,7 +41,8 @@
 | `tools/shein-cart-quantity.browser.test.py` | اختبار متصفح ببيانات اصطناعية على الهاتف والكمبيوتر دون طلبات إلى SHEIN |
 | `tools/shein-direct-reader.mjs` | قارئ مباشر مشتق من `shein-cart`؛ allowlist وحدود طلبات بلا cache أو سجلات خاصة |
 | `tools/apply-shein-direct-reader.py` | ينسخ القارئ إلى وظيفة Vercel ويستبدل تكامل Omkar عند البناء |
-| `tools/shein-direct-reader.test.cjs` | محاكاة قراءة الرابط و403 والتحويل والعملة دون اتصال حي |
+| `tools/shein-direct-reader.test.cjs` | محاكاة قراءة الرابط و403 والتحويل والعملة دون اتصال |
+| `tools/apply-kb-reference-design.py` | يستبدل الشعار المركزي بكرة Orb3D المضمنة ويعرب العنوان ويعرض واجهة المساعد عند أول زيارة |
 | `tools/verify.sh` | يتحقق من الملفات الأساسية، صحة JavaScript، الهوية الحالية، وعدم وجود أسرار في runtime |
 | `tools/build.sh` | يشغل التحديث الآمن ثم فحوص JSON وJavaScript واختبارات الهوية |
 

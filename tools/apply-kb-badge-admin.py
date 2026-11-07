@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULTS = [
-    "وكيل KB الذكي",
+    "مرحبًا بك",
     "شحن مجاني من شي إن",
     "صفر عمولة على طلبك",
     "البطاقة نفس سعر الكاش",
@@ -115,12 +115,19 @@ def patch_api_bundle() -> None:
     path = ROOT / "vercel-output/functions/api.func/index.cjs"
     text = path.read_text()
     defaults = json.dumps(DEFAULTS, ensure_ascii=False, separators=(",", ":"))
-    text = replace_once(
-        text,
-        'var __oshopStore=require("./shared-store.cjs").createSharedStore();async function Vs()',
-        f'var __oshopStore=require("./shared-store.cjs").createSharedStore();var KB_BADGE_DEFAULTS={defaults};/*KB_BADGE_ADMIN_V1*/async function Vs()',
-        "API badge-copy defaults",
-    )
+    marker = "/*KB_BADGE_ADMIN_V1*/"
+    if marker in text:
+        declaration_start = text.rfind("var KB_BADGE_DEFAULTS=", 0, text.index(marker))
+        if declaration_start < 0:
+            raise SystemExit("Badge defaults marker exists without its declaration")
+        text = text[:declaration_start] + f"var KB_BADGE_DEFAULTS={defaults};" + text[text.index(marker):]
+    else:
+        text = replace_once(
+            text,
+            'var __oshopStore=require("./shared-store.cjs").createSharedStore();async function Vs()',
+            f'var __oshopStore=require("./shared-store.cjs").createSharedStore();var KB_BADGE_DEFAULTS={defaults};/*KB_BADGE_ADMIN_V1*/async function Vs()',
+            "API badge-copy defaults",
+        )
     route_code = '''e.get("/api/kb/badge-display",__oshopSecurity.asyncHandler(async(r,i)=>{i.setHeader("Cache-Control","no-store");i.setHeader("X-Robots-Tag","noindex, nofollow, noarchive");i.json({items:await __oshopStore.getKbBadgeCopy(KB_BADGE_DEFAULTS)})})),e.get("/api/staff/kb-badge-copy",__oshopSecurity.asyncHandler(async(r,i)=>{i.setHeader("Cache-Control","no-store");i.json({items:await __oshopStore.getKbBadgeCopy(KB_BADGE_DEFAULTS)})})),e.put("/api/staff/kb-badge-copy",__oshopSecurity.asyncHandler(async(r,i)=>{let n=r.body?.items;if(!Array.isArray(n)||n.length!==5||n.some(a=>typeof a!=="string"||a.length>80))return i.status(400).json({error:"صيغة العبارات غير صالحة."});let a=n.map(a=>a.replace(/[\\u0000-\\u001f\\u007f]/g," ").trim());if(a.every(a=>!a))return i.status(400).json({error:"أدخل عبارة واحدة على الأقل."});i.setHeader("Cache-Control","no-store");i.json({items:await __oshopStore.updateKbBadgeCopy(a)})})),e.get("/api/staff/kb-badge-admin",(r,i)=>{i.setHeader("Cache-Control","no-store");i.setHeader("X-Robots-Tag","noindex, nofollow, noarchive");i.type("html").send(require("./kb-badge-admin-page.cjs"))}),'''
     text = replace_once(text, 'e.get("/api/staff/overview"', route_code + 'e.get("/api/staff/overview"', "API badge-copy routes")
     path.write_text(text)
@@ -129,8 +136,8 @@ def patch_api_bundle() -> None:
 def patch_storefront() -> None:
     path = ROOT / "vercel-output/static/assets/index-6ttDirym.js"
     text = path.read_text()
-    old = 'const OSF=["وكيل KB الذكي","شحن مجاني من شي إن","صفر عمولة على طلبك","البطاقة نفس سعر الكاش","توصيل لكل مدن ليبيا"];function OSO(){const[i,x]=N.useState(0);return N.useEffect(()=>{const t=setInterval(()=>x(v=>(v+1)%OSF.length),3200);return()=>clearInterval(t)},[]),c.jsx(oe.span,{initial:{opacity:0,y:6},animate:{opacity:1,y:0},transition:Oe,children:OSF[i]},i)}'
-    new = 'const OSF=["وكيل KB الذكي","شحن مجاني من شي إن","صفر عمولة على طلبك","البطاقة نفس سعر الكاش","توصيل لكل مدن ليبيا"];function OSO(){const[a,b]=N.useState(OSF),[i,x]=N.useState(0);return N.useEffect(()=>{let live=true;fetch("/api/kb/badge-display",{credentials:"same-origin",cache:"no-store"}).then(r=>r.ok?r.json():null).then(r=>{if(live&&Array.isArray(r?.items)&&r.items.length===OSF.length&&r.items.every(t=>typeof t==="string"))b(r.items)}).catch(()=>{});return()=>{live=false}},[]),N.useEffect(()=>{const t=setInterval(()=>x(v=>(v+1)%a.length),3200);return()=>clearInterval(t)},[a.length]),c.jsx(oe.span,{initial:{opacity:0,y:6},animate:{opacity:1,y:0},transition:Oe,children:a[i]},i)}'
+    old = 'const OSF=["مرحبًا بك","شحن مجاني من شي إن","صفر عمولة على طلبك","البطاقة نفس سعر الكاش","توصيل لكل مدن ليبيا"];function OSO(){const[i,x]=N.useState(0);return N.useEffect(()=>{const t=setInterval(()=>x(v=>(v+1)%OSF.length),3200);return()=>clearInterval(t)},[]),c.jsx(oe.span,{initial:{opacity:0,y:6},animate:{opacity:1,y:0},transition:Oe,children:OSF[i]},i)}'
+    new = 'const OSF=["مرحبًا بك","شحن مجاني من شي إن","صفر عمولة على طلبك","البطاقة نفس سعر الكاش","توصيل لكل مدن ليبيا"];function OSO(){const[a,b]=N.useState(OSF),[i,x]=N.useState(0);return N.useEffect(()=>{let live=true;fetch("/api/kb/badge-display",{credentials:"same-origin",cache:"no-store"}).then(r=>r.ok?r.json():null).then(r=>{if(live&&Array.isArray(r?.items)&&r.items.length===OSF.length&&r.items.every(t=>typeof t==="string"))b(r.items)}).catch(()=>{});return()=>{live=false}},[]),N.useEffect(()=>{const t=setInterval(()=>x(v=>(v+1)%a.length),3200);return()=>clearInterval(t)},[a.length]),c.jsx(oe.span,{initial:{opacity:0,y:6},animate:{opacity:1,y:0},transition:Oe,children:a[i]},i)}'
     text = replace_once(text, old, new, "storefront badge rotation source")
     path.write_text(text)
 

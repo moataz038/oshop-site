@@ -1,4 +1,4 @@
-import{r as c,j as r}from"./index-6ttDirym.js";import{e as u,C as i,u as p,M as y}from"./react-three-fiber.esm-sYP6ER8-.js";const f=`
+import{r as c,j as r}from"./index-6ttDirym.js?palette=64a124f9d2";import{e as u,C as i,u as p,M as y}from"./react-three-fiber.esm-sYP6ER8-.js";const f=`
 uniform float uTime; uniform float uAmp; uniform float uSpeed;
 varying vec3 vN; varying vec3 vP; varying float vD;
 // simplex noise (Ashima)

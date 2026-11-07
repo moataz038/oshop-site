@@ -18,6 +18,7 @@ python3 tools/apply-shared-storage.py
 # تحديث الهوية المرئية والشعارات في الحزمة الجاهزة، مع إبقاء المسارات والمنطق.
 python3 tools/apply-kb-branding.py
 # تركيب لوحة العبارات المستقلة وحمايتها بعد توليد الحزمة، بصورة قابلة للتكرار.
+python3 tools/apply-kb-reference-design.py
 python3 tools/apply-kb-badge-admin.py
 # Restrict badge UI, APIs, and assets to the exact production admin hostname.
 python3 tools/apply-kb-badge-host-isolation.py
@@ -33,6 +34,7 @@ python3 tools/apply-shein-cart-routing.py
 node --check vercel-output/functions/api.func/index.cjs
 node --check vercel-output/functions/api.func/shein-direct-reader.mjs
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
+node --check vercel-output/static/assets/kb-crystal-orb.js
 node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
 node --check vercel-output/functions/api.func/admin-login-js.cjs

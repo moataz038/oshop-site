@@ -9,6 +9,9 @@ required=(
   vercel-output/static/assets/index-6ttDirym.js
   vercel-output/static/assets/index-ca6a3825.css
   vercel-output/static/assets/kb-ui-refresh.css
+  vercel-output/static/assets/kb-crystal-orb.js
+  vercel-output/static/img/assistant-avatar.svg
+  licenses/AI-Orb-MIT.txt
   vercel-output/static/img/kb-mark.png
   vercel-output/static/img/kb-hero.webp
   vercel-output/static/favicon.png
@@ -62,8 +65,16 @@ node --check tools/shein-direct-reader.mjs
 grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
 grep -q 'href="./assets/kb-ui-refresh.css"' vercel-output/static/index.html
-grep -q 'name:"KB"' vercel-output/static/assets/index-6ttDirym.js
-grep -q 'وكيل الذكاء الاصطناعي المساعد' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'kb-crystal-orb.js' vercel-output/static/index.html
+grep -q 'kb-orb-host' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'assistant-avatar.svg' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'oshop:{name:"مساعد الشحن",img:"img/assistant-avatar.svg",role:"وكيل الشحن الذكي"' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'button-home-attach' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'button-home-voice-mode' vercel-output/static/assets/index-6ttDirym.js
+grep -q 'kb-wave-bars' vercel-output/static/assets/index-6ttDirym.js
+cmp -s brand/kb-ui-refresh.css vercel-output/static/assets/kb-ui-refresh.css
+grep -q 'kbBottomTide' vercel-output/static/assets/kb-ui-refresh.css
+grep -q 'kbInputFlow' vercel-output/static/assets/kb-ui-refresh.css
 grep -q 'https://www.instagram.com/kb.online.store' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'KB_SHEIN_ITEM_QUANTITY_CALL_V1' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'KB_SHEIN_ITEM_QUANTITY_API_V1' vercel-output/functions/api.func/index.cjs

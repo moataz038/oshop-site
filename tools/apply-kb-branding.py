@@ -21,6 +21,7 @@ GEOMETRY_SOURCE = ROOT / "brand" / "kb-gold-geometry.json"
 THREED = ROOT / "tools" / "kb-logo-3d.js"
 PROFILE_SOURCE = ROOT / "brand" / "kb-original-profile.jpg"
 UI_REFRESH_SOURCE = ROOT / "brand" / "kb-ui-refresh.css"
+ASSISTANT_AVATAR_SOURCE = ROOT / "brand" / "assistant-avatar.svg"
 
 
 def replace_all(text: str, old: str, new: str, label: str) -> str:
@@ -44,20 +45,20 @@ def patch_file(path: Path, pairs: list[tuple[str, str, str]], *, skip_if_new: bo
 
 
 def main() -> None:
-    if not all(path.is_file() for path in (JS, CSS, INDEX, ADMIN, API, GOLD_SOURCE, GEOMETRY_SOURCE, THREED, PROFILE_SOURCE, UI_REFRESH_SOURCE)):
+    if not all(path.is_file() for path in (JS, CSS, INDEX, ADMIN, API, GOLD_SOURCE, GEOMETRY_SOURCE, THREED, PROFILE_SOURCE, UI_REFRESH_SOURCE, ASSISTANT_AVATAR_SOURCE)):
         raise RuntimeError("A required runtime file is missing; refusing a partial branding update")
 
     patch_file(JS, [
         ('children:"O"}),"shop"]', 'children:"K"}),"B"]', "welcome wordmark"),
         ('oshop-mark.png', 'kb-mark.png', "assistant and app logo asset"),
         ('img/kb-hero.webp', 'img/kb-gold-only.png', "transparent 3D hero logo"),
-        ('id:"oshop",hex:"#d0d0d0",name:"KB"', 'id:"oshop",hex:"#c9a65f",name:"KB"', "default theme color"),
+        ('id:"oshop",hex:"#d0d0d0",name:"KB"', 'id:"oshop",hex:"#798cff",name:"ليلي"', "default theme color"),
         ('https://www.instagram.com/oshop.company', 'https://www.instagram.com/kb.online.store', "Instagram target"),
         ('@oshop.company', '@kb.online.store', "Instagram handle"),
         ('Oshop', 'KB', "visible English brand name"),
         ('اوشوب', 'KB', "visible Arabic brand name"),
-        ('KB KB · Shipping & E-commerce · الإصدار 1.0', 'KB Online Store · Shipping & E-commerce · الإصدار 1.0', "footer brand lockup"),
-        ('oshop:{name:"KB",img:"img/kb-mark.png",role:', 'oshop:{name:"KB",img:"img/kb-original-profile.jpg",role:', "official KB profile logo near settings"),
+        ('KB Online Store · Shipping & E-commerce · الإصدار 1.0', 'مساعد الشحن · الإصدار 1.0', "localized footer brand lockup"),
+        ('oshop:{name:"KB",img:"img/kb-mark.png",role:"وكيل الذكاء الاصطناعي المساعد",f:!1}', 'oshop:{name:"مساعد الشحن",img:"img/assistant-avatar.svg",role:"وكيل الشحن الذكي",f:!1}', "neutral assistant identity near settings"),
     ])
 
     patch_file(API, [
@@ -70,8 +71,8 @@ def main() -> None:
     ])
 
     patch_file(INDEX, [
-        ('<title>اوشوب Oshop | وكيلك الذكي للتسوق والشحن</title>', '<title>KB Online Store | وكيلك الذكي للتسوق والشحن</title>', "page title"),
-        ('اوشوب للشحن والتجارة الإلكترونية:', 'KB للتسوق والشحن والتجارة الإلكترونية:', "page description"),
+        ('<title>اوشوب Oshop | وكيلك الذكي للتسوق والشحن</title>', '<title>التسوق والشحن | مساعدك الذكي</title>', "page title"),
+        ('اوشوب للشحن والتجارة الإلكترونية:', 'التسوق والشحن والتجارة الإلكترونية:', "page description"),
         ('#9B7B3F', '#000000', "browser theme color"),
         ('./img/kb-hero.webp', './img/kb-gold-only.png', "preloaded transparent 3D logo"),
         ('<link rel="stylesheet" href="./assets/kb-black-gold-theme-4f26a4e738.css">', '<link rel="stylesheet" href="./assets/kb-black-gold-theme-4f26a4e738.css">\n    <link rel="stylesheet" href="./assets/kb-ui-refresh.css">', "KB visual refresh stylesheet"),
@@ -104,6 +105,7 @@ def main() -> None:
         ROOT / "brand" / "kb-hero.webp": STATIC / "img" / "kb-hero.webp",
         PROFILE_SOURCE: STATIC / "img" / "kb-original-profile.jpg",
         UI_REFRESH_SOURCE: STATIC / "assets" / "kb-ui-refresh.css",
+        ASSISTANT_AVATAR_SOURCE: STATIC / "img" / "assistant-avatar.svg",
         GOLD_SOURCE: STATIC / "img" / "kb-gold-only.png",
         GEOMETRY_SOURCE: STATIC / "kb-gold-geometry.json",
         THREED: STATIC / "kb-logo-3d.js",
@@ -123,14 +125,17 @@ def main() -> None:
     runtime = "\n".join(path.read_text(encoding="utf-8", errors="replace") for path in (JS, API, INDEX, ADMIN, STATIC / "kb-logo-3d.js"))
     if "Oshop" in runtime or "اوشوب" in runtime or "oshop.company" in runtime or "KB KB" in runtime:
         raise RuntimeError("Old visible brand text remains in the runtime output")
-    if 'role:"وكيل الذكاء الاصطناعي المساعد"' not in JS.read_text(encoding="utf-8"):
+    js_runtime = JS.read_text(encoding="utf-8")
+    if 'role:"وكيل الذكاء الاصطناعي المساعد"' not in js_runtime and 'role:"وكيل الشحن الذكي"' not in js_runtime:
         raise RuntimeError("AI assistant identity/role marker was unexpectedly changed")
     if 'href="./assets/kb-ui-refresh.css"' not in INDEX.read_text(encoding="utf-8"):
         raise RuntimeError("KB visual refresh stylesheet is not linked from the page")
-    if "kb-gold-only.png" not in JS.read_text(encoding="utf-8") or "kb-gold-geometry.json" not in THREED.read_text(encoding="utf-8") or "kb-logo-3d.js" not in INDEX.read_text(encoding="utf-8"):
-        raise RuntimeError("The transparent gold logo or 3D mesh renderer is not connected")
-    if 'oshop:{name:"KB",img:"img/kb-original-profile.jpg",role:' not in JS.read_text(encoding="utf-8"):
-        raise RuntimeError("The original KB profile logo is not connected to the small profile/avatar icon")
+    if ("kb-gold-only.png" not in js_runtime and "kb-orb-host" not in js_runtime) or "kb-gold-geometry.json" not in THREED.read_text(encoding="utf-8") or "kb-logo-3d.js" not in INDEX.read_text(encoding="utf-8"):
+        raise RuntimeError("Neither the legacy logo fallback nor the refreshed orb host is connected")
+    if 'oshop:{name:"KB",img:"img/kb-original-profile.jpg",role:' not in js_runtime and 'oshop:{name:"مساعد الشحن",img:"img/assistant-avatar.svg",role:"وكيل الشحن الذكي",f:!1}' not in js_runtime:
+        raise RuntimeError("The neutral shipping-assistant profile is not connected")
+    if "kb-crystal-orb.js" not in INDEX.read_text(encoding="utf-8"):
+        raise RuntimeError("The local crystal orb module is not linked from the page")
     for tool_name in ("compare_markets", "calculate_shein_cart", "track_shipment", "search_china_suppliers"):
         if tool_name not in API.read_text(encoding="utf-8"):
             raise RuntimeError(f"API tool missing after visual branding change: {tool_name}")
