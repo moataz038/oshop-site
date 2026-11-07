@@ -70,7 +70,7 @@ grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
 grep -q 'href="./assets/kb-ui-refresh.css"' vercel-output/static/index.html
 grep -q 'kb-crystal-orb.js' vercel-output/static/index.html
-python3 -c 'from pathlib import Path; source=Path("vercel-output/static/index.html").read_text(); assert source.count("./assets/kb-crystal-orb.js?orb=vessel-1") == 1'
+python3 -c 'from pathlib import Path; source=Path("vercel-output/static/index.html").read_text(); assert source.count("./assets/kb-crystal-orb.js?orb=ai-orb-aurora-1") == 1 and source.count("kb-crystal-orb.js?orb=") == 1'
 grep -q 'kb-orb-host' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'assistant-avatar.svg' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'oshop:{name:"مساعد الشحن",img:"img/assistant-avatar.svg",role:"وكيل الشحن الذكي"' vercel-output/static/assets/index-6ttDirym.js

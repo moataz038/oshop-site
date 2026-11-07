@@ -120,13 +120,13 @@ def patch_html() -> bool:
         source = source.replace(ui_stylesheet, ui_stylesheet + "\n    " + orbling_stylesheet, 1)
         changed = True
     main_script = '<script type="module" crossorigin src="./assets/index-6ttDirym.js?palette=64a124f9d2"></script>'
-    orb_script = '<script type="module" crossorigin src="./assets/kb-crystal-orb.js?orb=vessel-1"></script>'
+    orb_script = '<script type="module" crossorigin src="./assets/kb-crystal-orb.js?orb=ai-orb-aurora-1"></script>'
     fluid_script = '<script type="module" crossorigin src="./assets/kb-fluid-background.js?fluid=webgl-1"></script>'
     if source.count(main_script) != 1:
         raise SystemExit(f"Expected exactly one main module script, found {source.count(main_script)}.")
-    normalized = source
-    for script in (orb_script, fluid_script):
-        normalized = re.sub(rf"(?m)^[ \t]*{re.escape(script)}[ \t]*(?:\r?\n|$)", "", normalized)
+    orb_script_pattern = r'(?m)^[ \t]*<script type="module" crossorigin src="\./assets/kb-crystal-orb\.js\?orb=[^"]+"></script>[ \t]*(?:\r?\n|$)'
+    normalized = re.sub(orb_script_pattern, "", source)
+    normalized = re.sub(rf"(?m)^[ \t]*{re.escape(fluid_script)}[ \t]*(?:\r?\n|$)", "", normalized)
     normalized = normalized.replace(main_script, main_script + "\n    " + orb_script + "\n    " + fluid_script, 1)
     normalized = re.sub(
         rf"({re.escape(main_script)}\r?\n    {re.escape(orb_script)}\r?\n    {re.escape(fluid_script)})(?:\r?\n[ \t]*(?=\r?\n))*",

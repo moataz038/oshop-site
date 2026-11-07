@@ -15,10 +15,11 @@ const css = read('brand/kb-ui-refresh.css');
 const html = read('vercel-output/static/index.html');
 const appBundle = read('vercel-output/static/assets/index-6ttDirym.js');
 
-test('orb remains the GitHub WebGL vessel with local iris colors, microphone response, and direct manipulation', () => {
+test('orb uses the GitHub WebGL aurora finish with local iris colors, microphone response, and direct manipulation', () => {
   assert.match(vendorNotes, /https:\/\/github\.com\/weeeha\/AI-Orb/);
   assert.match(vendorNotes, /MIT licensed/);
   assert.match(orbRuntime, /import \{ OrbRenderer, orbPalettes \} from "\.\/ai-orb-core\.js"/);
+  assert.match(orbRuntime, /finish: "aurora"/);
   assert.match(orbRuntime, /colors: orbPalettes\.iris\.dark/);
   assert.match(orbRuntime, /getInputLevel: \(\) => Number\(window\.__kbOrbInputLevel\)/);
   assert.match(orbRuntime, /renderer\.setPointer\(direction\.x, direction\.y, true\)/);
@@ -45,7 +46,8 @@ test('background uses the vendored GPU fluid engine and injects fixed-palette sp
 });
 
 test('build ships GitHub visual sources locally and carries their upstream licenses', () => {
-  assert.match(html, /assets\/kb-crystal-orb\.js\?orb=vessel-1/);
+  assert.match(html, /assets\/kb-crystal-orb\.js\?orb=ai-orb-aurora-1/);
+  assert.equal((html.match(/kb-crystal-orb\.js\?orb=/g) || []).length, 1, 'only one orb renderer is loaded');
   assert.match(html, /assets\/kb-fluid-background\.js\?fluid=webgl-1/);
   assert.match(html, /assets\/orbling\.css/);
   assert.equal(

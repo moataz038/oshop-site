@@ -27,7 +27,7 @@ function mount(host) {
   const renderer = new OrbRenderer(
     canvas,
     {
-      finish: "vessel",
+      finish: "aurora",
       field: "dark",
       colors: orbPalettes.iris.dark,
       state: "idle",
