@@ -6,6 +6,7 @@ home screen to the supplied dark glassy app layout, and preserve functional
 attachment, voice and chat controls.
 """
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "vercel-output/static/assets"
@@ -48,12 +49,19 @@ def patch_html() -> bool:
     source, did_change = replace_all(source, "KB للتسوق والشحن", "التسوق والشحن", "brand metadata")
     changed |= did_change
     main_script = '<script type="module" crossorigin src="./assets/index-6ttDirym.js?palette=64a124f9d2"></script>'
-    source, did_change = replace_once(
-        source,
-        main_script,
-        main_script + '\n    <script type="module" crossorigin src="./assets/kb-crystal-orb.js?orb=vessel-1"></script>',
-        "local crystal orb module",
+    orb_script = '<script type="module" crossorigin src="./assets/kb-crystal-orb.js?orb=vessel-1"></script>'
+    if source.count(main_script) != 1:
+        raise SystemExit(f"Expected exactly one main module script, found {source.count(main_script)}.")
+    normalized = re.sub(rf"(?m)^[ \t]*{re.escape(orb_script)}[ \t]*(?:\r?\n|$)", "", source)
+    normalized = normalized.replace(main_script, main_script + "\n    " + orb_script, 1)
+    normalized = re.sub(
+        rf"({re.escape(main_script)}\r?\n    {re.escape(orb_script)})(?:\r?\n[ \t]*(?=\r?\n))*",
+        r"\1",
+        normalized,
+        count=1,
     )
+    did_change = normalized != source
+    source = normalized
     changed |= did_change
     path.write_text(source, encoding="utf-8")
     return changed
