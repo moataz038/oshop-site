@@ -8,3 +8,8 @@ These are implementation sources for individual visual effects, not the original
 
 
 The face and gaze animation are adapted from [kochjar/orbling](https://github.com/kochjar/orbling), MIT licensed, inspected at commit `f76c4b8932f144dd2430a7ca6b475d603bd71652` (2026-11-07). Its original `src/orbling/orbling.css` is shipped as `orbling.css`, and the original `src/orbling/ball.tsx` markup plus copyright/license text are retained in `orbling/`. Only the original `orbling-eyes` layer is mounted over the already-vendored AI-Orb glass vessel; its shader heat is not loaded, so this adds no `@paper-design/shaders-react` runtime dependency.
+
+
+The current assistant orb preview uses the [abektes/lumaform-orb](https://github.com/abektes/lumaform-orb) MIT package, version `0.3.1`, with its named `aqueous` engine and Three.js `0.160.0` (MIT). It renders the real refractive 3D sphere with a low, blue-violet glass palette; it is not claimed to be an exact match for the reference's interwoven rings. The upstream license texts and generated bundle are in `vendor/lumaform-orb/`; the small source entry is `tools/vendor-lumaform-entry.js`.
+
+The composer preview uses the MIT free components [Libraries.dev Border Beam](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/border-beam) `1.4.1` and [Voice Ring](https://github.com/Jakubantalik/Libraries.dev/tree/main/packages/voice-ring) `0.2.0`. React `18.3.1` is bundled privately with the visual roots to avoid coupling to the store's React instance. Both components use only KB's existing text-input and audio-level UI; no microphone is requested and no Pro feature is included. Source, licenses and bundle are recorded in `vendor/libraries-dev/`.

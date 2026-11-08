@@ -48,6 +48,8 @@ def replace_all(source: str, old: str, new: str, label: str) -> tuple[str, bool]
 def copy_visual_assets() -> bool:
     assets = [
         (ROOT / "tools/kb-crystal-orb.js", ASSETS / "kb-crystal-orb.js"),
+        (ROOT / "vendor/lumaform-orb/dist/lumaform-aqueous.js", ASSETS / "lumaform-aqueous.js"),
+        (ROOT / "vendor/libraries-dev/dist/kb-libraries-effects.js", ASSETS / "kb-libraries-effects.js"),
         (ROOT / "tools/kb-fluid-background.js", ASSETS / "kb-fluid-background.js"),
         (ROOT / "vendor/ai-orb/dist/ai-orb-core.js", ASSETS / "ai-orb-core.js"),
         (ROOT / "vendor/webgl-fluid-enhanced/dist/index.es.js", ASSETS / "webgl-fluid-enhanced.js"),
@@ -122,14 +124,16 @@ def patch_html() -> bool:
     main_script = '<script type="module" crossorigin src="./assets/index-6ttDirym.js?palette=64a124f9d2"></script>'
     orb_script = '<script type="module" crossorigin src="./assets/kb-crystal-orb.js?orb=vessel-1"></script>'
     fluid_script = '<script type="module" crossorigin src="./assets/kb-fluid-background.js?fluid=webgl-1"></script>'
+    effects_script = '<script type="module" crossorigin src="./assets/kb-libraries-effects.js?libraries=mit-1"></script>'
     if source.count(main_script) != 1:
         raise SystemExit(f"Expected exactly one main module script, found {source.count(main_script)}.")
     normalized = source
-    for script in (orb_script, fluid_script):
+    for script in (orb_script, fluid_script, effects_script):
         normalized = re.sub(rf"(?m)^[ \t]*{re.escape(script)}[ \t]*(?:\r?\n|$)", "", normalized)
-    normalized = normalized.replace(main_script, main_script + "\n    " + orb_script + "\n    " + fluid_script, 1)
+    scripts = "\n    ".join((main_script, orb_script, fluid_script, effects_script))
+    normalized = normalized.replace(main_script, scripts, 1)
     normalized = re.sub(
-        rf"({re.escape(main_script)}\r?\n    {re.escape(orb_script)}\r?\n    {re.escape(fluid_script)})(?:\r?\n[ \t]*(?=\r?\n))*",
+        rf"({re.escape(main_script)}\r?\n    {re.escape(orb_script)}\r?\n    {re.escape(fluid_script)}\r?\n    {re.escape(effects_script)})(?:\r?\n[ \t]*(?=\r?\n))*",
         r"\1",
         normalized,
         count=1,

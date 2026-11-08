@@ -748,13 +748,6 @@ body,
   filter: drop-shadow(0 3px 18px rgba(60, 143, 255, .18));
 }
 
-.kb-orb-host.kb-orb-fallback {
-  background:
-    radial-gradient(ellipse at 34% 29%, rgba(216, 246, 255, .92), transparent 12%),
-    radial-gradient(ellipse at 38% 38%, rgba(62, 168, 255, .9), rgba(87, 88, 255, .65) 33%, rgba(14, 22, 59, .78) 62%, rgba(7, 10, 24, .35) 74%, transparent 76%);
-  box-shadow: inset 0 0 18px rgba(222, 245, 255, .32), 0 0 44px rgba(59, 125, 255, .3);
-}
-
 .kb-input-add,
 .kb-input-wave {
   display: inline-flex;
@@ -1238,10 +1231,6 @@ body,
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  transform: perspective(620px) rotateX(var(--kb-orb-pitch, 0deg)) rotateY(var(--kb-orb-yaw, 0deg));
-  transform-style: preserve-3d;
-  transition: transform 110ms cubic-bezier(.2, .7, .25, 1);
-  will-change: transform;
   cursor: grab;
   pointer-events: auto !important;
   touch-action: none;
@@ -1251,8 +1240,7 @@ body,
 .app .kb-orb-host.kb-orb-dragging { cursor: grabbing; transition-duration: 45ms; }
 .app .kb-orb-host:focus-visible { filter: drop-shadow(0 0 12px rgba(125, 171, 255, .62)); }
 .app .kb-orb-holder > .kb-orb-host { animation: none !important; }
-.app .kb-orb-webgl { display: block; width: 100%; height: 100%; pointer-events: none; }
-.app .kb-orb-webgl-fallback { border-radius: 50%; background: radial-gradient(circle at 42% 34%, #9e6bfa 0%, #2a85f5 39%, rgba(7, 8, 14, .4) 72%, transparent 74%); }
+.app .kb-orb-webgl { display: block; width: 100%; height: 100%; pointer-events: auto; touch-action: none; }
 
 /* The idle bar itself is a blue-violet pane; no recording state is required. */
 .app .input-bar:not(.voice-pill-expanded) {
@@ -1751,4 +1739,63 @@ body,
 
 @media (max-height: 740px) {
   .app:has(.kb-ref-copy) .kb-orb-holder { transform: translateY(88px) !important; }
+}
+
+/* Libraries.dev MIT interactive effects on existing controls. */
+.app .input-bar.kb-libraries-border-beam-positioned { position: relative !important; }
+.app .input-bar > .kb-libraries-border-beam-host {
+  position: absolute !important;
+  z-index: 0 !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+}
+.app .input-bar > .kb-libraries-border-beam-host > * {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+}
+.app .input-bar > *:not(.kb-libraries-border-beam-host) {
+  position: relative;
+  z-index: 1;
+}
+.app .kb-input-wave,
+.app .voice-pill-trigger {
+  position: relative !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+.app .kb-libraries-voice-ring-host {
+  position: absolute !important;
+  z-index: 0 !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 60px !important;
+  height: 60px !important;
+  transform: translate(-50%, -50%) !important;
+  opacity: .76;
+  overflow: visible !important;
+  mix-blend-mode: screen;
+  pointer-events: none !important;
+}
+.app .kb-libraries-voice-ring-host canvas {
+  display: block !important;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50%;
+  pointer-events: none !important;
+}
+.app .kb-input-wave > :not(.kb-libraries-voice-ring-host),
+.app .voice-pill-trigger > :not(.kb-libraries-voice-ring-host) {
+  position: relative;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app .kb-libraries-voice-ring-host { animation: none !important; }
 }

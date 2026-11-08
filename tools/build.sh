@@ -21,6 +21,7 @@ python3 tools/apply-kb-branding.py
 python3 tools/apply-kb-reference-design.py
 # Style the existing chat recorder as a glass Voice Pill; no new recorder logic.
 python3 tools/apply-kb-voice-pill.py
+python3 tools/apply-kb-libraries-effects.py
 python3 tools/apply-kb-badge-admin.py
 # Restrict badge UI, APIs, and assets to the exact production admin hostname.
 python3 tools/apply-kb-badge-host-isolation.py
@@ -37,9 +38,14 @@ node --check vercel-output/functions/api.func/index.cjs
 node --check vercel-output/functions/api.func/shein-direct-reader.mjs
 node --input-type=module --check < vercel-output/static/assets/index-6ttDirym.js
 node --input-type=module --check < vercel-output/static/assets/kb-crystal-orb.js
+node --input-type=module --check < vercel-output/static/assets/lumaform-aqueous.js
+node --input-type=module --check < vercel-output/static/assets/kb-libraries-effects.js
 node --input-type=module --check < vercel-output/static/assets/kb-fluid-background.js
 node --input-type=module --check < vercel-output/static/assets/ai-orb-core.js
 node --input-type=module --check < vercel-output/static/assets/webgl-fluid-enhanced.js
+node --input-type=module --check < tools/kb-crystal-orb.js
+node --input-type=module --check < tools/kb-libraries-effects.js
+node --input-type=module --check < tools/vendor-lumaform-entry.js
 node --check vercel-output/functions/api.func/admin-security.cjs
 node --check vercel-output/functions/api.func/shared-store.cjs
 node --check vercel-output/functions/api.func/admin-login-js.cjs

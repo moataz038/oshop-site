@@ -10,6 +10,20 @@ required=(
   vercel-output/static/assets/index-ca6a3825.css
   vercel-output/static/assets/kb-ui-refresh.css
   vercel-output/static/assets/kb-crystal-orb.js
+  vercel-output/static/assets/lumaform-aqueous.js
+  vercel-output/static/assets/kb-libraries-effects.js
+  vendor/lumaform-orb/LICENSE
+  vendor/lumaform-orb/THREE-LICENSE.txt
+  vendor/libraries-dev/NOTICE.md
+  vendor/libraries-dev/licenses/border-beam-MIT.txt
+  vendor/libraries-dev/licenses/voice-ring-MIT.txt
+  vendor/libraries-dev/licenses/react-MIT.txt
+  vendor/libraries-dev/licenses/react-dom-MIT.txt
+  vendor/libraries-dev/licenses/scheduler-MIT.txt
+  vendor/libraries-dev/licenses/loose-envify-MIT.txt
+  vendor/libraries-dev/licenses/js-tokens-MIT.txt
+  tools/kb-libraries-effects.js
+  tools/apply-kb-libraries-effects.py
   vercel-output/static/img/assistant-avatar.svg
   licenses/AI-Orb-MIT.txt
   vercel-output/static/img/kb-mark.png
@@ -70,7 +84,9 @@ grep -q 'index-6ttDirym.js' vercel-output/static/index.html
 grep -q 'index-ca6a3825.css' vercel-output/static/index.html
 grep -q 'href="./assets/kb-ui-refresh.css"' vercel-output/static/index.html
 grep -q 'kb-crystal-orb.js' vercel-output/static/index.html
+grep -q 'kb-libraries-effects.js' vercel-output/static/index.html
 python3 -c 'from pathlib import Path; source=Path("vercel-output/static/index.html").read_text(); assert source.count("./assets/kb-crystal-orb.js?orb=vessel-1") == 1'
+python3 -c 'from pathlib import Path; source=Path("vercel-output/static/index.html").read_text(); assert source.count("./assets/kb-libraries-effects.js?libraries=mit-1") == 1'
 grep -q 'kb-orb-host' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'assistant-avatar.svg' vercel-output/static/assets/index-6ttDirym.js
 grep -q 'oshop:{name:"مساعد الشحن",img:"img/assistant-avatar.svg",role:"وكيل الشحن الذكي"' vercel-output/static/assets/index-6ttDirym.js
@@ -196,6 +212,7 @@ assert 'apply-shein-cart-routing.py' in build and 'shein-cart-routing.test.cjs' 
 assert 'apply-shein-direct-reader.py' in build and 'shein-direct-reader.test.cjs' in build, 'Missing direct SHEIN reader patch/test gate'
 assert 'apply-kb-badge-admin.py' in build, 'Missing badge-admin build patch'
 assert 'apply-kb-badge-host-isolation.py' in build, 'Missing badge host-isolation build patch'
+assert 'apply-kb-libraries-effects.py' in build and 'kb-visual-effects.test.cjs' in build, 'Missing the Libraries.dev visual patch/test gate'
 assert any(route.get('src') == '^/kb-badge-admin/?$' and route.get('dest') == '/api/staff/kb-badge-admin' and route.get('check') is True and not route.get('continue') for route in routes), 'Missing checked Build Output standalone admin rewrite'
 assert any(item.get('source') == '/kb-badge-admin' and 'X-Robots-Tag' in {h.get('key') for h in item.get('headers', [])} for item in vercel.get('headers', [])), 'Missing admin noindex headers'
 assert any(item.get('source') == '/kb-badge-admin' and item.get('destination') == '/api/staff/kb-badge-admin' for item in vercel.get('rewrites', [])), 'Missing Vercel root standalone admin rewrite'
